@@ -9,6 +9,10 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 	
-	<bean id="userDao"  class="kr.co.riderhub.web.dao.UserDaoImpl"></bean>
+	<!-- bean id="userDao"  class="kr.co.riderhub.web.dao.UserDaoImpl">
+	<property name="sqlSessionFactory">
+			<ref bean="sqlSessionFactory" />
+		</property>
+	</bean -->
 	
 </beans>

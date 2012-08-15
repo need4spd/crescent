@@ -8,11 +8,7 @@
 		<setting name="defaultExecutorType" value="REUSE" />
 	</settings>
 	
-	<typeAliases>
+	<!--  typeAliases>
 		<typeAlias type="kr.co.riderhub.web.domain.User" alias="user"/>
-	</typeAliases>
-	
-	<mappers>
-		<mapper resource="mapper/user.xml" />
-	</mappers>
+	</typeAliases -->
 </configuration>
