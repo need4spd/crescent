@@ -24,7 +24,7 @@ public class FullmoonIndexExecutor {
 		this.handler = handler;
 	}
 
-	public void execute(String jsonFormStr, OutputStream outToClient) {
+	public String execute(String jsonFormStr) {
 		
 		List<Document> documentList = handler.handledData(jsonFormStr, collection.getFieldsByName());		
 		FullmoonIndexer fullmoonIndexer = new FullmoonIndexer(collection.getIndexingDir());
@@ -33,11 +33,7 @@ public class FullmoonIndexExecutor {
 		String logMessage = collection.getCollectionName() + "의 " + documentList.size() + "건 색인 완료";
 		logger.info("{} 의 {}건 인덱싱이 완료되었습니다.", new String[] {collection.getCollectionName(), String.valueOf(documentList.size())});
 		
-		try {
-			outToClient.write(logMessage.getBytes());
-		} catch (IOException e) {
-			logger.error("색인 메시지 전송 중 에러 : ", e);
-		}
+		return logMessage;
 		
 		//ExecutorService threadExecutor = Executors.newFixedThreadPool(1);
 		//for(int part = 0; part < numberOfIndexFiles; part++) {

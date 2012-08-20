@@ -141,7 +141,7 @@ public class PostUtil {
 				if (null != length) urlc.setFixedLengthStreamingMode(length);
 
 			} catch (IOException e) {
-				System.out.println("Connection error (is Solr running at "+ serverURL + e);
+				System.out.println("Connection error (is crescent running at "+ serverURL + e);
 				success = false;
 			}
 
@@ -160,7 +160,7 @@ public class PostUtil {
 			BufferedReader br = null;
 			try {
 				if (HttpURLConnection.HTTP_OK != urlc.getResponseCode()) {
-					System.out.println("Solr returned an error #" + urlc.getResponseCode() + 
+					System.out.println("server returned an error #" + urlc.getResponseCode() + 
 							" " + urlc.getResponseMessage());
 					success = false;
 				}

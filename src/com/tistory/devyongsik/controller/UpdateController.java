@@ -27,7 +27,7 @@ public class UpdateController {
 	Logger logger = LoggerFactory.getLogger(UpdateController.class);
 	
 	@RequestMapping("/update")
-	public String updateDocument(HttpServletRequest request, HttpServletResponse response) {
+	public void updateDocument(HttpServletRequest request, HttpServletResponse response) {
 		
 		String contentsType = request.getHeader("Content-type");
 		
@@ -52,16 +52,17 @@ public class UpdateController {
 			
 			reader.close();
 			
-			outToClient = response.getOutputStream();
+			FullmoonIndexExecutor excutor = new FullmoonIndexExecutor(CollectionConfig.getInstance().getCollection("sample"), handler);
+			String message = excutor.execute(text.toString());
+			
+			outToClient = response.getOutputStream();			
+			outToClient.write(message.getBytes());
+			outToClient.flush();
+			
+			outToClient.close();
 			
 		} catch (IOException e) {
 			logger.error("error : ", e);
 		}
-		
-		
-		FullmoonIndexExecutor excutor = new FullmoonIndexExecutor(CollectionConfig.getInstance().getCollection("sample"), handler);
-		excutor.execute(text.toString(), outToClient);
-		
-		return null;
 	}
 }
