@@ -104,7 +104,7 @@ public class PostUtil {
 		try {
 			is = new FileInputStream(file);
 
-			System.out.println("POSTING..." + file.getName() + "[mimeType]");
+			System.out.println("POSTING..." + file.getName() + "["+mimeType+"]");
 
 			postData(is, (int)file.length(), mimeType);
 
@@ -170,7 +170,7 @@ public class PostUtil {
 				
 				String log="";
 				while((log=br.readLine()) != null) {
-					System.out.println(log);
+					System.out.println("log from server... " + log);
 				}
 				
 			} catch (IOException e) {

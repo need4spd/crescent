@@ -2,6 +2,7 @@ package com.tistory.devyongsik.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,6 +39,8 @@ public class UpdateController {
 		}
 		
 		StringBuilder text = new StringBuilder();
+		OutputStream outToClient = null;
+		
 		try {
 			
 			BufferedReader reader = request.getReader();
@@ -49,12 +52,15 @@ public class UpdateController {
 			
 			reader.close();
 			
+			outToClient = response.getOutputStream();
+			
 		} catch (IOException e) {
 			logger.error("error : ", e);
 		}
 		
+		
 		FullmoonIndexExecutor excutor = new FullmoonIndexExecutor(CollectionConfig.getInstance().getCollection("sample"), handler);
-		excutor.execute(text.toString());
+		excutor.execute(text.toString(), outToClient);
 		
 		return null;
 	}
