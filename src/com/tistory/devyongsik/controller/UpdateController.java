@@ -25,6 +25,10 @@ public class UpdateController {
 		try {
 			
 			BufferedReader reader = request.getReader();
+			String tmp = "";
+			while((tmp = reader.readLine()) != null) {
+				logger.info(tmp);
+			}
 			
 		} catch (IOException e) {
 			logger.error("error : ", e);

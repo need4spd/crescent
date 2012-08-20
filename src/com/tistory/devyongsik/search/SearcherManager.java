@@ -57,7 +57,7 @@ IndexSearcher indexSearcher = new IndexSearcher(multiReader);
 		for(String collectionName : collectionNames) {
 			Collection collection = collections.get(collectionName);
 			String indexDir = collection.getIndexingDir();
-			int numOfIndex = collection.getNumberOfIndexFiles();
+			//int numOfIndex = collection.getNumberOfIndexFiles();
 			
 			List<IndexReader> readers = Collections.synchronizedList(new ArrayList<IndexReader>());
 			
