@@ -1,12 +1,13 @@
 package com.tistory.devyongsik.index;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.List;
 
+import org.apache.lucene.document.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.domain.Collection;
+import com.tistory.devyongsik.handler.Handler;
 
 /**
  * author : need4spd, need4spd@naver.com, 2012. 3. 18.
@@ -14,47 +15,49 @@ import com.tistory.devyongsik.domain.Collection;
 public class FullmoonIndexExecutor {
 	private Logger logger = LoggerFactory.getLogger(FullmoonIndexExecutor.class);
 	private Collection collection = null;
-
-	public FullmoonIndexExecutor(Collection collection) {
+	private Handler handler = null;
+	
+	public FullmoonIndexExecutor(Collection collection, Handler handler) {
 		this.collection = collection;
+		this.handler = handler;
 	}
 
-	public void execute() {
+	public void execute(String jsonFormStr) {
 		
-		int numberOfIndexFiles = collection.getNumberOfIndexFiles();
+		List<Document> documentList = handler.handledData(jsonFormStr, collection.getFieldsByName());		
+		FullmoonIndexer fullmoonIndexer = new FullmoonIndexer(collection.getIndexingDir());
+		fullmoonIndexer.indexing(documentList);
 		
-		ExecutorService threadExecutor = Executors.newFixedThreadPool(numberOfIndexFiles);
-		for(int part = 0; part < numberOfIndexFiles; part++) {
-			threadExecutor.execute(new IndexExecutor(String.valueOf(part)));
-		}
+		logger.info("{} 의 {}건 인덱싱이 완료되었습니다.", new String[] {collection.getCollectionName(), String.valueOf(documentList.size())});
+		//ExecutorService threadExecutor = Executors.newFixedThreadPool(1);
+		//for(int part = 0; part < numberOfIndexFiles; part++) {
+		//	threadExecutor.execute(new IndexExecutor(String.valueOf(part)));
+		//}
 		
-		threadExecutor.shutdown();
-		
-		while(!threadExecutor.isTerminated()) {
-			logger.info("waiting...");
-			
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+//		threadExecutor.shutdown();
+//		
+//		while(!threadExecutor.isTerminated()) {
+//			logger.info("waiting...");
+//			
+//			try {
+//				Thread.sleep(1000);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//		}
 	}
 	
-	private class IndexExecutor implements Runnable {
-
-		private String jobPart = null;
-
-		public IndexExecutor(String part) {
-			this.jobPart = part;
-		}
-
-		@Override
-		public void run() {
-			FullmoonIndexer fullmoonIndexer = new FullmoonIndexer(jobPart, collection);
-			fullmoonIndexer.indexing();
-			
-			logger.info("{} 의 {} 인덱싱이 완료되었습니다.", new String[] {collection.getName(), jobPart});
-		}
-	}
+//	private class IndexExecutor implements Runnable {
+//
+//		//private String jobPart = null;
+//
+////		public IndexExecutor(String part) {
+////			this.jobPart = part;
+////		}
+//
+//		@Override
+//		public void run() {
+//			
+//		}
+//	}
 }

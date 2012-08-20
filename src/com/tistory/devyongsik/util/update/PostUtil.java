@@ -13,7 +13,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.*;
 
 public class PostUtil {
 
@@ -60,6 +59,9 @@ public class PostUtil {
 	}
 
 	private int postFiles(String srcFileName) {
+		
+		System.out.println("sourceFileName : " + sourceFileName);
+		
 		int filesPosted = 0;
 
 		File srcFile = new File(srcFileName);
@@ -89,6 +91,9 @@ public class PostUtil {
 	}
 
 	private void postFile(File file) {
+		
+		System.out.println("file : " + file);
+		
 		String mimeType = mimeMap.get(fileType);
 
 		if(mimeType == null) {

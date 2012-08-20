@@ -1,6 +1,5 @@
 package com.tistory.devyongsik.handler;
 
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -10,5 +9,5 @@ import com.tistory.devyongsik.domain.CollectionField;
 
 public interface Handler {
 
-	List<Document> handledData(File dataSourceFile, Map<String, CollectionField> fieldsByName);
+	List<Document> handledData(String jsonFormStr, Map<String, CollectionField> fieldsByName);
 }

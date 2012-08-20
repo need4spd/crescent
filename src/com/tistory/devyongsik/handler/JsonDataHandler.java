@@ -1,9 +1,5 @@
 package com.tistory.devyongsik.handler;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
@@ -26,26 +22,23 @@ public class JsonDataHandler implements Handler {
 	private Logger logger = LoggerFactory.getLogger(JsonDataHandler.class);
 	
 	@Override
-	public List<Document> handledData(File dataSourceFile, Map<String, CollectionField> fieldsByName) {
+	public List<Document> handledData(String jonsFormStr, Map<String, CollectionField> fieldsByName) {
 
 		Type collectionType = new TypeToken<List<Map<String,String>>>(){}.getType();
 		Gson gson = new Gson();
 		
-		logger.debug("dataSourceFile : {}", dataSourceFile);
+		logger.debug("jonsFormStr : {}", jonsFormStr);
 		
 		try {
-			FileInputStream fis = new FileInputStream(dataSourceFile);
-			InputStreamReader isr = new InputStreamReader(fis, "UTF-8");
-			BufferedReader br = new BufferedReader(isr);
 
-			List<Map<String,String>> indexingData = gson.fromJson(br, collectionType);
+			List<Map<String,String>> indexingData = gson.fromJson(jonsFormStr, collectionType);
 			List<Document> docList = LuceneDocumentBuilder.buildDocumentList(indexingData, fieldsByName);
 			
 			return docList;
 			
 		} catch (Exception e) {
 			logger.error("error : ", e);
-			throw new IllegalStateException("색인 대상 파일을 찾을 수 없거나, 변환 중 에러가 발생하였습니다. [" + dataSourceFile +"]");
+			throw new IllegalStateException("색인 대상 문서를 변환 중 에러가 발생하였습니다. [" + jonsFormStr +"]");
 		}
 	}
 }
