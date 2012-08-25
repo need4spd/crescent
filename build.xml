@@ -5,7 +5,7 @@
 	<property name="version" value="1.0"/>
 	
 	<property name="src.dir" value="src"/>
-	<property name="util.update.src.dir" value="src/com/tistory/devyongsik/util/update" />
+	<property name="util.update.src.dir" value="java/com/tistory/devyongsik/util/update" />
 	<property name="build.dir" value="build"/>
 	<property name="dist.dir" value="dist"/>
 	<property name="lib.dir" value="WebContent/WEB-INF/lib"/>
@@ -42,8 +42,8 @@
 	</target>
 
 	<target name="create.util.update.jarfile" depends="build_util_update" description="create util jar files">
-		<delete file="${dist.dir}/postutil.jar"/>
-		<jar jarfile="${dist.dir}/postutil.jar" compress="true" 
+		<delete file="${dist.dir}/indexingUtil.jar"/>
+		<jar jarfile="${dist.dir}/indexingUtil.jar" compress="true" 
 			basedir="${build.dir}/classes">
 			
 			<manifest>
