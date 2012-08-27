@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.tistory.devyongsik.config.CollectionConfig;
 import com.tistory.devyongsik.domain.Collection;
 import com.tistory.devyongsik.domain.CollectionField;
+import com.tistory.devyongsik.domain.SearchRequest;
 
 /**
  * author : need4spd, need4spd@naver.com, 2012. 3. 4.
@@ -17,60 +18,51 @@ import com.tistory.devyongsik.domain.CollectionField;
 public class QueryParser {
 	private Logger logger = LoggerFactory.getLogger(QueryParser.class);
 	
-	private Map<String,String> paramMap = null;
+	private SearchRequest searchRequest = null;
 	
 	//한 page에 보여 줄 결과건수
 	private final int DEFAULT_HITS_FOR_PAGE = 20;
 	//몇 페이지?
-	private final int DEFAULT_PAGE = 1;
+	private final int DEFAULT_START_OFFSET = 0;
 	//디폴트로 몇 페이지까지 검색 넘어갈 수 있도록?
 	private final int DEFAULT_HITS_PAGE = 5;
 	
-	private String collectionName;
-
-	public QueryParser(Map<String,String> paramMap) {
-		this.paramMap = paramMap;	
-		this.collectionName = paramMap.get("col_name");
-	}
-	
-	public int getStartOffset() {
-		return ((getPage() - 1) * getHitsForPage());
+	public QueryParser(SearchRequest searchRequest) {
+		this.searchRequest = searchRequest;	
 	}
 	
 	public String getKeyword() {
-		return paramMap.get("keyword");
+		return searchRequest.getKeyword();
 	}
 	
-	public String getTargetVolume() {
-		return paramMap.get("index");
+	public String getCollectionName() {
+		return searchRequest.getCollectionName();
 	}
 	
 	public int getDefaultHitsPage() {
 		return DEFAULT_HITS_PAGE;
 	}
 	
-	public int getPage() {
-		if(paramMap.containsKey("page")) {
-			if(paramMap.get("page") != null) return Integer.parseInt(paramMap.get("page"));
-			else return DEFAULT_PAGE;
-		} else {
-			return DEFAULT_PAGE;
+	public int getStartOffSet() {
+		if(searchRequest.getStartOffSet() == null || "".equals(searchRequest.getStartOffSet())) {
+			return DEFAULT_START_OFFSET;
 		}
+		
+		return Integer.parseInt(searchRequest.getStartOffSet());
 	}
 	
 	public int getHitsForPage() {
-		if(paramMap.containsKey("row")) {
-			if(paramMap.get("row") != null) return Integer.parseInt(paramMap.get("row"));
-			else return DEFAULT_HITS_FOR_PAGE;
-		} else {
+		if(searchRequest.getPageSize() == null || "".equals(searchRequest.getPageSize())) {
 			return DEFAULT_HITS_FOR_PAGE;
 		}
+		
+		return Integer.parseInt(searchRequest.getPageSize());
 	}
 	
 	public Sort getSort() {
-		String sortQueryString = paramMap.get("sort");
+		String sortQueryString = searchRequest.getSort();
+		
 		logger.debug("소트 파라미터 : {}", sortQueryString);
-			
 		
 		if(sortQueryString == null || "".equals(sortQueryString) || "null".equals(sortQueryString)) return null;
 		
@@ -117,7 +109,7 @@ public class QueryParser {
 					lst[i] = new SortField(null,SortField.SCORE, true);
 				}
 			} else {
-				Collection collection = CollectionConfig.getInstance().getCollection(collectionName);
+				Collection collection = CollectionConfig.getInstance().getCollection(searchRequest.getCollectionName());
 				Map<String, CollectionField> collectionFields = collection.getFieldsByName();
 				
 				CollectionField f = collectionFields.get(part);
@@ -137,22 +129,13 @@ public class QueryParser {
 	
 	public String[] getSearchFieldNames() {
 		String fieldNames[] = null;
-		if(fieldHasNotNull("field")) { 
-			fieldNames = paramMap.get("field").split(",");
+		if(searchRequest.getSearchField() != null && !"".equals(searchRequest.getSearchField())) { 
+			fieldNames = searchRequest.getSearchField().split(",");
 		} else {//검색 대상 필드가 지정되어 있지 않으면..
-			Collection collection = CollectionConfig.getInstance().getCollection(collectionName);
+			Collection collection = CollectionConfig.getInstance().getCollection(searchRequest.getCollectionName());
 			fieldNames = collection.getDefaultSearchFieldNames().toArray(new String[0]);
 		}
 		
 		return fieldNames;
-	}
-	
-	private boolean fieldHasNotNull(String key) {
-		if(paramMap.containsKey(key)) {
-			String tmp = paramMap.get(key);
-			if(tmp != null && !"".equals(tmp)) return true;
-		}
-		
-		return false;
 	}
 }

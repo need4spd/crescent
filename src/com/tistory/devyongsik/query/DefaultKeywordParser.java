@@ -3,18 +3,17 @@ package com.tistory.devyongsik.query;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,18 +27,17 @@ import com.tistory.devyongsik.domain.CollectionField;
  * @author : 장용석, 2008. 12. 29., need4spd@google.com
  */
 
-public class DefaultKeywordParser extends QueryParser {
+public class DefaultKeywordParser {
+
+	private Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
 	
-
-	public DefaultKeywordParser(String f, Analyzer a) {
-		super(Version.LUCENE_35 ,f, a);
-	}
-
-	public static Query parse(com.tistory.devyongsik.query.QueryParser qp, Analyzer a, String collectionName) {
-		Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
-		Collection collection = CollectionConfig.getInstance().getCollection(collectionName);
+	public Query parse(com.tistory.devyongsik.query.QueryParser qp, Analyzer a) {
+		Collection collection = CollectionConfig.getInstance().getCollection(qp.getCollectionName());
 		
 		String fieldNames[] = qp.getSearchFieldNames();
+		
+		logger.debug("search fields : {}", Arrays.toString(fieldNames));
+		
 
 		//검색대상 필드를 가져온다.
 		CollectionField[] fields = new CollectionField[fieldNames.length];
@@ -82,7 +80,7 @@ public class DefaultKeywordParser extends QueryParser {
 		return resultQuery;
 	}
 
-	private static ArrayList<String> analyzedTokenList(Analyzer a, String splitedKeyword) {
+	private ArrayList<String> analyzedTokenList(Analyzer a, String splitedKeyword) {
 		Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
 		
 		ArrayList<String> rst = new ArrayList<String>();
