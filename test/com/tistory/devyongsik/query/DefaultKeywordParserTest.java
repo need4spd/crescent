@@ -14,10 +14,11 @@ public class DefaultKeywordParserTest {
 		searchRequest.setCollectionName("sample");
 		searchRequest.setKeyword("나이키청바지");
 		
-		QueryParser qp = new QueryParser(searchRequest);
+		CrescentRequestQueryStrParser crescentRequestQueryStrParser 
+			= new CrescentRequestQueryStrParser(searchRequest);
 		
 		DefaultKeywordParser parser = new DefaultKeywordParser();
-		Query query = parser.parse(qp, new KoreanAnalyzer());
+		Query query = parser.parse(crescentRequestQueryStrParser, new KoreanAnalyzer(false));
 		
 		System.out.println(query);
 	}

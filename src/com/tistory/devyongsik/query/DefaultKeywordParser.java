@@ -31,7 +31,7 @@ public class DefaultKeywordParser {
 
 	private Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
 	
-	public Query parse(com.tistory.devyongsik.query.QueryParser qp, Analyzer a) {
+	public Query parse(CrescentRequestQueryStrParser qp, Analyzer a) {
 		Collection collection = CollectionConfig.getInstance().getCollection(qp.getCollectionName());
 		
 		String fieldNames[] = qp.getSearchFieldNames();

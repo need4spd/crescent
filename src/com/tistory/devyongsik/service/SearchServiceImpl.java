@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.domain.SearchRequest;
+import com.tistory.devyongsik.query.CrescentRequestQueryStrParser;
 import com.tistory.devyongsik.query.DefaultKeywordParser;
-import com.tistory.devyongsik.query.QueryParser;
 import com.tistory.devyongsik.search.SearcherManager;
 
 public class SearchServiceImpl implements SearchService {
@@ -24,15 +24,17 @@ public class SearchServiceImpl implements SearchService {
 	
 	@Override
 	public List<Document> search(SearchRequest searchRequest) throws IOException {
-		QueryParser qp = new QueryParser(searchRequest);
+		CrescentRequestQueryStrParser crescentRequestQueryStrParser 
+			= new CrescentRequestQueryStrParser(searchRequest);
 		
-		DefaultKeywordParser parser = new DefaultKeywordParser();
-		Query query = parser.parse(qp, new KoreanAnalyzer());
+		DefaultKeywordParser keywordParser = new DefaultKeywordParser();
+		Query query = keywordParser.parse(crescentRequestQueryStrParser, new KoreanAnalyzer(false));
 		
 		logger.debug("query : {}" , query);
 		
-		IndexSearcher indexSearcher = SearcherManager.getSearcherManager().getIndexSearcher(searchRequest.getCollectionName());
-		TopDocs topDocs = indexSearcher.search(query, qp.getHitsForPage());
+		IndexSearcher indexSearcher 
+			= SearcherManager.getSearcherManager().getIndexSearcher(searchRequest.getCollectionName());
+		TopDocs topDocs = indexSearcher.search(query, crescentRequestQueryStrParser.getHitsForPage());
 		
 		ScoreDoc[] scoreDocs = topDocs.scoreDocs;
 		logger.debug("total count : "+ topDocs.totalHits);

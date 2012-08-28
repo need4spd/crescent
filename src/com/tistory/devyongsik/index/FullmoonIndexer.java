@@ -51,7 +51,7 @@ public class FullmoonIndexer {
 			
 			Directory dir = FSDirectory.open(new File(indexFileDir));
 			
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, new KoreanAnalyzer());
+			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, new KoreanAnalyzer(true));
 			IndexWriter indexWriter = new IndexWriter(dir, conf);
 			
 			//File file = new File(dataSourceDir);

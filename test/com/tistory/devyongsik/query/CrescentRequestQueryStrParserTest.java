@@ -10,12 +10,8 @@ import org.junit.Test;
 
 import com.tistory.devyongsik.domain.SearchRequest;
 
-/**
- * author : need4spd, need4spd@naver.com, 2012. 3. 5.
- */
-public class QueryParserTest {
-	
-	private static SearchRequest searchRequest;
+public class CrescentRequestQueryStrParserTest {
+private static SearchRequest searchRequest;
 	
 	@Before
 	public void initParamMap() {
@@ -25,7 +21,7 @@ public class QueryParserTest {
 	
 	@Test
 	public void getStartOffset() {
-		QueryParser queryParser = new QueryParser(searchRequest);		
+		CrescentRequestQueryStrParser queryParser = new CrescentRequestQueryStrParser(searchRequest);		
 		Assert.assertEquals(0, queryParser.getStartOffSet());
 		
 		searchRequest.setStartOffSet("20");
@@ -34,7 +30,7 @@ public class QueryParserTest {
 	
 	@Test
 	public void getHitsForPage() {
-		QueryParser queryParser = new QueryParser(searchRequest);		
+		CrescentRequestQueryStrParser queryParser = new CrescentRequestQueryStrParser(searchRequest);		
 		Assert.assertEquals(20, queryParser.getHitsForPage());
 		
 		searchRequest.setPageSize("30");
@@ -43,7 +39,7 @@ public class QueryParserTest {
 	
 	@Test
 	public void getSearchFieldNames() {
-		QueryParser queryParser = new QueryParser(searchRequest);
+		CrescentRequestQueryStrParser queryParser = new CrescentRequestQueryStrParser(searchRequest);
 		String[] searchFieldNames = queryParser.getSearchFieldNames();
 		
 		Assert.assertEquals("[title, dscr]", Arrays.toString(searchFieldNames));
@@ -52,7 +48,7 @@ public class QueryParserTest {
 	@Test
 	public void getSort() {
 		searchRequest.setSort("title_sort desc, board_id_sort asc");
-		QueryParser queryParser = new QueryParser(searchRequest);
+		CrescentRequestQueryStrParser queryParser = new CrescentRequestQueryStrParser(searchRequest);
 		
 		Sort sort = queryParser.getSort();
 		Assert.assertEquals("<string: \"title_sort\">!,<long: \"board_id_sort\">", sort.toString());
@@ -66,7 +62,7 @@ public class QueryParserTest {
 	@Test
 	public void getKeyword() {
 		searchRequest.setKeyword("청바지");
-		QueryParser queryParser = new QueryParser(searchRequest);
+		CrescentRequestQueryStrParser queryParser = new CrescentRequestQueryStrParser(searchRequest);
 		
 		Assert.assertEquals("청바지", queryParser.getKeyword());
 	}

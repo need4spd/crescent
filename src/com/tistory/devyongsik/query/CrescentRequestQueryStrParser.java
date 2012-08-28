@@ -12,76 +12,73 @@ import com.tistory.devyongsik.domain.Collection;
 import com.tistory.devyongsik.domain.CollectionField;
 import com.tistory.devyongsik.domain.SearchRequest;
 
-/**
- * author : need4spd, need4spd@naver.com, 2012. 3. 4.
- */
-public class QueryParser {
-	private Logger logger = LoggerFactory.getLogger(QueryParser.class);
-	
+public class CrescentRequestQueryStrParser {
+	private Logger logger = LoggerFactory.getLogger(CrescentRequestQueryStrParser.class);
+
 	private SearchRequest searchRequest = null;
-	
+
 	//한 page에 보여 줄 결과건수
 	private final int DEFAULT_HITS_FOR_PAGE = 20;
 	//몇 페이지?
 	private final int DEFAULT_START_OFFSET = 0;
 	//디폴트로 몇 페이지까지 검색 넘어갈 수 있도록?
 	private final int DEFAULT_HITS_PAGE = 5;
-	
-	public QueryParser(SearchRequest searchRequest) {
+
+	public CrescentRequestQueryStrParser(SearchRequest searchRequest) {
 		this.searchRequest = searchRequest;	
 	}
-	
+
 	public String getKeyword() {
 		return searchRequest.getKeyword();
 	}
-	
+
 	public String getCollectionName() {
 		return searchRequest.getCollectionName();
 	}
-	
+
 	public int getDefaultHitsPage() {
 		return DEFAULT_HITS_PAGE;
 	}
-	
+
 	public int getStartOffSet() {
 		if(searchRequest.getStartOffSet() == null || "".equals(searchRequest.getStartOffSet())) {
 			return DEFAULT_START_OFFSET;
 		}
-		
+
 		return Integer.parseInt(searchRequest.getStartOffSet());
 	}
-	
+
 	public int getHitsForPage() {
 		if(searchRequest.getPageSize() == null || "".equals(searchRequest.getPageSize())) {
 			return DEFAULT_HITS_FOR_PAGE;
 		}
-		
+
 		return Integer.parseInt(searchRequest.getPageSize());
 	}
-	
+
 	public Sort getSort() {
 		String sortQueryString = searchRequest.getSort();
-		
+
 		logger.debug("소트 파라미터 : {}", sortQueryString);
-		
+
 		if(sortQueryString == null || "".equals(sortQueryString) || "null".equals(sortQueryString)) return null;
-		
+
 		String[] parts = sortQueryString.split(",");
 		if(parts.length == 0) return null;
-		
+
 		SortField[] lst = new SortField[parts.length];
-		
+
 		for(int i = 0; i < parts.length; i++) {
 			String part = parts[i].trim(); //part = field desc
-			
+
 			logger.debug("part : {}", part);
-			
+
 			boolean descending = true;
-			
+
 			int idx = part.indexOf( ' ' );
 			if(idx > 0) {
 				String order = part.substring( idx+1 ).trim();
-				
+
 				if("desc".equals(order)) {
 					descending = true;
 				} else if("asc".equals(order)) {
@@ -89,16 +86,16 @@ public class QueryParser {
 				} else {
 					throw new IllegalStateException("알 수 없는 조건입니다. : " + order);
 				}
-				
+
 				part = part.substring( 0, idx ).trim(); //part = field
-				
+
 			} else {
 				throw new IllegalStateException("Order 조건이 없습니다.");
 			}
-			
+
 			if(logger.isDebugEnabled())
 				logger.debug("part order 제거 후: " + part);
-			
+
 			if("score".equals(part)) {
 				if(descending) {
 					if(parts.length == 1) {
@@ -111,14 +108,14 @@ public class QueryParser {
 			} else {
 				Collection collection = CollectionConfig.getInstance().getCollection(searchRequest.getCollectionName());
 				Map<String, CollectionField> collectionFields = collection.getFieldsByName();
-				
+
 				CollectionField f = collectionFields.get(part);
-				
+
 				if(f.isAnalyze()) throw new IllegalStateException("Analyze 된 필드는 Sort가 불가능합니다. ["+part+"]");
 				lst[i] = new SortField(f.getName(),f.getSortFieldType(),descending);
 			}
 		}//end for
-		
+
 		if(logger.isDebugEnabled()) {
 			for(int i=0; i < lst.length; i++) {
 				logger.debug(lst[i].getField());
@@ -126,7 +123,7 @@ public class QueryParser {
 		}
 		return new Sort(lst);
 	}
-	
+
 	public String[] getSearchFieldNames() {
 		String fieldNames[] = null;
 		if(searchRequest.getSearchField() != null && !"".equals(searchRequest.getSearchField())) { 
@@ -135,7 +132,7 @@ public class QueryParser {
 			Collection collection = CollectionConfig.getInstance().getCollection(searchRequest.getCollectionName());
 			fieldNames = collection.getDefaultSearchFieldNames().toArray(new String[0]);
 		}
-		
+
 		return fieldNames;
 	}
 }
