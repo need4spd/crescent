@@ -8,8 +8,8 @@ public class SearchRequest {
 	@RequestParamName(name="keyword", defaultValue="")
 	private String keyword;
 	
-	@RequestParamName(name="start_offset", defaultValue="0")
-	private String startOffSet;
+	@RequestParamName(name="page_num", defaultValue="1")
+	private String pageNum;
 	
 	@RequestParamName(name="page_size", defaultValue="10")
 	private String pageSize;
@@ -36,12 +36,12 @@ public class SearchRequest {
 		this.keyword = keyword;
 	}
 
-	public String getStartOffSet() {
-		return startOffSet;
+	public String getPageNum() {
+		return pageNum;
 	}
 
-	public void setStartOffSet(String startOffSet) {
-		this.startOffSet = startOffSet;
+	public void setPageNum(String pageNum) {
+		this.pageNum = pageNum;
 	}
 
 	public String getPageSize() {
@@ -71,7 +71,7 @@ public class SearchRequest {
 	@Override
 	public String toString() {
 		return "SearchRequest [collectionName=" + collectionName + ", keyword="
-				+ keyword + ", startOffSet=" + startOffSet + ", pageSize="
+				+ keyword + ", pageNum=" + pageNum + ", pageSize="
 				+ pageSize + ", sort=" + sort + ", searchField=" + searchField
 				+ "]";
 	}

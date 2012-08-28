@@ -20,9 +20,11 @@ public class CrescentRequestQueryStrParser {
 	//한 page에 보여 줄 결과건수
 	private final int DEFAULT_HITS_FOR_PAGE = 20;
 	//몇 페이지?
-	private final int DEFAULT_START_OFFSET = 0;
+	private final int DEFAULT_PAGE_NUM = 1;
+	
 	//디폴트로 몇 페이지까지 검색 넘어갈 수 있도록?
 	private final int DEFAULT_HITS_PAGE = 5;
+	
 
 	public CrescentRequestQueryStrParser(SearchRequest searchRequest) {
 		this.searchRequest = searchRequest;	
@@ -39,13 +41,17 @@ public class CrescentRequestQueryStrParser {
 	public int getDefaultHitsPage() {
 		return DEFAULT_HITS_PAGE;
 	}
-
-	public int getStartOffSet() {
-		if(searchRequest.getStartOffSet() == null || "".equals(searchRequest.getStartOffSet())) {
-			return DEFAULT_START_OFFSET;
+	
+	public int getPageNum() {
+		if(searchRequest.getPageNum() == null || "".equals(searchRequest.getPageNum())) {
+			return DEFAULT_PAGE_NUM;
 		}
-
-		return Integer.parseInt(searchRequest.getStartOffSet());
+		
+		return Integer.parseInt(searchRequest.getPageNum());
+	}
+	
+	public int getStartOffSet() {
+		return ((getPageNum() - 1) * getHitsForPage());
 	}
 
 	public int getHitsForPage() {

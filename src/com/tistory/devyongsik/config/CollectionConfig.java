@@ -103,6 +103,7 @@ public class CollectionConfig {
 				collectionField.setHasTermVector(Boolean.valueOf(e.attributeValue("termvector")));
 				
 				collection.putField(collectionField.getName(), collectionField);
+				collection.addFieldName(collectionField.getName());
 			}
 
 			@SuppressWarnings("unchecked")

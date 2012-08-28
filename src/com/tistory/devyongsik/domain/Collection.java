@@ -16,8 +16,16 @@ public class Collection {
 	private Map<String, CollectionField> fieldsByName = new ConcurrentHashMap<String, CollectionField>();
 	private List<String> defaultSearchFieldNames = new ArrayList<String>();
 	private List<String> sortFieldNames = new ArrayList<String>();
+	private List<String> fieldNames = new ArrayList<String>();
 	
 	
+	public List<String> getFieldNames() {
+		return fieldNames;
+	}
+
+	public void addFieldName(String fieldName) {
+		this.fieldNames.add(fieldName);
+	}
 
 	public String getAnalyzerName() {
 		return analyzerName;

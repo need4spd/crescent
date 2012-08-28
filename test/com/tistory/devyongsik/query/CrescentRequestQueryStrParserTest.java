@@ -24,8 +24,8 @@ private static SearchRequest searchRequest;
 		CrescentRequestQueryStrParser queryParser = new CrescentRequestQueryStrParser(searchRequest);		
 		Assert.assertEquals(0, queryParser.getStartOffSet());
 		
-		searchRequest.setStartOffSet("20");
-		Assert.assertEquals(20, queryParser.getStartOffSet());
+		searchRequest.setPageNum("10");
+		Assert.assertEquals(180, queryParser.getStartOffSet());
 	}
 	
 	@Test
