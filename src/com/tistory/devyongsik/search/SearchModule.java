@@ -59,6 +59,7 @@ public class SearchModule {
 					= SearcherManager.getSearcherManager().getIndexSearcher(crqsp.getCollectionName());
 				
 				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
+				Map<String, Object> result = new HashMap<String, Object>();
 				
 				for(int i = start; i < end; i++) {
 					Document doc = indexSearcher.doc(hits[i].doc);
@@ -74,8 +75,12 @@ public class SearchModule {
 					resultList.add(resultMap);
 				}
 				
+				result.put("total_count", cds.getTotalHitsCount());
+				result.put("result_list", resultList);
+				
 				searchResult.setResultList(resultList);
 				searchResult.setTotalHitsCount(cds.getTotalHitsCount());
+				searchResult.setSearchResult(result);
 			}
 		
 			return searchResult;

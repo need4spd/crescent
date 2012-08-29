@@ -10,6 +10,10 @@ public class SearchResult {
 	private int errorCode = 0;
 	private String errorMsg = "";
 	
+	private Map<String, Object> searchResult = null;
+	
+	
+	
 	public int getTotalHitsCount() {
 		return totalHitsCount;
 	}
@@ -33,5 +37,11 @@ public class SearchResult {
 	}
 	public void setErrorMsg(String errorMsg) {
 		this.errorMsg = errorMsg;
+	}
+	public Map<String, Object> getSearchResult() {
+		return searchResult;
+	}
+	public void setSearchResult(Map<String, Object> searchResult) {
+		this.searchResult = searchResult;
 	}
 }

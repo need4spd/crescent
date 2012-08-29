@@ -1,15 +1,12 @@
 package com.tistory.devyongsik.search;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.gson.Gson;
 
 public class JsonFormConverter {
 
-	public String convert(List<Map<String, String>> targetList) {
+	public String convert(Object targetObject) {
 		Gson gson = new Gson();
-		String json = gson.toJson(targetList);
+		String json = gson.toJson(targetObject);
 		
 		return json;
 	}
