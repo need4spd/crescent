@@ -63,17 +63,7 @@ public class CollectionConfig {
 			collection.setCollectionName(node.elementText("name"));
 			
 			@SuppressWarnings("unchecked")
-			List<Element> dataResource = document.selectNodes("//datasource");
-			if(logger.isDebugEnabled()) {
-				for(Element e : dataResource) {
-					logger.debug("type : {}", e.elementText("type"));
-					logger.debug("directory : {}", e.elementText("directory"));
-					logger.debug("number-of-index : {}", e.elementText("number-of-index"));
-				}
-			}
-			
-			@SuppressWarnings("unchecked")
-			List<Element> fieldsList = document.selectNodes("//field");
+			List<Element> fieldsList = node.selectNodes("field");
 			
 			if(logger.isDebugEnabled()) {
 				for(Element e : fieldsList) {
@@ -107,7 +97,7 @@ public class CollectionConfig {
 			}
 
 			@SuppressWarnings("unchecked")
-			List<Element> defaultSearchFields = document.selectNodes("//defaultSearchField");
+			List<Element> defaultSearchFields = node.selectNodes("//defaultSearchField");
 			if(logger.isDebugEnabled()) {
 				for(Element e : defaultSearchFields) {
 					logger.debug("default search fields : {}", e.attributeValue("name"));
@@ -119,7 +109,7 @@ public class CollectionConfig {
 			}
 
 			@SuppressWarnings("unchecked")
-			List<Element> sortFields = document.selectNodes("//sortField");
+			List<Element> sortFields = node.selectNodes("//sortField");
 			
 			if(logger.isDebugEnabled()) {
 				for(Element e : sortFields) {

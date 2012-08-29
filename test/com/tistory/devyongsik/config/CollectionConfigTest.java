@@ -18,8 +18,6 @@ public class CollectionConfigTest {
 		CollectionConfig collectionConfig = CollectionConfig.getInstance();
 		Map<String, Collection> collections = collectionConfig.getCollections();
 		
-		System.out.println(collections);
-		
 		Assert.assertNotNull(collections);
 	}
 }
