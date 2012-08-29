@@ -20,6 +20,7 @@ public class IndexingUtil {
 	private Map<String, String> mimeMap;
 	private String sourceFileName = "";
 	private String fileType = "json";
+	private String collectionName = "sample";
 
 	public static void main(String[] args) {
 		IndexingUtil p = new IndexingUtil();
@@ -46,6 +47,7 @@ public class IndexingUtil {
 
 		sourceFileName = System.getProperty("file", "");
 		fileType = System.getProperty("fileType", "json");
+		collectionName = System.getProperty("collection", "sample");
 
 	}
 
@@ -136,6 +138,7 @@ public class IndexingUtil {
 				urlc.setUseCaches(false);
 				urlc.setAllowUserInteraction(false);
 				urlc.setRequestProperty("Content-type", type);
+				urlc.setRequestProperty("collection_name", collectionName);
 
 				if (null != length) urlc.setFixedLengthStreamingMode(length);
 

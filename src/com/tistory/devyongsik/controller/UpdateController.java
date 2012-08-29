@@ -38,6 +38,8 @@ public class UpdateController {
 			handler = new JsonDataHandler();
 		}
 		
+		String collectionName = request.getParameter("collection_name");
+		
 		StringBuilder text = new StringBuilder();
 		OutputStream outToClient = null;
 		
@@ -52,7 +54,7 @@ public class UpdateController {
 			
 			reader.close();
 			
-			CrescentIndexerExecutor excutor = new CrescentIndexerExecutor(CollectionConfig.getInstance().getCollection("sample"), handler);
+			CrescentIndexerExecutor excutor = new CrescentIndexerExecutor(CollectionConfig.getInstance().getCollection(collectionName), handler);
 			String message = excutor.execute(text.toString());
 			
 			outToClient = response.getOutputStream();			

@@ -20,4 +20,27 @@
 			<sortField source="board_id" dest="board_id_sort" />
 		</sortFields>
 	</collection>
+	
+	<collection>
+		<name>glider_wiki</name>
+		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
+		<indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory>
+		<fields>
+			<!-- type : string, long, int -->
+			<field name="we_wiki_idx" store="true" index="false" type="long" analyze="false" />
+			<field name="we_space_idx" store="true" index="false" type="long"	analyze="false"  />
+			<field name="we_wiki_text" store="true" index="true" type="string" analyze="true" must="true" termvector="true" />
+			<field name="we_wiki_title" store="true" index="true" type="string" analyze="true" must="true" boost="2.0" />
+			<field name="we_ins_user" store="true" index="true" type="string" analyze="false" />
+			<field name="we_ins_date" store="true" index="true" type="long" analyze="false" />			
+		</fields>
+		<defaultSearchFields>
+			<defaultSearchField name="we_wiki_title" />
+			<defaultSearchField name="we_wiki_text" />
+		</defaultSearchFields>
+		<sortFields>
+			<sortField source="we_ins_date" dest="we_ins_date_sort" />
+			<sortField source="we_wiki_idx" dest="we_wiki_idx_sort" />
+		</sortFields>
+	</collection>
 </collections>
