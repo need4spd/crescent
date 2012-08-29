@@ -3,7 +3,9 @@
 	<collection>
 		<name>sample</name>
 		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
-		<indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/sample</indexingDirectory>
+		<indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory>
+		<!-- indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory -->
+		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/sample</indexingDirectory -->
 		<fields>
 			<!-- type : string, long, int -->
 			<field name="board_id" store="true" index="false" type="long" analyze="false" termposition="false" termoffset="false" />
@@ -25,6 +27,7 @@
 		<name>glider_wiki</name>
 		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
 		<indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory>
+		<!-- indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory -->
 		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/glider_wiki</indexingDirectory -->
 		<fields>
 			<!-- type : string, long, int -->
