@@ -83,10 +83,10 @@ public class Collection {
 
 	@Override
 	public String toString() {
-		return "Collection [analyzerName=" + analyzerName + ", collectionName="
-				+ collectionName + ", indexingDir=" + indexingDir
-				+ ", fieldsByName=" + fieldsByName
-				+ ", defaultSearchFieldNames=" + defaultSearchFieldNames
-				+ ", sortFieldNames=" + sortFieldNames + "]";
+		return "Collection [analyzerName=" + analyzerName + "\n, collectionName="
+				+ collectionName + "\n, indexingDir=" + indexingDir
+				+ "\n, fieldsByName=" + fieldsByName
+				+ "\n, defaultSearchFieldNames=" + defaultSearchFieldNames
+				+ "\n, sortFieldNames=" + sortFieldNames + "]";
 	}	
 }

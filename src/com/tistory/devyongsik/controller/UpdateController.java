@@ -40,6 +40,8 @@ public class UpdateController {
 		
 		String collectionName = request.getParameter("collection_name");
 		
+		logger.info("collection name : {}", collectionName);
+		
 		StringBuilder text = new StringBuilder();
 		OutputStream outToClient = null;
 		
@@ -49,7 +51,7 @@ public class UpdateController {
 			String tmp = "";
 			while((tmp = reader.readLine()) != null) {
 				text.append(tmp);
-				logger.info(tmp);
+				//logger.info(tmp);
 			}
 			
 			reader.close();

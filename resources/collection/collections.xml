@@ -25,6 +25,7 @@
 		<name>glider_wiki</name>
 		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
 		<indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory>
+		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/glider_wiki</indexingDirectory -->
 		<fields>
 			<!-- type : string, long, int -->
 			<field name="we_wiki_idx" store="true" index="false" type="long" analyze="false" />
