@@ -3,8 +3,6 @@ package com.tistory.devyongsik.domain;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.lucene.document.Document;
-
 public class SearchResult {
 
 	private int totalHitsCount = 0;

@@ -21,7 +21,7 @@ public class FullmoonIndexExecutorTest {
 		
 		String jsonFormStr = "[{\"board_id\":\"1\",\"title\":\"title\",\"dscr\":\"상세설명\",\"creuser\":\"작성자\"}," +
 				"{\"board_id\":\"2\",\"title\":\"제목\",\"dscr\":\"상세설명\",\"creuser\":\"작성자\"}]";
-		FullmoonIndexExecutor executor = new FullmoonIndexExecutor(collection, handler);
+		CrescentIndexerExecutor executor = new CrescentIndexerExecutor(collection, handler);
 		executor.execute(jsonFormStr);
 	}
 }

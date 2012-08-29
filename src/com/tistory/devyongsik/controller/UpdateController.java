@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.tistory.devyongsik.config.CollectionConfig;
 import com.tistory.devyongsik.handler.Handler;
 import com.tistory.devyongsik.handler.JsonDataHandler;
-import com.tistory.devyongsik.index.FullmoonIndexExecutor;
+import com.tistory.devyongsik.index.CrescentIndexerExecutor;
 
 /**
  * author : need4spd, need4spd@naver.com, 2012. 8. 15.
@@ -52,7 +52,7 @@ public class UpdateController {
 			
 			reader.close();
 			
-			FullmoonIndexExecutor excutor = new FullmoonIndexExecutor(CollectionConfig.getInstance().getCollection("sample"), handler);
+			CrescentIndexerExecutor excutor = new CrescentIndexerExecutor(CollectionConfig.getInstance().getCollection("sample"), handler);
 			String message = excutor.execute(text.toString());
 			
 			outToClient = response.getOutputStream();			

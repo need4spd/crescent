@@ -19,8 +19,8 @@ import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 /**
  * author : need4spd, need4spd@naver.com, 2012. 2. 26.
  */
-public class FullmoonIndexer {
-	private Logger logger = LoggerFactory.getLogger(FullmoonIndexer.class);
+public class CrescentIndexer {
+	private Logger logger = LoggerFactory.getLogger(CrescentIndexer.class);
 	
 //	private Collection collection = null;
 //	private String part = null;
@@ -32,7 +32,7 @@ public class FullmoonIndexer {
 	
 	private String indexFileDir = null;
 	
-	public FullmoonIndexer(String indexFileDir) {
+	public CrescentIndexer(String indexFileDir) {
 		this.indexFileDir = indexFileDir;
 	}
 	

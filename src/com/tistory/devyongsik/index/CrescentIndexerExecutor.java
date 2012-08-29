@@ -9,15 +9,12 @@ import org.slf4j.LoggerFactory;
 import com.tistory.devyongsik.domain.Collection;
 import com.tistory.devyongsik.handler.Handler;
 
-/**
- * author : need4spd, need4spd@naver.com, 2012. 3. 18.
- */
-public class FullmoonIndexExecutor {
-	private Logger logger = LoggerFactory.getLogger(FullmoonIndexExecutor.class);
+public class CrescentIndexerExecutor {
+	private Logger logger = LoggerFactory.getLogger(CrescentIndexerExecutor.class);
 	private Collection collection = null;
 	private Handler handler = null;
 	
-	public FullmoonIndexExecutor(Collection collection, Handler handler) {
+	public CrescentIndexerExecutor(Collection collection, Handler handler) {
 		this.collection = collection;
 		this.handler = handler;
 	}
@@ -25,8 +22,8 @@ public class FullmoonIndexExecutor {
 	public String execute(String jsonFormStr) {
 		
 		List<Document> documentList = handler.handledData(jsonFormStr, collection.getFieldsByName());		
-		FullmoonIndexer fullmoonIndexer = new FullmoonIndexer(collection.getIndexingDir());
-		fullmoonIndexer.indexing(documentList);
+		CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getIndexingDir());
+		crescentIndexer.indexing(documentList);
 		
 		String logMessage = collection.getCollectionName() + "의 " + documentList.size() + "건 색인 완료";
 		logger.info("{} 의 {}건 인덱싱이 완료되었습니다.", new String[] {collection.getCollectionName(), String.valueOf(documentList.size())});

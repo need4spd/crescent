@@ -1,12 +1,13 @@
 package com.tistory.devyongsik.service;
 
 import java.io.IOException;
-import java.util.List;
 
-import org.apache.lucene.document.Document;
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import com.tistory.devyongsik.domain.SearchRequest;
+import com.tistory.devyongsik.domain.SearchResult;
 
 public class SearchServiceImplTest {
 
@@ -17,8 +18,8 @@ public class SearchServiceImplTest {
 		searchRequest.setKeyword("타이틀");
 		
 		SearchService searchService = new SearchServiceImpl();
-		List<Document> searchResult = searchService.search(searchRequest);
+		SearchResult searchResult = searchService.search(searchRequest);
 		
-		
+		Assert.assertTrue(searchResult.getTotalHitsCount() > 0);	
 	}
 }
