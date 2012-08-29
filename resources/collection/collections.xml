@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <collections>
-	<collection>
-		<name>sample</name>
+	<collection name="sample">
 		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
 		<indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/sample</indexingDirectory>
 		<!-- indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory -->
@@ -23,8 +22,7 @@
 		</sortFields>
 	</collection>
 	
-	<collection>
-		<name>glider_wiki</name>
+	<collection name="glider_wiki">
 		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
 		<indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/glider_wiki</indexingDirectory>
 		<!-- indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory -->

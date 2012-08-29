@@ -57,13 +57,13 @@ public class CollectionConfig {
 			Collection collection = new Collection();
 						
 			logger.debug("indexingDirectory : {}", node.elementText("indexingDirectory"));
-			logger.debug("name : {}", node.elementText("name"));
+			logger.debug("name : {}", node.attributeValue("name"));
 			
 			collection.setIndexingDir(node.elementText("indexingDirectory"));
-			collection.setCollectionName(node.elementText("name"));
+			collection.setCollectionName(node.attributeValue("name"));
 			
 			@SuppressWarnings("unchecked")
-			List<Element> fieldsList = node.selectNodes("field");
+			List<Element> fieldsList = node.selectNodes("//collection[@name='"+collection.getCollectionName()+"']"+"/fields/field");
 			
 			if(logger.isDebugEnabled()) {
 				for(Element e : fieldsList) {
@@ -97,7 +97,7 @@ public class CollectionConfig {
 			}
 
 			@SuppressWarnings("unchecked")
-			List<Element> defaultSearchFields = node.selectNodes("//defaultSearchField");
+			List<Element> defaultSearchFields = node.selectNodes("//collection[@name='"+collection.getCollectionName()+"']"+"//defaultSearchFields/defaultSearchField");
 			if(logger.isDebugEnabled()) {
 				for(Element e : defaultSearchFields) {
 					logger.debug("default search fields : {}", e.attributeValue("name"));
@@ -109,7 +109,7 @@ public class CollectionConfig {
 			}
 
 			@SuppressWarnings("unchecked")
-			List<Element> sortFields = node.selectNodes("//sortField");
+			List<Element> sortFields = node.selectNodes("//collection[@name='"+collection.getCollectionName()+"']"+"//sortFields/sortField");
 			
 			if(logger.isDebugEnabled()) {
 				for(Element e : sortFields) {
