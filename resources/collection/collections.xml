@@ -2,7 +2,7 @@
 <collections>
 	<collection name="sample">
 		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
-		<indexingDirectory>/data1/lucene_index/sample</indexingDirectory>
+		<indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/sample</indexingDirectory>
 		<!-- indexingDirectory>/data1/lucene_index/sample</indexingDirectory -->
 		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/sample</indexingDirectory -->
 		<fields>
@@ -24,7 +24,7 @@
 	
 	<collection name="glider_wiki">
 		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
-		<indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory>
+		<indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/glider_wiki</indexingDirectory>
 		<!-- indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory -->
 		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/glider_wiki</indexingDirectory -->
 		<fields>
