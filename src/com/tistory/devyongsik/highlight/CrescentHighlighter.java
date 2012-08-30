@@ -8,11 +8,11 @@ import java.util.Arrays;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.search.Query;
-import org.apache.lucene.search.highlight.Fragmenter;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +24,6 @@ public class CrescentHighlighter {
 	private Logger logger = LoggerFactory.getLogger(CrescentHighlighter.class);
 	private Highlighter highlighter;
 	private ArrayList<String> searchFieldsNameList;
-	private Fragmenter fragmenter;
 	//TODO Analyzer 동적으로 생성하도록..
 	private Analyzer analyzer = new KoreanAnalyzer(false);
 	
@@ -33,22 +32,25 @@ public class CrescentHighlighter {
 		DefaultKeywordParser keywordParser = new DefaultKeywordParser();
 		Query query = keywordParser.parse(crqsp, analyzer);
 		
-		QueryScorer scorer = new QueryScorer(query);
-		highlighter = new Highlighter(scorer);
-		highlighter.setMaxDocCharsToAnalyze(1000);
-		this.searchFieldsNameList = new ArrayList<String>(Arrays.asList(crqsp.getSearchFieldNames()));
-		fragmenter = new SimpleFragmenter(100);
+		logger.debug("query for highlighter : {}" , query);
 		
-		highlighter.setTextFragmenter(fragmenter);
+		QueryScorer scorer = new QueryScorer(query);
+		
+		SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<span class=\"hl\">","</span>");
+	    highlighter = new Highlighter(formatter, scorer);
+	    highlighter.setTextFragmenter(new SimpleFragmenter(50));
+	    
+		this.searchFieldsNameList = new ArrayList<String>(Arrays.asList(crqsp.getSearchFieldNames()));
 	}
 	
 	public String getBestFragment(String fieldName,String value) {
 		String fragment = "";
 		
 		if(searchFieldsNameList.contains(fieldName)) {
-			TokenStream stream = analyzer.tokenStream("", new StringReader(value));
 			try {
-				fragment = highlighter.getBestFragments(stream, value, 3, "...");
+				TokenStream stream = analyzer.reusableTokenStream(fieldName, new StringReader(value));
+				fragment = highlighter.getBestFragments(stream, value, 1, "...");
+				
 				if(fragment == null || "".equals(fragment)) {
 					if(value.length() > 100) {
 						fragment = value.substring(0,100);
