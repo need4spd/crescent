@@ -39,7 +39,10 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			= SearcherManager.getSearcherManager().getIndexSearcher(crqp.getCollectionName());
 		
 		DefaultKeywordParser keywordParser = new DefaultKeywordParser();
-		Query query = keywordParser.parse(crqp, new KoreanAnalyzer(false));
+		Query query = keywordParser.parse(crqp.getCollectionName()
+				,crqp.getSearchFieldNames()
+				,crqp.getKeyword()
+				,new KoreanAnalyzer(false));
 		
 		logger.debug("query : {}" , query);
 		

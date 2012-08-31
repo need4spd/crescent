@@ -43,7 +43,10 @@ public class CrescentSortDocSearcher implements CrescentDocSearcher {
 			= SearcherManager.getSearcherManager().getIndexSearcher(crqp.getCollectionName());
 		
 		DefaultKeywordParser keywordParser = new DefaultKeywordParser();
-		Query query = keywordParser.parse(crqp, new KoreanAnalyzer(false));
+		Query query = keywordParser.parse(crqp.getCollectionName()
+				,crqp.getSearchFieldNames()
+				,crqp.getKeyword()
+				, new KoreanAnalyzer(false));
 		
 		TopFieldDocs tfd = indexSearcher.search(query,null,numOfHits,sort);
 		

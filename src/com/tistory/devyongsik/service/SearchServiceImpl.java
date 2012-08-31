@@ -23,7 +23,10 @@ public class SearchServiceImpl implements SearchService {
 			= new CrescentRequestQueryStrParser(searchRequest);
 		
 		DefaultKeywordParser keywordParser = new DefaultKeywordParser();
-		Query query = keywordParser.parse(crqsp, new KoreanAnalyzer(false));
+		Query query = keywordParser.parse(crqsp.getCollectionName()
+				,crqsp.getSearchFieldNames()
+				,crqsp.getKeyword()
+				,new KoreanAnalyzer(false));
 		
 		logger.debug("query : {}" , query);
 		

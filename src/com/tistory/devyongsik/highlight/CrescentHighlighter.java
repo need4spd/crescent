@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -22,32 +23,44 @@ import com.tistory.devyongsik.query.DefaultKeywordParser;
 
 public class CrescentHighlighter {
 	private Logger logger = LoggerFactory.getLogger(CrescentHighlighter.class);
-	private Highlighter highlighter;
-	private ArrayList<String> searchFieldsNameList;
+	//private Highlighter highlighter;
+	private List<String> searchFieldsNameList;
 	//TODO Analyzer 동적으로 생성하도록..
 	private Analyzer analyzer = new KoreanAnalyzer(false);
-	
+	private CrescentRequestQueryStrParser crqsp = null;
+	private DefaultKeywordParser keywordParser = new DefaultKeywordParser();
+	private SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
+    
 	public CrescentHighlighter(CrescentRequestQueryStrParser crqsp) {
-		
-		DefaultKeywordParser keywordParser = new DefaultKeywordParser();
-		Query query = keywordParser.parse(crqsp, analyzer);
-		
-		logger.debug("query for highlighter : {}" , query);
-		
-		QueryScorer scorer = new QueryScorer(query);
-		
-		SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<span class=\"hl\">","</span>");
-	    highlighter = new Highlighter(formatter, scorer);
-	    highlighter.setTextFragmenter(new SimpleFragmenter(50));
-	    
+		this.crqsp = crqsp;
 		this.searchFieldsNameList = new ArrayList<String>(Arrays.asList(crqsp.getSearchFieldNames()));
+	
+		logger.debug("searchFieldsNameList : {}", searchFieldsNameList);
+		
 	}
 	
-	public String getBestFragment(String fieldName,String value) {
+	public String getBestFragment(String fieldName, String value) {
 		String fragment = "";
 		
+		logger.debug("fieldName : {}", fieldName);
+		
 		if(searchFieldsNameList.contains(fieldName)) {
+			
 			try {
+				String[] fields = {fieldName};
+				Query query = keywordParser.parse(crqsp.getCollectionName()
+						,fields
+						,crqsp.getKeyword()
+						, analyzer);
+				
+				logger.debug("query for highlighter : {}" , query);
+				
+				QueryScorer scorer = new QueryScorer(query);
+				
+				Highlighter highlighter = new Highlighter(formatter, scorer);
+			    highlighter.setTextFragmenter(new SimpleFragmenter(50));
+			    
+				
 				TokenStream stream = analyzer.reusableTokenStream(fieldName, new StringReader(value));
 				fragment = highlighter.getBestFragments(stream, value, 1, "...");
 				

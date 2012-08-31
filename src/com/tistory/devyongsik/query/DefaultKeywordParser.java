@@ -31,10 +31,8 @@ public class DefaultKeywordParser {
 
 	private Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
 	
-	public Query parse(CrescentRequestQueryStrParser qp, Analyzer a) {
-		Collection collection = CollectionConfig.getInstance().getCollection(qp.getCollectionName());
-		
-		String fieldNames[] = qp.getSearchFieldNames();
+	public Query parse(String collectionName, String[] fieldNames, String keyword, Analyzer a) {
+		Collection collection = CollectionConfig.getInstance().getCollection(collectionName);
 		
 		logger.debug("search fields : {}", Arrays.toString(fieldNames));
 		
@@ -48,7 +46,7 @@ public class DefaultKeywordParser {
 		BooleanQuery resultQuery = new BooleanQuery();
 
 		//검색어를 split
-		String[] keywords = qp.getKeyword().split( " " );
+		String[] keywords = keyword.split( " " );
 
 
 		for(int i = 0; i < keywords.length; i++) {

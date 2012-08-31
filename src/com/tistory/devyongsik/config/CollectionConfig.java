@@ -87,7 +87,7 @@ public class CollectionConfig {
 				collectionField.setType(e.attributeValue("type"));
 				collectionField.setisAnalyze(Boolean.valueOf(e.attributeValue("analyze")));
 				collectionField.setisMust(Boolean.valueOf(e.attributeValue("must")));
-				collectionField.setFieldBoost(Float.parseFloat(StringUtils.defaultString(e.attributeValue("boost"), "0")));
+				collectionField.setFieldBoost(Float.parseFloat(StringUtils.defaultString(e.attributeValue("boost"), "1")));
 				collectionField.setHasTermOffset(Boolean.valueOf(e.attributeValue("termoffset")));
 				collectionField.setHasTermPosition(Boolean.valueOf(e.attributeValue("termposition")));
 				collectionField.setHasTermVector(Boolean.valueOf(e.attributeValue("termvector")));

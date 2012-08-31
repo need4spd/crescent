@@ -138,7 +138,7 @@ public class CrescentRequestQueryStrParser {
 			Collection collection = CollectionConfig.getInstance().getCollection(searchRequest.getCollectionName());
 			fieldNames = collection.getDefaultSearchFieldNames().toArray(new String[0]);
 		}
-
+		
 		return fieldNames;
 	}
 }
