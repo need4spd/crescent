@@ -17,5 +17,5 @@
 		
 	<bean id="jspViewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" p:cache="true" p:order="1" />
+		p:prefix="/jsp/" p:suffix=".jsp" p:cache="true" p:order="1" />
 </beans>
