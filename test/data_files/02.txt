@@ -1,1 +1,0 @@
- [{"board_id":"3","title":"타이틀","dscr":"두번째설명","creuser":"작성자"},{"board_id":"4","title":"타이틀2","dscr":"두번째설명2","creuser":"작성자"}]

@@ -1,1 +1,0 @@
- [{"board_id":"5","title":"맥북인기","dscr":"맥북은 왜 좋을까","creuser":"작성자"},{"board_id":"6","title":"아이폰인기","dscr":"아이폰이 좋은 이유..","creuser":"작성자"}]

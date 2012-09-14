@@ -1,1 +1,0 @@
- [{"board_id":"7","title":"검색엔진","dscr":"검색엔진의 성능..","creuser":"작성자"},{"board_id":"8","title":"색인속도","dscr":"색인 속도의 영향","creuser":"작성자"}]
