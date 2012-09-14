@@ -17,6 +17,16 @@
 		<level value="warn" />
 		<appender-ref ref="CONSOLE"/>
 	</logger>
+	
+	<logger name="com.tistory.devyongsik.highlight" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="CONSOLE"/>
+	</logger>
+	
+	<logger name="com.tistory.devyongsik.query" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="CONSOLE"/>
+	</logger>
 
 	<logger name="org.apache.lucene.analysis.kr" additivity="false">
 		<level value="warn" />

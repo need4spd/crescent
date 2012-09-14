@@ -70,8 +70,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		logger.debug("start : [{}], end : [{}], total : [{}]"
 						,new Object[]{crqp.getStartOffSet(), end, totalHitsCount});
 		logger.debug("hits count : [{}]", hits.length);
-		logger.debug("startOffset + hitsPerPage : [{}]", numOfHits);
-		
+		logger.debug("startOffset + hitsPerPage : [{}]", crqp.getStartOffSet() + crqp.getHitsForPage());
 
 		return hits;
 	}

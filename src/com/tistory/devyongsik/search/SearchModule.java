@@ -46,7 +46,7 @@ public class SearchModule {
 			if(hits!=null) { 
 			
 				int start = crqsp.getStartOffSet();
-				int end = crqsp.getStartOffSet() + hits.length;
+				int end = crqsp.getStartOffSet() + crqsp.getHitsForPage();
 				
 				logger.debug("start : [{}], end : [{}]", new Object[]{start, end});
 				
@@ -77,6 +77,8 @@ public class SearchModule {
 				
 				result.put("total_count", cds.getTotalHitsCount());
 				result.put("result_list", resultList);
+				
+				logger.debug("result list {}", resultList);
 				
 				searchResult.setResultList(resultList);
 				searchResult.setTotalHitsCount(cds.getTotalHitsCount());
