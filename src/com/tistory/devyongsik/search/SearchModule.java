@@ -43,7 +43,7 @@ public class SearchModule {
 			
 			ScoreDoc[] hits = cds.search();
 			
-			if(hits!=null) { 
+			if(hits.length > 0) { 
 			
 				int start = crqsp.getStartOffSet();
 				int end = crqsp.getStartOffSet() + crqsp.getHitsForPage();
@@ -83,6 +83,20 @@ public class SearchModule {
 				searchResult.setResultList(resultList);
 				searchResult.setTotalHitsCount(cds.getTotalHitsCount());
 				searchResult.setSearchResult(result);
+			} else {
+				
+				Map<String, Object> result = new HashMap<String, Object>();
+				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
+				
+				result.put("total_count", cds.getTotalHitsCount());
+				result.put("result_list", resultList);
+				
+				logger.debug("result list {}", resultList);
+				
+				searchResult.setResultList(resultList);
+				searchResult.setTotalHitsCount(0);
+				searchResult.setSearchResult(result);
+			
 			}
 		
 			return searchResult;
