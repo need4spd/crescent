@@ -1,0 +1,50 @@
+<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<%@ page import="java.util.*" %>
+<%
+	List<String> dictionary = (List<String>)request.getAttribute("dictionary");
+	String dicType = (String)request.getAttribute("dicType");
+	String startOffset = (String)request.getAttribute("startOffset");
+%>
+<head>
+	<script type="text/javascript" src="js/jquery-1.8.1.js"></script>
+	
+	<script language="javascript">
+		function prev() {
+			$('#pagingAction').val("prev");
+			$('#dictionaryForm').submit();
+			
+		}
+		
+		function next() {
+			$('#pagingAction').val("next");
+			$('#dictionaryForm').submit();
+			
+		}
+		
+		function addWord() {
+			$('#dictionaryForm').attr('action', '/dictionaryManageAdd.devys').submit();
+		}
+	</script>
+</head>
+<body>
+	<form id="dictionaryForm" method="post" action="/dictionaryManage.devys" >
+		<input type="hidden" id="dicType" name="dicType" value="<%=dicType %>" />
+		<input type="hidden" id="startOffset" name="startOffset" value="<%=startOffset%>" />
+		<input type="hidden" id="pagingAction" name="pagingAction" value="" />
+		
+		<% for(String word : dictionary) { %>
+			<tr><input type="checkbox" id="<%=word%>" /><%=word %></tr><br/>
+		<% } %>
+		
+		<br/>
+		
+		<a href="javascript:removeWord();">선택단어삭제</a><br/>
+		
+		<input type="text" id="word" name="word" value="" /><a href="javascript:addWord();">단어추가</a><br/>
+		<input type="text" id="word" name="word" value="" /><a href="javascript:searchWord();">단어찾기</a><br/>
+		
+		<a href="javascript:prev();"> 이전 </a>&nbsp;&nbsp; | &nbsp;&nbsp;<a href="javascript:next();"> 다음 </a>
+	</form>
+</body>

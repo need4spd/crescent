@@ -5,8 +5,8 @@
 	<script type="text/javascript" src="js/jquery-1.8.1.js"></script>
 </head>
 <body>
-	<a href="/customNouns.devys">명사사전</a><br/>
-	<a href="/stopWords.devys">불용어사전</a><br/>
-	<a href="/synonyms.devys">동의어사전</a><br/>
-	<a href="/compoundNouns.devys">복합명사사전</a><br/>
+	<a href="/dictionaryManage.devys?dicType=noun">명사사전</a><br/>
+	<a href="/dictionaryManage.devys?dicType=stop">불용어사전</a><br/>
+	<a href="/dictionaryManage.devys?dicType=syn">동의어사전</a><br/>
+	<a href="/dictionaryManage.devys?dicType=com">복합명사사전</a><br/>
 </body>
