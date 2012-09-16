@@ -26,6 +26,22 @@
 		function addWord() {
 			$('#dictionaryForm').attr('action', '/dictionaryManageAdd.devys').submit();
 		}
+		
+		function removeWord() {
+			var checked = []
+			$("input[name='wordToRemove[]']:checked").each(function ()
+			{
+			    checked.push($(this).val());
+			});
+			
+			$('#wordsToRemove').val(checked);
+			
+			$('#dictionaryForm').attr('action', '/dictionaryManageRemove.devys').submit();
+		}
+		
+		function findWord() {
+			$('#dictionaryForm').attr('action', '/dictionaryManageFind.devys').submit();
+		}
 	</script>
 </head>
 <body>
@@ -33,17 +49,18 @@
 		<input type="hidden" id="dicType" name="dicType" value="<%=dicType %>" />
 		<input type="hidden" id="startOffset" name="startOffset" value="<%=startOffset%>" />
 		<input type="hidden" id="pagingAction" name="pagingAction" value="" />
+		<input type="hidden" id="wordsToRemove" name="wordsToRemove" value="" />
 		
 		<% for(String word : dictionary) { %>
-			<tr><input type="checkbox" id="<%=word%>" /><%=word %></tr><br/>
+			<tr><input type="checkbox" id="<%=word%>" name="wordToRemove[]" value="<%=word %>" /><%=word %></tr><br/>
 		<% } %>
 		
 		<br/>
 		
 		<a href="javascript:removeWord();">선택단어삭제</a><br/>
 		
-		<input type="text" id="word" name="word" value="" /><a href="javascript:addWord();">단어추가</a><br/>
-		<input type="text" id="word" name="word" value="" /><a href="javascript:searchWord();">단어찾기</a><br/>
+		<input type="text" id="wordToAdd" name="wordToAdd" value="" /><a href="javascript:addWord();">단어추가</a><br/>
+		<input type="text" id="wordToFind" name="wordToFind" value="" /><a href="javascript:findWord();">단어찾기</a><br/>
 		
 		<a href="javascript:prev();"> 이전 </a>&nbsp;&nbsp; | &nbsp;&nbsp;<a href="javascript:next();"> 다음 </a>
 	</form>

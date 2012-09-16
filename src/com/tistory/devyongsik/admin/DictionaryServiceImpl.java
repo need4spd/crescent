@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -46,15 +47,22 @@ public class DictionaryServiceImpl implements DictionaryService, ApplicationCont
 		dictionary.remove(word);
 	}
 	
-	public String findWordFromDictionary (DictionaryType dicType, String word) {
+	public List<String> findWordFromDictionary (DictionaryType dicType, String word) {
 		List<String> dictionary = DictionaryFactory.getFactory().get(dicType);
 		int index = dictionary.indexOf(word);
 		
+		logger.debug("index : {}", index);
+		
 		if(index < 0) {
-			return "";
+			return new ArrayList<String>();
 		} 
 		
-		return dictionary.get(index);
+		List<String> returnResult = new ArrayList<String>();
+		returnResult.add(dictionary.get(index));
+		
+		logger.debug("returnResult : {}", returnResult);
+		
+		return returnResult;
 	}
 	
 	public void writeToDictionaryFile(DictionaryType dicType) {

@@ -103,11 +103,11 @@ public class AdminMainController {
 		modelAndView.addObject("dicType", dicType);
 		
 		//Add Word to Dictionary
-		String word = request.getParameter("word");
+		String wordToAdd = request.getParameter("wordToAdd");
 		
-		logger.debug("word to add : {}", word);
+		logger.debug("word to add : {}", wordToAdd);
 		
-		dictionaryService.addWordToDictionary(getDictionaryType(dicType), word);
+		dictionaryService.addWordToDictionary(getDictionaryType(dicType), wordToAdd);
 		dictionaryService.writeToDictionaryFile(getDictionaryType(dicType));
 
 		//dictionaryService.
@@ -116,7 +116,77 @@ public class AdminMainController {
 		if(dictionary != null && dictionary.size() > endOffset) {
 			modelAndView.addObject("dictionary", dictionary.subList(startOffset, endOffset));
 		} else {
-			modelAndView.addObject("dictionary", dictionary.subList(startOffset, dictionary.size() - 1));
+			modelAndView.addObject("dictionary", dictionary.subList(startOffset, dictionary.size()));
+		}
+
+		modelAndView.addObject("startOffset", String.valueOf(endOffset));
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping("/dictionaryManageRemove")
+	public ModelAndView dictionaryManageRemove(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String dicType = request.getParameter("dicType");
+		String wordsToRemove = StringUtils.defaultIfEmpty(request.getParameter("wordsToRemove"), "");
+		
+		int startOffset = 0;
+		int endOffset = 30;
+		
+		logger.debug("dicType : {}", dicType);
+		logger.debug("wordsToRemove : {}", wordsToRemove);
+		logger.debug("startOffset : {} , endOffset : {}", new Object[]{startOffset, endOffset});
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/admin/dictionaryManage");
+		
+		modelAndView.addObject("dicType", dicType);
+		
+		String[] removeWordArray = wordsToRemove.split(",");
+		if(removeWordArray != null && removeWordArray.length > 0) {
+			for(String removeWord : removeWordArray) {
+				dictionaryService.removeWordFromDictionary(getDictionaryType(dicType), removeWord);
+			}
+			
+			dictionaryService.writeToDictionaryFile(getDictionaryType(dicType));
+		}
+		
+		List<String> dictionary = loadDictionary(dicType);
+		
+		if(dictionary != null && dictionary.size() > endOffset) {
+			modelAndView.addObject("dictionary", dictionary.subList(startOffset, endOffset));
+		} else {
+			modelAndView.addObject("dictionary", dictionary.subList(startOffset, dictionary.size()));
+		}
+
+		modelAndView.addObject("startOffset", String.valueOf(endOffset));
+		
+		return modelAndView;
+	}
+	
+	@RequestMapping("/dictionaryManageFind")
+	public ModelAndView dictionaryManageFind(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String dicType = request.getParameter("dicType");
+		String wordToFind = request.getParameter("wordToFind");
+		
+		int startOffset = 0;
+		int endOffset = 30;
+		
+		logger.debug("dicType : {}", dicType);
+		logger.debug("wordToFind : {}", wordToFind);
+		logger.debug("startOffset : {} , endOffset : {}", new Object[]{startOffset, endOffset});
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/admin/dictionaryManage");
+		
+		modelAndView.addObject("dicType", dicType);
+		
+		List<String> dictionary = dictionaryService.findWordFromDictionary(getDictionaryType(dicType), wordToFind);
+		dictionaryService.writeToDictionaryFile(getDictionaryType(dicType));
+		
+		if(dictionary != null && dictionary.size() > endOffset) {
+			modelAndView.addObject("dictionary", dictionary.subList(startOffset, endOffset));
+		} else {
+			modelAndView.addObject("dictionary", dictionary.subList(startOffset, dictionary.size()));
 		}
 
 		modelAndView.addObject("startOffset", String.valueOf(endOffset));
