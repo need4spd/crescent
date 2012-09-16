@@ -56,9 +56,9 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		ScoreDoc[] hits = collector.topDocs().scoreDocs;
 		
 		//총 검색건수와 실제 보여줄 document의 offset (min ~ max)를 비교해서 작은 것을 가져옴
-		int end = Math.min(totalHitsCount, crqp.getStartOffSet() + crqp.getHitsForPage());
+		int endOffset = Math.min(totalHitsCount, crqp.getStartOffSet() + crqp.getHitsForPage());
 		
-		if(end > hits.length) {
+		if(endOffset > hits.length) {
 			logger.debug("기본 설정된 검색건수보다 더 검색을 원하므로, 전체를 대상으로 검색합니다.");
 			
 			collector = TopScoreDocCollector.create(totalHitsCount , true);
@@ -67,8 +67,8 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		}
 
 		
-		logger.debug("start : [{}], end : [{}], total : [{}]"
-						,new Object[]{crqp.getStartOffSet(), end, totalHitsCount});
+		logger.debug("start offset : [{}], end offset : [{}], total : [{}]"
+						,new Object[]{crqp.getStartOffSet(), endOffset, totalHitsCount});
 		logger.debug("hits count : [{}]", hits.length);
 		logger.debug("startOffset + hitsPerPage : [{}]", crqp.getStartOffSet() + crqp.getHitsForPage());
 

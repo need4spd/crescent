@@ -45,10 +45,10 @@ public class SearchModule {
 			
 			if(hits.length > 0) { 
 			
-				int start = crqsp.getStartOffSet();
-				int end = crqsp.getStartOffSet() + crqsp.getHitsForPage();
+				int startOffset = crqsp.getStartOffSet();
+				int endOffset = startOffset + hits.length;
 				
-				logger.debug("start : [{}], end : [{}]", new Object[]{start, end});
+				logger.debug("start : [{}], end : [{}]", new Object[]{startOffset, endOffset});
 				
 				Collection collection = CollectionConfig.getInstance().getCollection(crqsp.getCollectionName());
 				
@@ -61,7 +61,7 @@ public class SearchModule {
 				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
 				Map<String, Object> result = new HashMap<String, Object>();
 				
-				for(int i = start; i < end; i++) {
+				for(int i = startOffset; i < hits.length; i++) {
 					Document doc = indexSearcher.doc(hits[i].doc);
 					Map<String,String> resultMap = new HashMap<String, String>();
 					
@@ -77,19 +77,26 @@ public class SearchModule {
 				
 				result.put("total_count", cds.getTotalHitsCount());
 				result.put("result_list", resultList);
+				result.put("error_code", "0");
+				result.put("error_msg", "SUCCESS");
 				
 				logger.debug("result list {}", resultList);
 				
 				searchResult.setResultList(resultList);
 				searchResult.setTotalHitsCount(cds.getTotalHitsCount());
 				searchResult.setSearchResult(result);
+				
 			} else {
 				
+				//결과없음
 				Map<String, Object> result = new HashMap<String, Object>();
 				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
 				
 				result.put("total_count", cds.getTotalHitsCount());
 				result.put("result_list", resultList);
+				
+				result.put("error_code", "0");
+				result.put("error_msg", "SUCCESS");
 				
 				logger.debug("result list {}", resultList);
 				
@@ -104,9 +111,21 @@ public class SearchModule {
 		} catch (Exception e) {
 			e.printStackTrace();
 			
+			Map<String, Object> result = new HashMap<String, Object>();
+			List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
+			
+			result.put("total_count", cds.getTotalHitsCount());
+			result.put("result_list", resultList);
+			
+			result.put("error_code", "0");
+			result.put("error_msg", e.getMessage());
+			
 			logger.error("검색 중 에러 발생함." + e);
+			
 			searchResult.setErrorCode(-1);
 			searchResult.setErrorMsg(e.getMessage());
+			searchResult.setSearchResult(result);
+			searchResult.setResultList(resultList);
 			
 			return searchResult;
 		}
