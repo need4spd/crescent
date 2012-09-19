@@ -9,7 +9,7 @@
 	</appender>
 
 	<logger name="com.tistory.devyongsik.analyzer" additivity="false">
-		<level value="warn" />
+		<level value="debug" />
 		<appender-ref ref="CONSOLE"/>
 	</logger>
 	

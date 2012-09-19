@@ -11,4 +11,7 @@
 
 	<bean id="dictionaryService" class="com.tistory.devyongsik.admin.DictionaryServiceImpl">
 	</bean>
+	
+	<bean id="morphService" class="com.tistory.devyongsik.admin.MorphServiceImpl">
+	</bean>
 </beans>

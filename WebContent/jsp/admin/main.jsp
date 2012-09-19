@@ -6,5 +6,5 @@
 </head>
 <body>
 	<a href="/dicAdmin.devys">사전관리</a><br/>
-	<a href="/morphAdmin.devys">형태소분석 결과 조회</a><br/>
+	<a href="/morphMain.devys">형태소분석 결과 조회</a><br/>
 </body>
