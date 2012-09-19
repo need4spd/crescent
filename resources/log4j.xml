@@ -13,6 +13,11 @@
 		<appender-ref ref="CONSOLE"/>
 	</logger>
 	
+	<logger name="com.tistory.devyongsik.admin" additivity="false">
+		<level value="warn" />
+		<appender-ref ref="CONSOLE"/>
+	</logger>
+	
 	<logger name="com.tistory.devyongsik.config" additivity="false">
 		<level value="warn" />
 		<appender-ref ref="CONSOLE"/>
