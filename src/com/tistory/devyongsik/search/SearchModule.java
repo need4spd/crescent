@@ -46,9 +46,9 @@ public class SearchModule {
 			if(hits.length > 0) { 
 			
 				int startOffset = crqsp.getStartOffSet();
-				int endOffset = startOffset + hits.length;
+				int endOffset = Math.min(hits.length, startOffset + crqsp.getHitsForPage());
 				
-				logger.debug("start : [{}], end : [{}]", new Object[]{startOffset, endOffset});
+				logger.debug("start : [{}], end : [{}], hit for page : [{}], hit.length :[{}]", new Object[]{startOffset, endOffset, crqsp.getHitsForPage(), hits.length});
 				
 				Collection collection = CollectionConfig.getInstance().getCollection(crqsp.getCollectionName());
 				
@@ -61,7 +61,7 @@ public class SearchModule {
 				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
 				Map<String, Object> result = new HashMap<String, Object>();
 				
-				for(int i = startOffset; i < hits.length; i++) {
+				for(int i = startOffset; i < endOffset; i++) {
 					Document doc = indexSearcher.doc(hits[i].doc);
 					Map<String,String> resultMap = new HashMap<String, String>();
 					

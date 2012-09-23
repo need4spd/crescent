@@ -7,7 +7,7 @@
 		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/sample</indexingDirectory -->
 		<fields>
 			<!-- type : string, long, int -->
-			<field name="board_id" store="true" index="false" type="long" analyze="false" termposition="false" termoffset="false" />
+			<field name="board_id" store="true" index="true" type="long" analyze="false" termposition="false" termoffset="false" />
 			<field name="title" store="true" index="true" type="string"	analyze="true" boost="2.0" />
 			<field name="dscr" store="true" index="true" type="string" analyze="true" must="true" termvector="true" />
 			<field name="creuser" store="true" index="false" type="string" analyze="false" />
