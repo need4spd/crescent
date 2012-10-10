@@ -7,6 +7,14 @@
 			<param name="ConversionPattern" value="%d{MM.dd hh:mm:ss aa} %p - %C{1}.%M(%L) || %m%n" />
 		</layout>
 	</appender>
+	
+	<appender name="dailyRollingFile" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="./logs/daily/search.log"/>
+		<param name="DatePattern" value=".yyyy-MM-dd"/>
+	    <layout class="org.apache.log4j.PatternLayout">
+	        <param name="ConversionPattern" value="%d %p [%c] - &lt;%m&gt;%n" />
+	    </layout>   
+	</appender>
 
 	<logger name="com.tistory.devyongsik.analyzer" additivity="false">
 		<level value="warn" />
@@ -16,6 +24,12 @@
 	<logger name="com.tistory.devyongsik.admin" additivity="false">
 		<level value="warn" />
 		<appender-ref ref="CONSOLE"/>
+	</logger>
+	
+	<logger name="com.tistory.devyongsik.logger" additivity="false">
+		<level value="info" />
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="dailyRollingFile" />
 	</logger>
 	
 	<logger name="com.tistory.devyongsik.config" additivity="false">

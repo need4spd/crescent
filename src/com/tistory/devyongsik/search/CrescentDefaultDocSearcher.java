@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
+import com.tistory.devyongsik.logger.CrescentLogger;
 import com.tistory.devyongsik.query.CrescentRequestQueryStrParser;
 import com.tistory.devyongsik.query.DefaultKeywordParser;
 
@@ -46,10 +47,15 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		
 		logger.debug("query : {}" , query);
 		
+		long startTime = System.currentTimeMillis();
 		indexSearcher.search(query, collector);
+		long endTime = System.currentTimeMillis();
 		
 		//전체 검색 건수
 		totalHitsCount = collector.getTotalHits();
+		
+		CrescentLogger.logging(query, totalHitsCount, endTime - startTime);
+		
 		
 		logger.debug("Total Hits Count : {} ", totalHitsCount);
 		
