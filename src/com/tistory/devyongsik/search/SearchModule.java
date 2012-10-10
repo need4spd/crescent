@@ -15,29 +15,29 @@ import com.tistory.devyongsik.config.CollectionConfig;
 import com.tistory.devyongsik.domain.Collection;
 import com.tistory.devyongsik.domain.SearchResult;
 import com.tistory.devyongsik.highlight.CrescentHighlighter;
-import com.tistory.devyongsik.query.CrescentRequestQueryStrParser;
+import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 
 public class SearchModule {
 	private Logger logger = LoggerFactory.getLogger(SearchModule.class);
 
 	private CrescentDocSearcher cds;
-	private CrescentRequestQueryStrParser crqsp;
+	private CrescentSearchRequestWrapper csrw;
 	
-	public SearchModule(CrescentRequestQueryStrParser crqsp) {
+	public SearchModule(CrescentSearchRequestWrapper csrw) {
 		
-		this.crqsp = crqsp;
+		this.csrw = csrw;
 		
-		if(crqsp.getSort() == null) {
-			cds = new CrescentDefaultDocSearcher(crqsp);
+		if(csrw.getSort() == null) {
+			cds = new CrescentDefaultDocSearcher(csrw);
 		} else {
-			cds = new CrescentSortDocSearcher(crqsp);
+			cds = new CrescentSortDocSearcher(csrw);
 		}
 	}
 	
 	public SearchResult search() {
 		
 		SearchResult searchResult = new SearchResult();
-		CrescentHighlighter highlighter = new CrescentHighlighter(crqsp);
+		CrescentHighlighter highlighter = new CrescentHighlighter(csrw);
 		
 		try {
 			
@@ -45,18 +45,18 @@ public class SearchModule {
 			
 			if(hits.length > 0) { 
 			
-				int startOffset = crqsp.getStartOffSet();
-				int endOffset = Math.min(hits.length, startOffset + crqsp.getHitsForPage());
+				int startOffset = csrw.getStartOffSet();
+				int endOffset = Math.min(hits.length, startOffset + csrw.getHitsForPage());
 				
-				logger.debug("start : [{}], end : [{}], hit for page : [{}], hit.length :[{}]", new Object[]{startOffset, endOffset, crqsp.getHitsForPage(), hits.length});
+				logger.debug("start : [{}], end : [{}], hit for page : [{}], hit.length :[{}]", new Object[]{startOffset, endOffset, csrw.getHitsForPage(), hits.length});
 				
-				Collection collection = CollectionConfig.getInstance().getCollection(crqsp.getCollectionName());
+				Collection collection = CollectionConfig.getInstance().getCollection(csrw.getCollectionName());
 				
 				List<String> fieldList = collection.getFieldNames();
 				String value = null;
 				
 				IndexSearcher indexSearcher 
-					= SearcherManager.getSearcherManager().getIndexSearcher(crqsp.getCollectionName());
+					= SearcherManager.getSearcherManager().getIndexSearcher(csrw.getCollectionName());
 				
 				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
 				Map<String, Object> result = new HashMap<String, Object>();

@@ -42,6 +42,8 @@ public class RequestBuilder<T> {
 			beanWrapperImpl.setPropertyValue(field.getName(), paramValue);
 		}
 		
+		beanWrapperImpl.setPropertyValue("userIp", request.getRemoteAddr());
+		
 		return returnObject;
 	}
 }

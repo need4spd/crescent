@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
-import com.tistory.devyongsik.query.CrescentRequestQueryStrParser;
+import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.query.DefaultKeywordParser;
 
 public class CrescentHighlighter {
@@ -27,13 +27,13 @@ public class CrescentHighlighter {
 	private List<String> searchFieldsNameList;
 	//TODO Analyzer 동적으로 생성하도록..
 	private Analyzer analyzer = new KoreanAnalyzer(false);
-	private CrescentRequestQueryStrParser crqsp = null;
+	private CrescentSearchRequestWrapper csrw = null;
 	private DefaultKeywordParser keywordParser = new DefaultKeywordParser();
 	private SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
     
-	public CrescentHighlighter(CrescentRequestQueryStrParser crqsp) {
-		this.crqsp = crqsp;
-		this.searchFieldsNameList = new ArrayList<String>(Arrays.asList(crqsp.getSearchFieldNames()));
+	public CrescentHighlighter(CrescentSearchRequestWrapper csrw) {
+		this.csrw = csrw;
+		this.searchFieldsNameList = new ArrayList<String>(Arrays.asList(csrw.getSearchFieldNames()));
 	
 		logger.debug("searchFieldsNameList : {}", searchFieldsNameList);
 		
@@ -48,9 +48,9 @@ public class CrescentHighlighter {
 			
 			try {
 				String[] fields = {fieldName};
-				Query query = keywordParser.parse(crqsp.getCollectionName()
+				Query query = keywordParser.parse(csrw.getCollectionName()
 						,fields
-						,crqsp.getKeyword()
+						,csrw.getKeyword()
 						, analyzer);
 				
 				logger.debug("query for highlighter : {}" , query);

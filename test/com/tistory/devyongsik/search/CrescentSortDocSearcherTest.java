@@ -8,7 +8,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.junit.Test;
 
 import com.tistory.devyongsik.domain.SearchRequest;
-import com.tistory.devyongsik.query.CrescentRequestQueryStrParser;
+import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 
 public class CrescentSortDocSearcherTest {
 	
@@ -19,9 +19,9 @@ public class CrescentSortDocSearcherTest {
 		searchRequest.setCollectionName("sample");
 		searchRequest.setSort("title_sort desc");
 		
-		CrescentRequestQueryStrParser crqsp = new CrescentRequestQueryStrParser(searchRequest);
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
-		CrescentDocSearcher crescentDocSearcher = new CrescentSortDocSearcher(crqsp);
+		CrescentDocSearcher crescentDocSearcher = new CrescentSortDocSearcher(csrw);
 		ScoreDoc[] scoreDocs = crescentDocSearcher.search();
 		
 		Assert.assertTrue(scoreDocs.length > 0);

@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.domain.SearchResult;
-import com.tistory.devyongsik.query.CrescentRequestQueryStrParser;
+import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 
 public class SearchModuleTest {
 
@@ -16,9 +16,9 @@ public class SearchModuleTest {
 		searchRequest.setKeyword("제목");
 		searchRequest.setCollectionName("sample");
 		
-		CrescentRequestQueryStrParser crqsp = new CrescentRequestQueryStrParser(searchRequest);
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
-		SearchModule searchModule = new SearchModule(crqsp);
+		SearchModule searchModule = new SearchModule(csrw);
 		SearchResult searchResult = searchModule.search();
 		
 		Assert.assertTrue(searchResult.getTotalHitsCount() > 0);
@@ -33,9 +33,9 @@ public class SearchModuleTest {
 		searchRequest.setCollectionName("sample");
 		searchRequest.setPageSize("10");
 		
-		CrescentRequestQueryStrParser crqsp = new CrescentRequestQueryStrParser(searchRequest);
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
-		SearchModule searchModule = new SearchModule(crqsp);
+		SearchModule searchModule = new SearchModule(csrw);
 		SearchResult searchResult = searchModule.search();
 		
 		Assert.assertTrue(searchResult.getTotalHitsCount() > 0);
@@ -50,9 +50,9 @@ public class SearchModuleTest {
 		searchRequest.setCollectionName("sample");
 		searchRequest.setPageSize("30");
 		
-		CrescentRequestQueryStrParser crqsp = new CrescentRequestQueryStrParser(searchRequest);
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
-		SearchModule searchModule = new SearchModule(crqsp);
+		SearchModule searchModule = new SearchModule(csrw);
 		SearchResult searchResult = searchModule.search();
 		
 		Assert.assertTrue(searchResult.getTotalHitsCount() > 0);
@@ -67,9 +67,9 @@ public class SearchModuleTest {
 		searchRequest.setCollectionName("sample");
 		searchRequest.setPageSize("80");
 		
-		CrescentRequestQueryStrParser crqsp = new CrescentRequestQueryStrParser(searchRequest);
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
-		SearchModule searchModule = new SearchModule(crqsp);
+		SearchModule searchModule = new SearchModule(csrw);
 		SearchResult searchResult = searchModule.search();
 		
 		Assert.assertTrue(searchResult.getTotalHitsCount() > 0);
@@ -85,9 +85,9 @@ public class SearchModuleTest {
 		searchRequest.setPageSize("5");
 		searchRequest.setPageNum("5");
 		
-		CrescentRequestQueryStrParser crqsp = new CrescentRequestQueryStrParser(searchRequest);
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
-		SearchModule searchModule = new SearchModule(crqsp);
+		SearchModule searchModule = new SearchModule(csrw);
 		SearchResult searchResult = searchModule.search();
 		
 		Assert.assertTrue(searchResult.getTotalHitsCount() > 0);

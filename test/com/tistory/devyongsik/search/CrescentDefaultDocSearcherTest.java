@@ -8,7 +8,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.junit.Test;
 
 import com.tistory.devyongsik.domain.SearchRequest;
-import com.tistory.devyongsik.query.CrescentRequestQueryStrParser;
+import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 
 public class CrescentDefaultDocSearcherTest {
 
@@ -18,9 +18,9 @@ public class CrescentDefaultDocSearcherTest {
 		searchRequest.setKeyword("제목");
 		searchRequest.setCollectionName("glider_wiki");
 		
-		CrescentRequestQueryStrParser crqsp = new CrescentRequestQueryStrParser(searchRequest);
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
-		CrescentDocSearcher crescentDocSearcher = new CrescentDefaultDocSearcher(crqsp);
+		CrescentDocSearcher crescentDocSearcher = new CrescentDefaultDocSearcher(csrw);
 		ScoreDoc[] scoreDocs = crescentDocSearcher.search();
 		
 		Assert.assertTrue(scoreDocs.length > 0);

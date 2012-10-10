@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.domain.SearchResult;
-import com.tistory.devyongsik.query.CrescentRequestQueryStrParser;
+import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.query.DefaultKeywordParser;
 import com.tistory.devyongsik.search.SearchModule;
 
@@ -19,18 +19,18 @@ public class SearchServiceImpl implements SearchService {
 	
 	@Override
 	public SearchResult search(SearchRequest searchRequest) throws IOException {
-		CrescentRequestQueryStrParser crqsp 
-			= new CrescentRequestQueryStrParser(searchRequest);
+		CrescentSearchRequestWrapper csrw 
+			= new CrescentSearchRequestWrapper(searchRequest);
 		
 		DefaultKeywordParser keywordParser = new DefaultKeywordParser();
-		Query query = keywordParser.parse(crqsp.getCollectionName()
-				,crqsp.getSearchFieldNames()
-				,crqsp.getKeyword()
+		Query query = keywordParser.parse(csrw.getCollectionName()
+				,csrw.getSearchFieldNames()
+				,csrw.getKeyword()
 				,new KoreanAnalyzer(false));
 		
 		logger.debug("query : {}" , query);
 		
-		SearchModule searchModule = new SearchModule(crqsp);
+		SearchModule searchModule = new SearchModule(csrw);
 		SearchResult searchResult = searchModule.search();
 		
 		

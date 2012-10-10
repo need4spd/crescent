@@ -12,8 +12,8 @@ import com.tistory.devyongsik.domain.Collection;
 import com.tistory.devyongsik.domain.CollectionField;
 import com.tistory.devyongsik.domain.SearchRequest;
 
-public class CrescentRequestQueryStrParser {
-	private Logger logger = LoggerFactory.getLogger(CrescentRequestQueryStrParser.class);
+public class CrescentSearchRequestWrapper {
+	private Logger logger = LoggerFactory.getLogger(CrescentSearchRequestWrapper.class);
 
 	private SearchRequest searchRequest = null;
 
@@ -26,7 +26,7 @@ public class CrescentRequestQueryStrParser {
 	private final int DEFAULT_HITS_PAGE = 5;
 	
 
-	public CrescentRequestQueryStrParser(SearchRequest searchRequest) {
+	public CrescentSearchRequestWrapper(SearchRequest searchRequest) {
 		this.searchRequest = searchRequest;	
 	}
 
@@ -140,5 +140,17 @@ public class CrescentRequestQueryStrParser {
 		}
 		
 		return fieldNames;
+	}
+	
+	public String getUserIp() {
+		return searchRequest.getUserIp();
+	}
+	
+	public String getUserId() {
+		return searchRequest.getUserId();
+	}
+	
+	public String getPcId() {
+		return searchRequest.getPcId();
 	}
 }

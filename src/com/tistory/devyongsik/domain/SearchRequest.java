@@ -20,6 +20,38 @@ public class SearchRequest {
 	@RequestParamName(name="search_field", defaultValue="")
 	private String searchField;
 
+	private String userIp;
+	
+	private String userId;
+	
+	private String pcId;
+	
+	
+	
+	public String getPcId() {
+		return pcId;
+	}
+
+	public void setPcId(String pcId) {
+		this.pcId = pcId;
+	}
+
+	public String getUserIp() {
+		return userIp;
+	}
+
+	public void setUserIp(String userIp) {
+		this.userIp = userIp;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
 	public String getCollectionName() {
 		return collectionName;
 	}

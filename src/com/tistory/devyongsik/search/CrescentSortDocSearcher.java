@@ -11,18 +11,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
-import com.tistory.devyongsik.query.CrescentRequestQueryStrParser;
+import com.tistory.devyongsik.logger.CrescentLogger;
+import com.tistory.devyongsik.logger.LogInfo;
+import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.query.DefaultKeywordParser;
 
 public class CrescentSortDocSearcher implements CrescentDocSearcher {
 
 	private Logger logger = LoggerFactory.getLogger(CrescentSortDocSearcher.class);
-	private CrescentRequestQueryStrParser crqp = null;
+	private CrescentSearchRequestWrapper csrw = null;
 	
 	private int totalHitsCount;
 	
-	public CrescentSortDocSearcher(CrescentRequestQueryStrParser crqp) {
-		this.crqp = crqp;
+	public CrescentSortDocSearcher(CrescentSearchRequestWrapper csrw) {
+		this.csrw = csrw;
 	}
 
 	public int getTotalHitsCount() {
@@ -33,34 +35,50 @@ public class CrescentSortDocSearcher implements CrescentDocSearcher {
 	public ScoreDoc[] search() throws IOException {
 		
 		//5page * 50
-		int numOfHits = crqp.getDefaultHitsPage() * crqp.getHitsForPage();
+		int numOfHits = csrw.getDefaultHitsPage() * csrw.getHitsForPage();
 		
-		Sort sort = crqp.getSort();
+		Sort sort = csrw.getSort();
 		
 		logger.debug("sort : {}", sort);
 		
 		IndexSearcher indexSearcher 
-			= SearcherManager.getSearcherManager().getIndexSearcher(crqp.getCollectionName());
+			= SearcherManager.getSearcherManager().getIndexSearcher(csrw.getCollectionName());
 		
 		DefaultKeywordParser keywordParser = new DefaultKeywordParser();
-		Query query = keywordParser.parse(crqp.getCollectionName()
-				,crqp.getSearchFieldNames()
-				,crqp.getKeyword()
+		Query query = keywordParser.parse(csrw.getCollectionName()
+				,csrw.getSearchFieldNames()
+				,csrw.getKeyword()
 				, new KoreanAnalyzer(false));
 		
+		long startTime = System.currentTimeMillis();
 		TopFieldDocs tfd = indexSearcher.search(query,null,numOfHits,sort);
+		long endTime = System.currentTimeMillis();
 		
 		logger.debug("query : {}" , query);
 				
 		//전체 검색 건수
 		totalHitsCount = tfd.totalHits;
 		
+		LogInfo logInfo = new LogInfo();
+		logInfo.setCollectionName(csrw.getCollectionName());
+		logInfo.setElaspedTimeMil(endTime - startTime);
+		logInfo.setKeyword(csrw.getKeyword());
+		logInfo.setPageNum(csrw.getPageNum());
+		logInfo.setPcid(csrw.getPcId());
+		logInfo.setQuery(query);
+		logInfo.setSort(csrw.getSort());
+		logInfo.setTotalCount(totalHitsCount);
+		logInfo.setUserId(csrw.getUserId());
+		logInfo.setUserIp(csrw.getUserIp());
+		
+		CrescentLogger.logging(logInfo);
+		
 		logger.debug("Total Hits Count : {} ", totalHitsCount);
 		
 		ScoreDoc[] hits = tfd.scoreDocs;
 		
 		//총 검색건수와 실제 보여줄 document의 offset (min ~ max)를 비교해서 작은 것을 가져옴
-		int endOffset = Math.min(totalHitsCount, crqp.getStartOffSet() + crqp.getHitsForPage());
+		int endOffset = Math.min(totalHitsCount, csrw.getStartOffSet() + csrw.getHitsForPage());
 		
 		if(endOffset > hits.length) {
 			logger.debug("기본 설정된 검색건수보다 더 검색을 원하므로, 전체를 대상으로 검색합니다.");
@@ -71,7 +89,7 @@ public class CrescentSortDocSearcher implements CrescentDocSearcher {
 
 		
 		logger.debug("start : [{}], end : [{}], total : [{}]"
-						,new Object[]{crqp.getStartOffSet(), endOffset, totalHitsCount});
+						,new Object[]{csrw.getStartOffSet(), endOffset, totalHitsCount});
 		logger.debug("hits count : [{}]", hits.length);
 		logger.debug("startOffset + hitsPerPage : [{}]", numOfHits);
 		

@@ -18,7 +18,7 @@ import org.junit.Test;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.domain.SearchRequest;
-import com.tistory.devyongsik.query.CrescentRequestQueryStrParser;
+import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 
 public class CrescentHighlighterTest {
 
@@ -29,9 +29,9 @@ public class CrescentHighlighterTest {
 		searchRequest.setCollectionName("glider_wiki");
 		searchRequest.setSearchField("we_wiki_title,we_wiki_text");
 		
-		CrescentRequestQueryStrParser crqsp = new CrescentRequestQueryStrParser(searchRequest);
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
-		CrescentHighlighter highlighter = new CrescentHighlighter(crqsp);
+		CrescentHighlighter highlighter = new CrescentHighlighter(csrw);
 		String r = highlighter.getBestFragment("we_wiki_title", "제목 입니다.텍스트 입니다.제목 입니다.");
 		String r2 = highlighter.getBestFragment("we_wiki_text", "텍스트 입니다. 제목.");
 		
