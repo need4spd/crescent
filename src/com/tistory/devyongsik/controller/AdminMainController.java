@@ -50,6 +50,20 @@ public class AdminMainController {
 		String dicType = request.getParameter("dicType");
 		String pagingAction = request.getParameter("pagingAction");
 		
+		List<String> dictionary = loadDictionary(dicType);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/admin/dictionaryManage");
+		modelAndView.addObject("dicType", dicType);
+		
+		if(dictionary != null && dictionary.size() < 30) {
+			modelAndView.addObject("dictionary", dictionary);
+			modelAndView.addObject("startOffset", "0");
+			modelAndView.addObject("dictionarySize", dictionary.size());
+			
+			return modelAndView;
+		} 
+		
 		int startOffset = Integer.parseInt(StringUtils.defaultString(request.getParameter("startOffset"), "0"));
 		int endOffset = 0;
 		
@@ -68,14 +82,7 @@ public class AdminMainController {
 		
 		logger.debug("dicType : {}", dicType);
 		logger.debug("startOffset : {} , endOffset : {}", new Object[]{startOffset, endOffset});
-		
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/admin/dictionaryManage");
-		
-		modelAndView.addObject("dicType", dicType);
-
-		List<String> dictionary = loadDictionary(dicType);
-		
+			
 		if(dictionary != null && dictionary.size() > endOffset) {
 			modelAndView.addObject("dictionary", dictionary.subList(startOffset, endOffset));
 		} else {
@@ -83,6 +90,8 @@ public class AdminMainController {
 		}
 		
 		modelAndView.addObject("startOffset", String.valueOf(endOffset));
+		modelAndView.addObject("dictionarySize", dictionary.size());
+		
 		
 		return modelAndView;
 	}
@@ -120,6 +129,7 @@ public class AdminMainController {
 		}
 
 		modelAndView.addObject("startOffset", String.valueOf(endOffset));
+		modelAndView.addObject("dictionarySize", dictionary.size());
 		
 		return modelAndView;
 	}
@@ -141,14 +151,8 @@ public class AdminMainController {
 		
 		modelAndView.addObject("dicType", dicType);
 		
-		String[] removeWordArray = wordsToRemove.split(",");
-		if(removeWordArray != null && removeWordArray.length > 0) {
-			for(String removeWord : removeWordArray) {
-				dictionaryService.removeWordFromDictionary(getDictionaryType(dicType), removeWord);
-			}
-			
-			dictionaryService.writeToDictionaryFile(getDictionaryType(dicType));
-		}
+		dictionaryService.removeWordFromDictionary(getDictionaryType(dicType), wordsToRemove);	
+		dictionaryService.writeToDictionaryFile(getDictionaryType(dicType));
 		
 		List<String> dictionary = loadDictionary(dicType);
 		
@@ -159,6 +163,7 @@ public class AdminMainController {
 		}
 
 		modelAndView.addObject("startOffset", String.valueOf(endOffset));
+		modelAndView.addObject("dictionarySize", dictionary.size());
 		
 		return modelAndView;
 	}
@@ -190,6 +195,7 @@ public class AdminMainController {
 		}
 
 		modelAndView.addObject("startOffset", String.valueOf(endOffset));
+		modelAndView.addObject("dictionarySize", dictionary.size());
 		
 		return modelAndView;
 	}

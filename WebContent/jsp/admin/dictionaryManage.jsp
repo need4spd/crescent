@@ -6,6 +6,8 @@
 	List<String> dictionary = (List<String>)request.getAttribute("dictionary");
 	String dicType = (String)request.getAttribute("dicType");
 	String startOffset = (String)request.getAttribute("startOffset");
+	Integer dictionarySize = (Integer)request.getAttribute("dictionarySize");
+	
 %>
 <head>
 	<script type="text/javascript" src="js/jquery-1.8.1.js"></script>
@@ -62,6 +64,8 @@
 		<input type="text" id="wordToAdd" name="wordToAdd" value="" /><a href="javascript:addWord();">단어추가</a><br/>
 		<input type="text" id="wordToFind" name="wordToFind" value="" /><a href="javascript:findWord();">단어찾기</a><br/>
 		
-		<a href="javascript:prev();"> 이전 </a>&nbsp;&nbsp; | &nbsp;&nbsp;<a href="javascript:next();"> 다음 </a>
+		<% if(dictionarySize > 30) { %>
+			<a href="javascript:prev();"> 이전 </a>&nbsp;&nbsp; | &nbsp;&nbsp;<a href="javascript:next();"> 다음 </a>
+		<% } %>
 	</form>
 </body>
