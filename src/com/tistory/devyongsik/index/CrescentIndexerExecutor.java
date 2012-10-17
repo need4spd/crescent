@@ -21,7 +21,7 @@ public class CrescentIndexerExecutor {
 
 	public String execute(String jsonFormStr) {
 		
-		List<Document> documentList = handler.handledData(jsonFormStr, collection.getFieldsByName());		
+		List<Document> documentList = handler.handledData(jsonFormStr, collection.getFieldsByName(), collection.getSortFieldNames());		
 		CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getIndexingDir());
 		crescentIndexer.indexing(documentList);
 		

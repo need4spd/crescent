@@ -22,7 +22,7 @@ public class JsonDataHandler implements Handler {
 	private Logger logger = LoggerFactory.getLogger(JsonDataHandler.class);
 	
 	@Override
-	public List<Document> handledData(String jonsFormStr, Map<String, CollectionField> fieldsByName) {
+	public List<Document> handledData(String jonsFormStr, Map<String, CollectionField> fieldsByName, List<String> sortFieldNames) {
 
 		Type collectionType = new TypeToken<List<Map<String,String>>>(){}.getType();
 		Gson gson = new Gson();
@@ -32,7 +32,7 @@ public class JsonDataHandler implements Handler {
 		try {
 
 			List<Map<String,String>> indexingData = gson.fromJson(jonsFormStr, collectionType);
-			List<Document> docList = LuceneDocumentBuilder.buildDocumentList(indexingData, fieldsByName);
+			List<Document> docList = LuceneDocumentBuilder.buildDocumentList(indexingData, fieldsByName, sortFieldNames);
 			
 			return docList;
 			

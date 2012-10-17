@@ -9,5 +9,5 @@ import com.tistory.devyongsik.domain.CollectionField;
 
 public interface Handler {
 
-	List<Document> handledData(String jsonFormStr, Map<String, CollectionField> fieldsByName);
+	List<Document> handledData(String jsonFormStr, Map<String, CollectionField> fieldsByName, List<String> sortFieldNames);
 }

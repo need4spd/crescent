@@ -29,7 +29,7 @@
 		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/glider_wiki</indexingDirectory -->
 		<fields>
 			<!-- type : string, long, int -->
-			<field name="we_wiki_idx" store="true" index="false" type="long" analyze="false" />
+			<field name="we_wiki_idx" store="true" index="true" type="long" analyze="false" />
 			<field name="we_space_idx" store="true" index="false" type="long"	analyze="false"  />
 			<field name="we_wiki_text" store="true" index="true" type="string" analyze="true" must="true" termvector="true" />
 			<field name="we_wiki_title" store="true" index="true" type="string" analyze="true" must="true" boost="2.0" />
