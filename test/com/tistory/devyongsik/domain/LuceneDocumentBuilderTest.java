@@ -33,7 +33,7 @@ public class LuceneDocumentBuilderTest {
 		
 		Map<String, CollectionField> fieldsByName = sampleCollection.getFieldsByName();
 		
-		List<Document> luceneDocuments = LuceneDocumentBuilder.buildDocumentList(docList, fieldsByName);
+		List<Document> luceneDocuments = LuceneDocumentBuilder.buildDocumentList(docList, fieldsByName, sampleCollection.getSortFieldNames());
 		
 		Assert.assertNotNull(luceneDocuments);
 		

@@ -118,6 +118,7 @@ public class AdminMainController {
 		
 		dictionaryService.addWordToDictionary(getDictionaryType(dicType), wordToAdd);
 		dictionaryService.writeToDictionaryFile(getDictionaryType(dicType));
+		dictionaryService.rebuildDictionary(getDictionaryType(dicType));
 
 		//dictionaryService.
 		List<String> dictionary = loadDictionary(dicType);
@@ -153,6 +154,7 @@ public class AdminMainController {
 		
 		dictionaryService.removeWordFromDictionary(getDictionaryType(dicType), wordsToRemove);	
 		dictionaryService.writeToDictionaryFile(getDictionaryType(dicType));
+		dictionaryService.rebuildDictionary(getDictionaryType(dicType));
 		
 		List<String> dictionary = loadDictionary(dicType);
 		
@@ -186,7 +188,6 @@ public class AdminMainController {
 		modelAndView.addObject("dicType", dicType);
 		
 		List<String> dictionary = dictionaryService.findWordFromDictionary(getDictionaryType(dicType), wordToFind);
-		dictionaryService.writeToDictionaryFile(getDictionaryType(dicType));
 		
 		if(dictionary != null && dictionary.size() > endOffset) {
 			modelAndView.addObject("dictionary", dictionary.subList(startOffset, endOffset));

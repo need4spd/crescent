@@ -112,6 +112,10 @@ public class DictionaryServiceImpl implements DictionaryService, ApplicationCont
 			
 		}		
 	}
+	
+	public void rebuildDictionary(DictionaryType dictionaryType) {
+		DictionaryFactory.getFactory().rebuildDictionary(dictionaryType);
+	}
 
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)

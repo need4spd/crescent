@@ -52,4 +52,35 @@ public class MorphAdminMainController {
 		
 		return modelAndView;
 	}
+	
+	@RequestMapping("/doMorphTestAjax")
+	public ModelAndView morphTestAjax(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		String keyword = request.getParameter("keyword");
+		
+		logger.debug("keyword : {}", keyword);
+		
+		List<Token> resultTokenListIndexingMode = morphService.getTokens(keyword, true);
+		List<Token> resultTokenListQueryMode = morphService.getTokens(keyword, false);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/admin/morphResultTest");
+		
+		StringBuilder resultIndexingMode = new StringBuilder();
+		for(Token token : resultTokenListIndexingMode) {
+			resultIndexingMode.append(token.toString()).append(":(").append(token.startOffset()).append(",").append(token.endOffset()).append(")")
+							  .append("[").append(token.type()).append("]").append(" , ");
+		}
+		
+		StringBuilder resultQueryMode = new StringBuilder();
+		for(Token token : resultTokenListQueryMode) {
+			resultQueryMode.append(token.toString()).append(":(").append(token.startOffset()).append(",").append(token.endOffset()).append(")")
+							  .append("[").append(token.type()).append("]").append(" , ");
+		}
+
+		modelAndView.addObject("resultTokenListIndexingMode", resultIndexingMode);
+		modelAndView.addObject("resultTokenListQueryMode", resultQueryMode);
+		
+		return modelAndView;
+	}
 }

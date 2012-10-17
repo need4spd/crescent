@@ -10,4 +10,5 @@ public interface DictionaryService {
 	public void removeWordFromDictionary (DictionaryType dicType, String word);
 	public List<String> findWordFromDictionary (DictionaryType dicType, String word);
 	public void writeToDictionaryFile(DictionaryType dicType);
+	public void rebuildDictionary(DictionaryType dictionaryType);
 }
