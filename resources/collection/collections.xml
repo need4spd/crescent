@@ -2,7 +2,7 @@
 <collections>
 	<collection name="sample">
 		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
-		<indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/sample</indexingDirectory>
+		<indexingDirectory>/Users/need4spd/Programming/Java/crescent_index/sample</indexingDirectory>
 		<!-- indexingDirectory>/data1/lucene_index/sample</indexingDirectory -->
 		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/sample</indexingDirectory -->
 		<fields>
@@ -22,27 +22,27 @@
 		</sortFields>
 	</collection>
 	
-	<collection name="glider_wiki">
+	<collection name="sample_wiki">
 		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
-		<indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/glider_wiki</indexingDirectory>
+		<indexingDirectory>/Users/need4spd/Programming/Java/crescent_index/sample_wiki</indexingDirectory>
 		<!-- indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory -->
 		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/glider_wiki</indexingDirectory -->
 		<fields>
 			<!-- type : string, long, int -->
-			<field name="we_wiki_idx" store="true" index="true" type="long" analyze="false" />
-			<field name="we_space_idx" store="true" index="false" type="long"	analyze="false"  />
-			<field name="we_wiki_text" store="true" index="true" type="string" analyze="true" must="true" termvector="true" />
-			<field name="we_wiki_title" store="true" index="true" type="string" analyze="true" must="true" boost="2.0" />
-			<field name="we_ins_user" store="true" index="true" type="string" analyze="false" />
-			<field name="we_ins_date" store="true" index="true" type="long" analyze="false" />			
+			<field name="wiki_idx" store="true" index="true" type="long" analyze="false" />
+			<field name="space_idx" store="true" index="true" type="long"	analyze="false"  />
+			<field name="wiki_text" store="true" index="true" type="string" analyze="true" must="true" termvector="true" />
+			<field name="wiki_title" store="true" index="true" type="string" analyze="true" must="true" boost="2.0" />
+			<field name="ins_user" store="true" index="true" type="string" analyze="false" />
+			<field name="ins_date" store="true" index="true" type="long" analyze="false" />			
 		</fields>
 		<defaultSearchFields>
-			<defaultSearchField name="we_wiki_title" />
-			<defaultSearchField name="we_wiki_text" />
+			<defaultSearchField name="wiki_title" />
+			<defaultSearchField name="wiki_text" />
 		</defaultSearchFields>
 		<sortFields>
-			<sortField source="we_ins_date" dest="we_ins_date_sort" />
-			<sortField source="we_wiki_idx" dest="we_wiki_idx_sort" />
+			<sortField source="ins_date" dest="ins_date_sort" />
+			<sortField source="wiki_idx" dest="wiki_idx_sort" />
 		</sortFields>
 	</collection>
 </collections>

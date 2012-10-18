@@ -1,2 +1,3 @@
 *.class
 /build
+/test/crescent_index
