@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.SearcherFactory;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
@@ -19,16 +19,16 @@ import com.tistory.devyongsik.domain.Collection;
 /**
  * author : need4spd, need4spd@naver.com, 2012. 3. 11.
  */
-public class SearcherManager {
+public class CrescentSearcherManager {
 
-	private static SearcherManager searcherManager = new SearcherManager();
+	private static CrescentSearcherManager searcherManager = new CrescentSearcherManager();
 	
-	private Map<String, IndexSearcher> indexSearchersByCollection = new ConcurrentHashMap<String, IndexSearcher>();
-	private Map<String, IndexReader> indexReadersByCollection = new ConcurrentHashMap<String, IndexReader>();
+	private Map<String, SearcherManager> searcherManagerByCollection = new ConcurrentHashMap<String, SearcherManager>();
+	//private Map<String, IndexReader> indexReadersByCollection = new ConcurrentHashMap<String, IndexReader>();
 
-	private Logger logger = LoggerFactory.getLogger(SearcherManager.class);
+	private Logger logger = LoggerFactory.getLogger(CrescentSearcherManager.class);
 	
-	private SearcherManager() {
+	private CrescentSearcherManager() {
 		try {
 			indexSearcherInit();
 		} catch (IOException e) {
@@ -37,7 +37,7 @@ public class SearcherManager {
 		}
 	}
 	
-	public static SearcherManager getSearcherManager() {
+	public static CrescentSearcherManager getCrescentSearcherManager() {
 		return searcherManager;
 	}
 	
@@ -59,19 +59,18 @@ public class SearcherManager {
 			
 			logger.info("index file dir ; {}", indexDir);
 			
-			//int numOfIndex = collection.getNumberOfIndexFiles();
-			
 			Directory dir = FSDirectory.open(new File(indexDir));
-			IndexReader reader = IndexReader.open(dir);
-			IndexSearcher searcher = new IndexSearcher(reader);
-		
-			logger.info("indexreader and indexsearcher created....");
-			indexReadersByCollection.put(collectionName, reader);
-			indexSearchersByCollection.put(collectionName, searcher);
+			//IndexReader reader = IndexReader.open(dir);
+			
+			SearcherFactory searcherFactory = new SearcherFactory();
+			SearcherManager searcherManager = new SearcherManager(dir, searcherFactory);
+			searcherManagerByCollection.put(collectionName, searcherManager);
+			
+			logger.info("searcher manager created....");
 		}
 	}
 	
-	public IndexSearcher getIndexSearcher(String collectionName) {
-		return indexSearchersByCollection.get(collectionName);
+	public SearcherManager getSearcherManager(String collectionName) {
+		return searcherManagerByCollection.get(collectionName);
 	}
 }

@@ -1,10 +1,11 @@
 package com.tistory.devyongsik.search;
 
 import java.io.IOException;
+import java.util.List;
 
 import junit.framework.Assert;
 
-import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.document.Document;
 import org.junit.Test;
 
 import com.tistory.devyongsik.domain.SearchRequest;
@@ -22,8 +23,8 @@ public class CrescentSortDocSearcherTest {
 		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
 		CrescentDocSearcher crescentDocSearcher = new CrescentSortDocSearcher(csrw);
-		ScoreDoc[] scoreDocs = crescentDocSearcher.search();
+		List<Document> resultList = crescentDocSearcher.search();
 		
-		Assert.assertTrue(scoreDocs.length > 0);
+		Assert.assertTrue(resultList.size() > 0);
 	}
 }

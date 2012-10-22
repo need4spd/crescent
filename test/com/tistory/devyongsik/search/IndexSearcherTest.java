@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
 import org.junit.Test;
@@ -15,8 +16,8 @@ public class IndexSearcherTest {
 
 	@Test
 	public void defaultSearch() throws IOException {
-		SearcherManager searcherManager = SearcherManager.getSearcherManager();
-		IndexSearcher indexSearcher = searcherManager.getIndexSearcher("sample");
+		SearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager("sample");
+		IndexSearcher indexSearcher = searcherManager.acquire();
 		
 		Term t = new Term("title", "2");
 		Query q = new TermQuery(t);

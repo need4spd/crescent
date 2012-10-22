@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.ScoreDoc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,31 +39,23 @@ public class SearchModule {
 		
 		try {
 			
-			ScoreDoc[] hits = cds.search();
+			List<Document> resultDocumentList = cds.search();
 			
-			if(hits.length > 0) { 
-			
-				int startOffset = csrw.getStartOffSet();
-				int endOffset = Math.min(hits.length, startOffset + csrw.getHitsForPage());
-				
-				logger.debug("start : [{}], end : [{}], hit for page : [{}], hit.length :[{}]", new Object[]{startOffset, endOffset, csrw.getHitsForPage(), hits.length});
-				
+			if(resultDocumentList.size() > 0) { 
+							
 				Collection collection = CollectionConfig.getInstance().getCollection(csrw.getCollectionName());
 				
 				List<String> fieldList = collection.getFieldNames();
 				String value = null;
 				
-				IndexSearcher indexSearcher 
-					= SearcherManager.getSearcherManager().getIndexSearcher(csrw.getCollectionName());
-				
 				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
 				Map<String, Object> result = new HashMap<String, Object>();
 				
-				for(int i = startOffset; i < endOffset; i++) {
-					Document doc = indexSearcher.doc(hits[i].doc);
+				//int docnum = 0;
+				for(Document doc : resultDocumentList) {
 					Map<String,String> resultMap = new HashMap<String, String>();
 					
-					resultMap.put("docnum", Integer.toString(i));
+					//resultMap.put("docnum", Integer.toString(docnum++));
 					for(String fieldName : fieldList) {
 						//필드별 결과를 가져온다.
 						value = highlighter.getBestFragment(fieldName, doc.get(fieldName));
