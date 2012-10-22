@@ -67,8 +67,8 @@ public class SearchModule {
 				
 				result.put("total_count", cds.getTotalHitsCount());
 				result.put("result_list", resultList);
-				result.put("error_code", "0");
-				result.put("error_msg", "SUCCESS");
+				result.put("error_code", String.valueOf(cds.getErrorCode()));
+				result.put("error_msg", cds.getErrorMessage());
 				
 				logger.debug("result list {}", resultList);
 				
@@ -84,9 +84,9 @@ public class SearchModule {
 				
 				result.put("total_count", cds.getTotalHitsCount());
 				result.put("result_list", resultList);
+				result.put("error_code", String.valueOf(cds.getErrorCode()));
+				result.put("error_msg", cds.getErrorMessage());
 				
-				result.put("error_code", "0");
-				result.put("error_msg", "SUCCESS");
 				
 				logger.debug("result list {}", resultList);
 				
@@ -106,14 +106,13 @@ public class SearchModule {
 			
 			result.put("total_count", cds.getTotalHitsCount());
 			result.put("result_list", resultList);
-			
-			result.put("error_code", "0");
-			result.put("error_msg", e.getMessage());
+			result.put("error_code", String.valueOf(cds.getErrorCode()));
+			result.put("error_msg", cds.getErrorMessage());
 			
 			logger.error("검색 중 에러 발생함." + e);
 			
-			searchResult.setErrorCode(-1);
-			searchResult.setErrorMsg(e.getMessage());
+			searchResult.setErrorCode(cds.getErrorCode());
+			searchResult.setErrorMsg(cds.getErrorMessage());
 			searchResult.setSearchResult(result);
 			searchResult.setResultList(resultList);
 			
