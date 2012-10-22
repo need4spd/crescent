@@ -25,7 +25,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 	private CrescentSearchRequestWrapper csrw = null;
 	
 	private int totalHitsCount;
-	private String errorMessage;
+	private String errorMessage = "SUCCESS";
 	private int errorCode;
 	
 	public CrescentDefaultDocSearcher(CrescentSearchRequestWrapper csrw) {
