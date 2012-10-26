@@ -85,11 +85,15 @@ public class DefaultKeywordParser {
 		//split된 검색어를 Analyze..
 		TokenStream stream = a.tokenStream("", new StringReader(splitedKeyword));
 		CharTermAttribute charTerm = stream.getAttribute(CharTermAttribute.class);
+		
 
 		try {
+			stream.reset();
+			
 			while(stream.incrementToken()) {
 				rst.add(charTerm.toString());
 			}
+			
 		} catch (IOException e) {
 			logger.error("error : " + e);
 			throw new RuntimeException(e);
