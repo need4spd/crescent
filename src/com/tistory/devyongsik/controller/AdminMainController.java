@@ -56,7 +56,7 @@ public class AdminMainController {
 		modelAndView.setViewName("/admin/dictionaryManage");
 		modelAndView.addObject("dicType", dicType);
 		
-		if(dictionary != null && dictionary.size() < 30) {
+		if(dictionary != null && dictionary.size() < 20) {
 			modelAndView.addObject("dictionary", dictionary);
 			modelAndView.addObject("startOffset", "0");
 			modelAndView.addObject("dictionarySize", dictionary.size());
@@ -68,8 +68,8 @@ public class AdminMainController {
 		int endOffset = 0;
 		
 		if("prev".equals(pagingAction)) {
-			endOffset = startOffset - 30;
-			startOffset = endOffset - 30;
+			endOffset = startOffset - 20;
+			startOffset = endOffset - 20;
 			
 			if (endOffset <= 0) {
 				endOffset = 0;
@@ -77,7 +77,7 @@ public class AdminMainController {
 			}
 			
 		} else {
-			endOffset = startOffset + 30;
+			endOffset = startOffset + 20;
 		}
 		
 		logger.debug("dicType : {}", dicType);
@@ -101,7 +101,7 @@ public class AdminMainController {
 		String dicType = request.getParameter("dicType");
 		
 		int startOffset = 0;
-		int endOffset = 30;
+		int endOffset = 20;
 		
 		logger.debug("dicType : {}", dicType);
 		logger.debug("startOffset : {} , endOffset : {}", new Object[]{startOffset, endOffset});
@@ -141,7 +141,7 @@ public class AdminMainController {
 		String wordsToRemove = StringUtils.defaultIfEmpty(request.getParameter("wordsToRemove"), "");
 		
 		int startOffset = 0;
-		int endOffset = 30;
+		int endOffset = 20;
 		
 		logger.debug("dicType : {}", dicType);
 		logger.debug("wordsToRemove : {}", wordsToRemove);
@@ -176,7 +176,7 @@ public class AdminMainController {
 		String wordToFind = request.getParameter("wordToFind");
 		
 		int startOffset = 0;
-		int endOffset = 30;
+		int endOffset = 20;
 		
 		logger.debug("dicType : {}", dicType);
 		logger.debug("wordToFind : {}", wordToFind);
