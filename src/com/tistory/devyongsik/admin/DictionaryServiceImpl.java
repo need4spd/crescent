@@ -49,17 +49,15 @@ public class DictionaryServiceImpl implements DictionaryService, ApplicationCont
 	
 	public List<String> findWordFromDictionary (DictionaryType dicType, String word) {
 		List<String> dictionary = DictionaryFactory.getFactory().get(dicType);
-		int index = dictionary.indexOf(word);
-		
-		logger.debug("index : {}", index);
-		
-		if(index < 0) {
-			return new ArrayList<String>();
-		} 
 		
 		List<String> returnResult = new ArrayList<String>();
-		returnResult.add(dictionary.get(index));
 		
+		for(String s : dictionary) {
+			if(s.indexOf(word) >= 0) {
+				returnResult.add(s);
+			}
+		}
+	
 		logger.debug("returnResult : {}", returnResult);
 		
 		return returnResult;
