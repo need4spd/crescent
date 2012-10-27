@@ -61,11 +61,17 @@
 		<input type="hidden" id="pagingAction" name="pagingAction" value="" />
 		<input type="hidden" id="wordsToRemove" name="wordsToRemove" value="" />
 		
+		<a href="/adminMain.devys">관리자 메인으로</a>
+		<br/><br/>
+		
 		<% for(String word : dictionary) { %>
 			<tr><input type="checkbox" id="<%=word%>" name="wordToRemove[]" value="<%=word %>" /><%=word %></tr><br/>
 		<% } %>
 		
 		<br/>
+		단어개수 : <%=dictionarySize%>개
+		
+		<br/><br/>
 		
 		<a href="javascript:removeWord();">선택단어삭제</a><br/>
 		

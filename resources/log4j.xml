@@ -17,7 +17,7 @@
 	</appender>
 
 	<logger name="com.tistory.devyongsik.analyzer" additivity="false">
-		<level value="warn" />
+		<level value="debug" />
 		<appender-ref ref="CONSOLE"/>
 	</logger>
 	
@@ -48,7 +48,7 @@
 	</logger>
 
 	<logger name="org.apache.lucene.analysis.kr" additivity="false">
-		<level value="warn" />
+		<level value="debug" />
 		<appender-ref ref="CONSOLE"/>
 	</logger>
 	
