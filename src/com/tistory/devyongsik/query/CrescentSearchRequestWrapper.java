@@ -116,8 +116,7 @@ public class CrescentSearchRequestWrapper {
 				Map<String, CollectionField> collectionFields = collection.getFieldsByName();
 
 				CollectionField f = collectionFields.get(part);
-
-				if(f.isAnalyze()) throw new IllegalStateException("Analyze 된 필드는 Sort가 불가능합니다. ["+part+"]");
+					
 				lst[i] = new SortField(f.getName(),f.getSortFieldType(),descending);
 			}
 		}//end for
@@ -127,6 +126,7 @@ public class CrescentSearchRequestWrapper {
 				logger.debug(lst[i].getField());
 			}
 		}
+		
 		return new Sort(lst);
 	}
 
