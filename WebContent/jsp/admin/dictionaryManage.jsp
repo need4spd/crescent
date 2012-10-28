@@ -9,52 +9,50 @@
 	Integer dictionarySize = (Integer)request.getAttribute("dictionarySize");
 	
 %>
-<head>
-	<script type="text/javascript" src="js/jquery-1.8.1.js"></script>
+<%@include file="../common/header.jsp" %>
+<script language="javascript">
+	function prev() {
+		$('#pagingAction').val("prev");
+		$('#dictionaryForm').submit();
+		
+	}
 	
-	<script language="javascript">
-		function prev() {
-			$('#pagingAction').val("prev");
-			$('#dictionaryForm').submit();
-			
-		}
+	function next() {
+		$('#pagingAction').val("next");
+		$('#dictionaryForm').submit();
 		
-		function next() {
-			$('#pagingAction').val("next");
-			$('#dictionaryForm').submit();
-			
-		}
+	}
+	
+	function addWord() {
+		$('#dictionaryForm').attr('action', '/dictionaryManageAdd.devys').submit();
+	}
+	
+	function removeWord() {
+		var checked = []
+		$("input[name='wordToRemove[]']:checked").each(function ()
+		{
+		    checked.push($(this).val());
+		});
 		
-		function addWord() {
-			$('#dictionaryForm').attr('action', '/dictionaryManageAdd.devys').submit();
-		}
+		$('#wordsToRemove').val(checked);
 		
-		function removeWord() {
-			var checked = []
-			$("input[name='wordToRemove[]']:checked").each(function ()
-			{
-			    checked.push($(this).val());
-			});
-			
-			$('#wordsToRemove').val(checked);
-			
-			$('#dictionaryForm').attr('action', '/dictionaryManageRemove.devys').submit();
-		}
-		
-		function findWord() {
-			$('#dictionaryForm').attr('action', '/dictionaryManageFind.devys').submit();
-		}
-		
-		function morphTest() {
-			var param = {keyword:$('#wordForTest').val()};
-			$.post("/doMorphTestAjax.devys", param, function(data){
-				$('#morphResult').text("");
-				$('#morphResult').text(data);
-			});
-		}
-	</script>
-</head>
+		$('#dictionaryForm').attr('action', '/dictionaryManageRemove.devys').submit();
+	}
+	
+	function findWord() {
+		$('#dictionaryForm').attr('action', '/dictionaryManageFind.devys').submit();
+	}
+	
+	function morphTest() {
+		var param = {keyword:$('#wordForTest').val()};
+		$.post("/doMorphTestAjax.devys", param, function(data){
+			$('#morphResult').text("");
+			$('#morphResult').text(data);
+		});
+	}
+</script>
 <body>
+	<%@ include file="../common/menu.jsp" %>
 	<form id="dictionaryForm" method="post" action="/dictionaryManage.devys" >
 		<input type="hidden" id="dicType" name="dicType" value="<%=dicType %>" />
 		<input type="hidden" id="startOffset" name="startOffset" value="<%=startOffset%>" />
