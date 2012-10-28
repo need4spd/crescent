@@ -81,12 +81,12 @@ public class AdminMainController {
 		}
 		
 		logger.debug("dicType : {}", dicType);
-		logger.debug("startOffset : {} , endOffset : {}", new Object[]{startOffset, endOffset});
+		logger.debug("startOffset : {} , endOffset : {}, dictionary size : {}", new Object[]{startOffset, endOffset, dictionary.size()});
 			
 		if(dictionary != null && dictionary.size() > endOffset) {
 			modelAndView.addObject("dictionary", dictionary.subList(startOffset, endOffset));
 		} else {
-			modelAndView.addObject("dictionary", dictionary.subList(startOffset, dictionary.size() - 1));
+			modelAndView.addObject("dictionary", dictionary.subList(startOffset, dictionary.size()));
 		}
 		
 		modelAndView.addObject("startOffset", String.valueOf(endOffset));

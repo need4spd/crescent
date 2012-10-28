@@ -1,6 +1,10 @@
 package com.tistory.devyongsik.controller;
 
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.tistory.devyongsik.admin.MorphService;
+import com.tistory.devyongsik.domain.MorphResult;
 
 @Controller
 public class MorphAdminMainController {
@@ -54,7 +60,7 @@ public class MorphAdminMainController {
 	}
 	
 	@RequestMapping("/doMorphTestAjax")
-	public ModelAndView morphTestAjax(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void morphTestAjax(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		String keyword = request.getParameter("keyword");
 		
@@ -63,24 +69,44 @@ public class MorphAdminMainController {
 		List<Token> resultTokenListIndexingMode = morphService.getTokens(keyword, true);
 		List<Token> resultTokenListQueryMode = morphService.getTokens(keyword, false);
 		
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/admin/morphResultTest");
+		List<MorphResult> morphIndexingTestResult = new ArrayList<MorphResult>();
+		List<MorphResult> morphQueryTestResult = new ArrayList<MorphResult>();
 		
-		StringBuilder resultIndexingMode = new StringBuilder();
+		Gson gson = new Gson();
+		
+		Map<String, List<MorphResult>> morphTestResultSet = new HashMap<String, List<MorphResult>>();
+		
 		for(Token token : resultTokenListIndexingMode) {
-			resultIndexingMode.append(token.toString()).append(":(").append(token.startOffset()).append(",").append(token.endOffset()).append(")")
-							  .append("[").append(token.type()).append("]").append(" , ");
+			MorphResult morphResult = new MorphResult();
+			morphResult.setWord(token.toString());
+			morphResult.setType(token.type());
+			morphResult.setStartOffset(token.startOffset());
+			morphResult.setEndOffset(token.endOffset());
+			
+			morphIndexingTestResult.add(morphResult);
 		}
 		
-		StringBuilder resultQueryMode = new StringBuilder();
 		for(Token token : resultTokenListQueryMode) {
-			resultQueryMode.append(token.toString()).append(":(").append(token.startOffset()).append(",").append(token.endOffset()).append(")")
-							  .append("[").append(token.type()).append("]").append(" , ");
+			MorphResult morphResult = new MorphResult();
+			morphResult.setWord(token.toString());
+			morphResult.setType(token.type());
+			morphResult.setStartOffset(token.startOffset());
+			morphResult.setEndOffset(token.endOffset());
+			
+			morphQueryTestResult.add(morphResult);
 		}
-
-		modelAndView.addObject("resultTokenListIndexingMode", resultIndexingMode);
-		modelAndView.addObject("resultTokenListQueryMode", resultQueryMode);
 		
-		return modelAndView;
+		morphTestResultSet.put("indexResult", morphIndexingTestResult);
+		morphTestResultSet.put("queryResult", morphQueryTestResult);
+		
+		String morphResult = gson.toJson(morphTestResultSet);
+		
+		logger.info("morphResult : {}", morphResult);
+		
+		response.setContentType("application/json;  charset=UTF-8");
+		PrintWriter writer = response.getWriter();
+		writer.write(morphResult);
+		writer.flush();
+		writer.close();
 	}
 }

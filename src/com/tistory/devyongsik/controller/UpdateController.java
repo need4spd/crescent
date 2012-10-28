@@ -2,7 +2,7 @@ package com.tistory.devyongsik.controller;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.Writer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,7 +43,6 @@ public class UpdateController {
 		logger.info("collection name : {}", collectionName);
 		
 		StringBuilder text = new StringBuilder();
-		OutputStream outToClient = null;
 		
 		try {
 			
@@ -59,11 +58,13 @@ public class UpdateController {
 			CrescentIndexerExecutor excutor = new CrescentIndexerExecutor(CollectionConfig.getInstance().getCollection(collectionName), handler);
 			String message = excutor.execute(text.toString());
 			
-			outToClient = response.getOutputStream();			
-			outToClient.write(message.getBytes());
-			outToClient.flush();
+			Writer writer = null;
 			
-			outToClient.close();
+			response.setContentType("text/html;  charset=UTF-8");
+			writer = response.getWriter();
+			writer.write(message);
+			writer.flush();
+			writer.close();
 			
 		} catch (IOException e) {
 			logger.error("error : ", e);

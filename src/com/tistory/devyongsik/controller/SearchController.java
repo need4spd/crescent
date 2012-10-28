@@ -1,7 +1,7 @@
 package com.tistory.devyongsik.controller;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,21 +33,20 @@ public class SearchController {
 		
 		logger.debug("search result : {}", searchResult.getResultList());
 		
-		OutputStream outToClient = null;
-		
 		JsonFormConverter converter = new JsonFormConverter();
-		
+		PrintWriter writer = null;
 		try {
 			
 			String jsonForm = converter.convert(searchResult.getSearchResult());
 			
 			logger.debug("search result json form : {}", jsonForm);
 			
-			outToClient = response.getOutputStream();			
-			outToClient.write(jsonForm.getBytes());
-			outToClient.flush();
+			response.setContentType("application/json;  charset=UTF-8");
 			
-			outToClient.close();
+			writer = response.getWriter();
+			writer.write(jsonForm);
+			writer.flush();
+			writer.close();
 			
 		} catch (IOException e) {
 			logger.error("error : ", e);
