@@ -10,16 +10,14 @@
 	
 %>
 
-<head>
-	<script type="text/javascript" src="js/jquery-1.8.1.js"></script>
-	
-	<script language="javascript">
-		function doMorphTest() {
-			$('#morphForm').submit();
-		}
-	</script>
-</head>
+<%@include file="../common/header.jsp" %>	
+<script language="javascript">
+	function doMorphTest() {
+		$('#morphForm').submit();
+	}
+</script>
 <body>
+	<%@include file="../common/menu.jsp" %>
 	<form id="morphForm" method="post" action="/doMorphTest.devys" >
 		<input type="text" id="keyword" name="keyword" value="" size="50" /> &nbsp;&nbsp; <a href="javascript:doMorphTest();">형태소분석 결과보기</a>
 	</form>
