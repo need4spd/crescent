@@ -1,19 +1,12 @@
 package com.tistory.devyongsik.index;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 
 
 /**
@@ -30,10 +23,10 @@ public class CrescentIndexer {
 //		this.part = part;
 //	}
 	
-	private String indexFileDir = null;
+	private String collectionName = null;
 	
-	public CrescentIndexer(String indexFileDir) {
-		this.indexFileDir = indexFileDir;
+	public CrescentIndexer(String collectionName) {
+		this.collectionName = collectionName;
 	}
 	
 	public void indexing(List<Document> documentList) {
@@ -45,15 +38,12 @@ public class CrescentIndexer {
 			
 			//logger.info("dataSourceType : {}", dataSourceType);
 			//logger.info("dataSourceDir : {}", dataSourceDir);
-			logger.info("indexFileDir : {}", indexFileDir);
+			logger.info("collectionName : {}", collectionName);
 			
 			logger.info("indexing start................");
 			
-			Directory dir = FSDirectory.open(new File(indexFileDir));
-			
-			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, new KoreanAnalyzer(true));
-			IndexWriter indexWriter = new IndexWriter(dir, conf);
-			
+			IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
+			IndexWriter indexWriter = indexWriterManager.getIndexWriterBy(collectionName);
 			//File file = new File(dataSourceDir);
 			//String[] files = file.list();
 			

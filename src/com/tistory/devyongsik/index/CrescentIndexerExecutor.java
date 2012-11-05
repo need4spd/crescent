@@ -22,7 +22,7 @@ public class CrescentIndexerExecutor {
 	public String execute(String jsonFormStr) {
 		
 		List<Document> documentList = handler.handledData(jsonFormStr, collection.getFieldsByName(), collection.getSortFieldNames());		
-		CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getIndexingDir());
+		CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getCollectionName());
 		crescentIndexer.indexing(documentList);
 		
 		String logMessage = collection.getCollectionName() + "의 " + documentList.size() + "건 색인 완료";

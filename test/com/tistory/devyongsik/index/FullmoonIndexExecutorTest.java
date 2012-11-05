@@ -15,12 +15,12 @@ public class FullmoonIndexExecutorTest {
 	@Test
 	public void execute() {
 		CollectionConfig collectionConfig = CollectionConfig.getInstance();
-		Collection collection = collectionConfig.getCollection("sample");
+		Collection collection = collectionConfig.getCollection("sample_wiki");
 		
 		Handler handler = new JsonDataHandler();
 		
-		String jsonFormStr = "[{\"board_id\":\"1\",\"title\":\"title\",\"dscr\":\"상세설명\",\"creuser\":\"작성자\"}," +
-				"{\"board_id\":\"2\",\"title\":\"제목\",\"dscr\":\"상세설명\",\"creuser\":\"작성자\"}]";
+		String jsonFormStr = "[{\"space_idx\":\"0\",\"wiki_title\":\"제목 입니다0\",\"wiki_idx\":\"0\",\"wiki_text\":\"본문 입니다.0\",\"ins_date\":\"20120819\"" +
+				",\"ins_user\":\"need4spd\"}]";
 		CrescentIndexerExecutor executor = new CrescentIndexerExecutor(collection, handler);
 		executor.execute(jsonFormStr);
 	}
