@@ -99,7 +99,6 @@ public class SearchModule {
 			return searchResult;
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			
 			Map<String, Object> result = new HashMap<String, Object>();
 			List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
@@ -109,7 +108,7 @@ public class SearchModule {
 			result.put("error_code", String.valueOf(cds.getErrorCode()));
 			result.put("error_msg", cds.getErrorMessage());
 			
-			logger.error("검색 중 에러 발생함." + e);
+			logger.error("검색 중 에러 발생함. {}", e);
 			
 			searchResult.setErrorCode(cds.getErrorCode());
 			searchResult.setErrorMsg(cds.getErrorMessage());

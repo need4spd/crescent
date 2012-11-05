@@ -95,7 +95,7 @@ public class DefaultKeywordParser {
 			}
 			
 		} catch (IOException e) {
-			logger.error("error : " + e);
+			logger.error("error in DefaultKeywordParser : ", e);
 			throw new RuntimeException(e);
 		}
 

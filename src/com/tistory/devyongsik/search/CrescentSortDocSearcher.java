@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.NRTManager;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TopFieldDocs;
 import org.slf4j.Logger;
@@ -43,13 +43,13 @@ public class CrescentSortDocSearcher implements CrescentDocSearcher {
 		//5page * 50
 		int numOfHits = csrw.getDefaultHitsPage() * csrw.getHitsForPage();
 		
-		SearcherManager searcherManager = null;
 		IndexSearcher indexSearcher = null;
+		NRTManager nrtManager = null;
 		List<Document> resultList = new ArrayList<Document>();
 		
 		try {
-			searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
-			indexSearcher = searcherManager.acquire();
+			nrtManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
+			indexSearcher = nrtManager.acquire();
 			
 			Sort sort = csrw.getSort();
 
@@ -113,15 +113,15 @@ public class CrescentSortDocSearcher implements CrescentDocSearcher {
 			
 		} catch (Exception e) {
 			
-			logger.error("error in CrescentDefaultDocSearcher : " + e);
-			e.printStackTrace();
+			logger.error("error in CrescentDefaultDocSearcher : {} ", e);
 			
 			errorMessage = e.toString();
 			errorCode = -1;
 			
 		} finally {
 			
-			searcherManager.release(indexSearcher);
+			nrtManager.release(indexSearcher);
+			indexSearcher = null;
 		}
 		
 
