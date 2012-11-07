@@ -14,4 +14,7 @@
 	
 	<bean id="morphService" class="com.tistory.devyongsik.admin.MorphServiceImpl">
 	</bean>
+	
+	<bean id="searchService" class="com.tistory.devyongsik.service.SearchServiceImpl">
+	</bean>
 </beans>

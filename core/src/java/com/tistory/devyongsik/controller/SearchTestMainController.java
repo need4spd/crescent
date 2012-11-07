@@ -1,8 +1,5 @@
 package com.tistory.devyongsik.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,16 +8,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.tistory.devyongsik.domain.RequestBuilder;
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.domain.SearchResult;
-import com.tistory.devyongsik.search.JsonFormConverter;
 import com.tistory.devyongsik.service.SearchService;
 
 @Controller
-public class SearchController {
-	private Logger logger = LoggerFactory.getLogger(SearchController.class);
+public class SearchTestMainController {
+	private Logger logger = LoggerFactory.getLogger(SearchTestMainController.class);
 
 	@Autowired
 	private SearchService searchService = null;
@@ -29,33 +26,27 @@ public class SearchController {
 		this.searchService = searchService;
 	}
 	
-	@RequestMapping("/search")
-	public void updateDocument(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	@RequestMapping("/searchTestMain")
+	public ModelAndView searchTestMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/admin/searchTestMain");
 
+		return modelAndView;
+	}
+	
+	@RequestMapping("/searchTest")
+	public ModelAndView searchTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
 		RequestBuilder<SearchRequest> requestBuilder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = requestBuilder.mappingRequestParam(request, SearchRequest.class);
 		
 		SearchResult searchResult = searchService.search(searchRequest);
 		
-		logger.debug("search result : {}", searchResult.getResultList());
-		
-		JsonFormConverter converter = new JsonFormConverter();
-		PrintWriter writer = null;
-		try {
-			
-			String jsonForm = converter.convert(searchResult.getSearchResult());
-			
-			logger.debug("search result json form : {}", jsonForm);
-			
-			response.setContentType("application/json;  charset=UTF-8");
-			
-			writer = response.getWriter();
-			writer.write(jsonForm);
-			writer.flush();
-			writer.close();
-			
-		} catch (IOException e) {
-			logger.error("error : ", e);
-		}
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.addObject("searchResult", searchResult);
+		modelAndView.setViewName("/admin/searchTestMain");
+
+		return modelAndView;
 	}
+	
 }

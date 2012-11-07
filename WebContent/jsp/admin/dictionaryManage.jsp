@@ -1,6 +1,6 @@
 <%@page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 
 <%@ page import="java.util.*"%>
 <%
@@ -10,10 +10,9 @@
 	Integer dictionarySize = (Integer)request.getAttribute("dictionarySize");
 
 %>
-<head>
-<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-
-<script language="javascript">
+<html lang="en">
+<%@ include file="../common/header.jsp" %>
+<script>
 		function prev() {
 			$('#pagingAction').val("prev");
 			$('#dictionaryForm').submit();
@@ -31,7 +30,7 @@
 		}
 
 		function removeWord() {
-			var checked = []
+			var checked = [];
 			$("input[name='wordToRemove[]']:checked").each(function ()
 			{
 			    checked.push($(this).val());
@@ -86,12 +85,9 @@
 			});
 		}
 	</script>
-</head>
 <body>
+	<%@ include file="../common/menu.jsp" %>
 	<div class="container">
-		<script type="text/javascript" src="js/jquery-1.8.1.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-
 		<form class="form-horizontal" id="dictionaryForm" method="post" action="/dictionaryManage.devys">
 			<input type="hidden" id="dicType" name="dicType" value="<%=dicType %>" />
 			<input type="hidden" id="startOffset" name="startOffset" value="<%=startOffset%>" /> 
@@ -151,3 +147,4 @@
 		</form>
 	</div>
 </body>
+</html>
