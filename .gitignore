@@ -1,3 +1,5 @@
-*.class
-/build
-/test/crescent_index
+.project
+.classpath
+.DS_Store
+/target
+.settings
