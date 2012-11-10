@@ -9,16 +9,11 @@
 	<script>
                 function search() {
                         if($('#keyword').val() == '') {
-                                newAlert('warning', '검색어를 입력해주세요.');
+                                newAlert('검색어를 입력해주세요.');
                                 //$('#keyword_alert').show();
                                 return;
                         }
                         $('#searchForm').attr('action', '/searchTest.devys').submit();
-                }
-
-                function newAlert (type, message) {
-                        $("#alert-area").append($("<div class='alert alert-block alert-error fade in' id='keyword_alert'><p> " + message + " </p></div>"));
-                    $("#keyword_alert").delay(2000).fadeOut("slow", function () { $(this).remove(); });
                 }
 
         </script>

@@ -20,4 +20,10 @@ body {
 	padding: 9px 0;
 }
 </style>
+<script>
+function newAlert (message) {
+    $("#alert-area").append($("<div class='alert alert-block alert-error fade in' id='keyword_alert'><p> " + message + " </p></div>"));
+	$("#keyword_alert").delay(2000).fadeOut("slow", function () { $(this).remove(); });
+}
+</script>
 </head>

@@ -38,6 +38,15 @@ public class DictionaryServiceImpl implements DictionaryService, ApplicationCont
 	}
 	
 	public void addWordToDictionary (DictionaryType dicType, String word) {
+		
+		if(dicType == DictionaryType.COMPOUND) {
+		
+			if(word.split(":").length < 2) {
+				logger.warn("복합명사사전의 단어는 [N:A,B] 형식이어야 합니다. [{}]", word);
+				throw new IllegalStateException("복합명사사전의 단어는 [N:A,B] 형식이어야 합니다.");
+			}
+		}
+		
 		List<String> dictionary = DictionaryFactory.getFactory().get(dicType);
 		dictionary.add(word);
 	}

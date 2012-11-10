@@ -30,6 +30,8 @@ public class SearchTestMainController {
 	public ModelAndView searchTestMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/admin/searchTestMain");
+		
+		logger.debug("search Test main");
 
 		return modelAndView;
 	}

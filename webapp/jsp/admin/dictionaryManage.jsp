@@ -26,6 +26,10 @@
                 }
 
                 function addWord() {
+                		if($('#wordToAdd').val() == '') {
+                			newAlert('검색어를 입력해주세요.');
+                			return;
+                		}
                         $('#dictionaryForm').attr('action', '/dictionaryManageAdd.devys').submit();
                 }
 
@@ -129,6 +133,7 @@
 					<button class="btn btn-small btn-primary" type="button"
 						onclick="javascript:addWord();">단어추가</button>
 				</div>
+				<div id="alert-area"></div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="wordToFind">단어찾기</label>
