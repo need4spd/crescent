@@ -2,8 +2,8 @@
 <%@ page import="java.util.*" %>
 
 <%
-	String resultTokenListIndexingMode = (String)request.getAttribute("resultTokenListIndexingMode");
-	String resultTokenListQueryMode = (String)request.getAttribute("resultTokenListQueryMode");	
+        String resultTokenListIndexingMode = (String)request.getAttribute("resultTokenListIndexingMode");
+        String resultTokenListQueryMode = (String)request.getAttribute("resultTokenListQueryMode");
 %>
 
 <%="색인모드"%>

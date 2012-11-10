@@ -1,11 +1,18 @@
-<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
+<!DOCTYPE html>
 
-<%@ include file="../common/header.jsp" %>
+<html lang="en">
+<%@ include file="../common/header.jsp"%>
 <body>
-	<%@ include file="../common/menu.jsp" %>
-	<a href="/dictionaryManage.devys?dicType=noun">명사사전</a><br/>
-	<a href="/dictionaryManage.devys?dicType=stop">불용어사전</a><br/>
-	<a href="/dictionaryManage.devys?dicType=syn">동의어사전</a><br/>
-	<a href="/dictionaryManage.devys?dicType=compound">복합명사사전</a><br/>
+	<%@ include file="../common/menu.jsp"%>
+	<div class="container">
+		<ul>
+			<li><a href="/dictionaryManage.devys?dicType=noun">명사사전</a></li>
+			<li><a href="/dictionaryManage.devys?dicType=stop">불용어사전</a></li>
+			<li><a href="/dictionaryManage.devys?dicType=syn">동의어사전</a></li>
+			<li><a href="/dictionaryManage.devys?dicType=compound">복합명사사전</a></li>
+		</ul>
+	</div>
 </body>
+</html>
