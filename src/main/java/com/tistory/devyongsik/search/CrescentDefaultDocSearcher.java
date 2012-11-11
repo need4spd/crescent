@@ -42,14 +42,13 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		//5page * 50
 		int numOfHits = csrw.getDefaultHitsPage() * csrw.getHitsForPage();
 		IndexSearcher indexSearcher = null;
-		NRTManager nrtManager = null;
+		NRTManager nrtManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
 		
 		TopScoreDocCollector collector = TopScoreDocCollector.create(numOfHits, true);
 		
 		List<Document> resultList = new ArrayList<Document>();
 		
 		try {
-			nrtManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
 			indexSearcher = nrtManager.acquire();
 			
 			DefaultKeywordParser keywordParser = new DefaultKeywordParser();

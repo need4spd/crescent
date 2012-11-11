@@ -44,11 +44,11 @@ public class CrescentSortDocSearcher implements CrescentDocSearcher {
 		int numOfHits = csrw.getDefaultHitsPage() * csrw.getHitsForPage();
 		
 		IndexSearcher indexSearcher = null;
-		NRTManager nrtManager = null;
+		NRTManager nrtManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
 		List<Document> resultList = new ArrayList<Document>();
 		
 		try {
-			nrtManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
+			
 			indexSearcher = nrtManager.acquire();
 			
 			Sort sort = csrw.getSort();
