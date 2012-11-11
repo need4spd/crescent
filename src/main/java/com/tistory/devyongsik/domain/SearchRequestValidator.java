@@ -2,6 +2,8 @@ package com.tistory.devyongsik.domain;
 
 import java.util.Map;
 
+import org.apache.lucene.analysis.kr.utils.StringUtil;
+
 import com.tistory.devyongsik.config.CollectionConfig;
 import com.tistory.devyongsik.exception.CrescentUnvalidRequestException;
 
@@ -26,6 +28,12 @@ public class SearchRequestValidator {
 				}
 			}
 		}
+		
+		//page num
+		if(!StringUtil.isNumeric(searchRequest.getPageNum())) {
+			throw new CrescentUnvalidRequestException("Page_Num parameter value is must positive number: " + searchRequest.getPageNum());
+		}
+	
 		
 		//request sort field
 		String sortQueryString = searchRequest.getSort();
