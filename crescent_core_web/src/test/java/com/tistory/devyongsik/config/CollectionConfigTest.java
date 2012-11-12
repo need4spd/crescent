@@ -20,4 +20,5 @@ public class CollectionConfigTest {
 		
 		Assert.assertNotNull(collections);
 	}
+	
 }
