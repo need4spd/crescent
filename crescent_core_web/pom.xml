@@ -1,0 +1,42 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>crescent</artifactId>
+    <groupId>com.tistory.devyongsik</groupId>
+    <version>1.0-SNAPSHOT</version>
+  </parent>
+  
+  <groupId>com.tistory.devyongsik</groupId>
+  <artifactId>crescent_core_web</artifactId>
+  <packaging>war</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>crescent_core_web</name>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+           <warSourceDirectory>webapp</warSourceDirectory>
+        </configuration>
+      </plugin>
+      <plugin>
+	<artifactId>maven-eclipse-plugin</artifactId>
+	<version>2.8</version>
+	<configuration>
+	  <wtpversion>2.0</wtpversion>
+	  <wtpContextName>/</wtpContextName>
+	  <downloadSources>true</downloadSources>
+	  <downloadJavadocs>true</downloadJavadocs>
+	  <additionalBuildcommands>
+	    <buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
+	  </additionalBuildcommands>
+	  <additionalProjectnatures>
+	    <projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
+	  </additionalProjectnatures>
+	</configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -3,10 +3,15 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.tistory.devyongsik</groupId>
   <artifactId>crescent</artifactId>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>crescent</name>
   <url>https://github.com/need4spd/crescent</url>
+  
+  <modules>
+    <module>crescent_core_web</module>
+    <module>crescent_utils</module>
+  </modules>
   
   <repositories>
     <repository>
@@ -123,36 +128,13 @@
   </dependencies>
   
   <build>
-    <finalName>crescent</finalName>
     <plugins>
-      <plugin>
-        <artifactId>maven-war-plugin</artifactId>
-        <configuration>
-           <warSourceDirectory>webapp</warSourceDirectory>
-        </configuration>
-      </plugin>
       <plugin>
 	<artifactId>maven-compiler-plugin</artifactId>
 	<configuration>
 	  <source>1.6</source>
 	  <target>1.6</target>
 	  <encoding>utf-8</encoding>
-	</configuration>
-      </plugin>
-      <plugin>
-	<artifactId>maven-eclipse-plugin</artifactId>
-	<version>2.8</version>
-	<configuration>
-	  <wtpversion>2.0</wtpversion>
-	  <wtpContextName>/</wtpContextName>
-	  <downloadSources>true</downloadSources>
-	  <downloadJavadocs>true</downloadJavadocs>
-	  <additionalBuildcommands>
-	    <buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
-	  </additionalBuildcommands>
-	  <additionalProjectnatures>
-	    <projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
-	  </additionalProjectnatures>
 	</configuration>
       </plugin>
     </plugins>

@@ -4,3 +4,5 @@
 /target
 .settings
 /bin
+crescent_utils/target
+crescent_core_web/target
