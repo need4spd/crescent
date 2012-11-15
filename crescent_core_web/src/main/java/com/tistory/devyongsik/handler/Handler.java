@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.apache.lucene.document.Document;
 
-import com.tistory.devyongsik.domain.CollectionField;
+import com.tistory.devyongsik.domain.CrescentCollectionField;
 
 public interface Handler {
 
-	List<Document> handledData(String jsonFormStr, Map<String, CollectionField> fieldsByName, List<String> sortFieldNames);
+	List<Document> handledData(String jsonFormStr, Map<String, CrescentCollectionField> fieldsByName);
 }

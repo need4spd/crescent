@@ -6,27 +6,27 @@ import org.apache.lucene.document.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.domain.Collection;
+import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.handler.Handler;
 
 public class CrescentIndexerExecutor {
 	private Logger logger = LoggerFactory.getLogger(CrescentIndexerExecutor.class);
-	private Collection collection = null;
+	private CrescentCollection collection = null;
 	private Handler handler = null;
 	
-	public CrescentIndexerExecutor(Collection collection, Handler handler) {
+	public CrescentIndexerExecutor(CrescentCollection collection, Handler handler) {
 		this.collection = collection;
 		this.handler = handler;
 	}
 
 	public String execute(String jsonFormStr) {
 		
-		List<Document> documentList = handler.handledData(jsonFormStr, collection.getFieldsByName(), collection.getSortFieldNames());		
-		CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getCollectionName());
+		List<Document> documentList = handler.handledData(jsonFormStr, collection.getCrescentFieldByName());		
+		CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getName());
 		crescentIndexer.indexing(documentList);
 		
-		String logMessage = collection.getCollectionName() + "의 " + documentList.size() + "건 색인 완료";
-		logger.info("{} 의 {}건 인덱싱이 완료되었습니다.", new String[] {collection.getCollectionName(), String.valueOf(documentList.size())});
+		String logMessage = collection.getName() + "의 " + documentList.size() + "건 색인 완료";
+		logger.info("{} 의 {}건 인덱싱이 완료되었습니다.", new String[] {collection.getName(), String.valueOf(documentList.size())});
 		
 		return logMessage;
 		

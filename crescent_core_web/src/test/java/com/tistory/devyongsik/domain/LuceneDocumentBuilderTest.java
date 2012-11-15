@@ -9,7 +9,7 @@ import org.apache.lucene.document.Document;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.tistory.devyongsik.config.CollectionConfig;
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
 
 public class LuceneDocumentBuilderTest {
 
@@ -25,15 +25,16 @@ public class LuceneDocumentBuilderTest {
 		
 		docList.add(doc);
 		
-		CollectionConfig collectionConfig = CollectionConfig.getInstance();
-		Map<String, Collection> collections = collectionConfig.getCollections();
+		CrescentCollections crescentCollections = CrescentCollectionHandler.getInstance().getCrescentCollections();
+
+		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+
+		CrescentCollection sampleCollection = collections.get("sample");
 		
-		Collection sampleCollection = collections.get("sample");
 		
+		Map<String, CrescentCollectionField> fieldsByName = sampleCollection.getCrescentFieldByName();
 		
-		Map<String, CollectionField> fieldsByName = sampleCollection.getFieldsByName();
-		
-		List<Document> luceneDocuments = LuceneDocumentBuilder.buildDocumentList(docList, fieldsByName, sampleCollection.getSortFieldNames());
+		List<Document> luceneDocuments = LuceneDocumentBuilder.buildDocumentList(docList, fieldsByName);
 		
 		Assert.assertNotNull(luceneDocuments);
 		

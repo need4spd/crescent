@@ -12,22 +12,16 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import com.tistory.devyongsik.analyzer.DictionaryProperties;
 import com.tistory.devyongsik.analyzer.dictionary.DictionaryFactory;
 import com.tistory.devyongsik.analyzer.dictionary.DictionaryType;
 
-public class DictionaryServiceImpl implements DictionaryService, ApplicationContextAware {
+public class DictionaryServiceImpl implements DictionaryService {
 	
 	private Logger logger = LoggerFactory.getLogger(DictionaryServiceImpl.class);
-	private ApplicationContext applicationContext = null;
 	
 	public List<String> getDictionary (DictionaryType dicType) {
 		
@@ -87,13 +81,8 @@ public class DictionaryServiceImpl implements DictionaryService, ApplicationCont
 			
 			logger.debug("dictionaryFile : {}", dictionaryFile);
 			
-			ServletContext sc = (ServletContext)applicationContext.getBean("servletContext");
-			String charSet = sc.getInitParameter("dictionary-charset");
-			
-			logger.debug("dictionary charSet : {}", charSet);
-			
 			FileOutputStream fos = new FileOutputStream(dictionaryFile, false);
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos, Charset.forName(charSet)));
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos, Charset.forName("utf-8")));
 			
 			List<String> dictionary = DictionaryFactory.getFactory().get(dicType);
 			for(String dicWord : dictionary) {
@@ -122,12 +111,5 @@ public class DictionaryServiceImpl implements DictionaryService, ApplicationCont
 	
 	public void rebuildDictionary(DictionaryType dictionaryType) {
 		DictionaryFactory.getFactory().rebuildDictionary(dictionaryType);
-	}
-
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext)
-			throws BeansException {
-		
-		this.applicationContext = applicationContext;
 	}
 }

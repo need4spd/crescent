@@ -4,13 +4,13 @@
   <parent>
     <artifactId>crescent</artifactId>
     <groupId>com.tistory.devyongsik</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.5-SNAPSHOT</version>
   </parent>
   
   <groupId>com.tistory.devyongsik</groupId>
   <artifactId>crescent_utils</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>0.5-SNAPSHOT</version>
   <name>crescent_utils</name>
   
   <build>

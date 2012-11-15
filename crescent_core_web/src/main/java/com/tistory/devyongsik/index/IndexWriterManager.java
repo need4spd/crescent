@@ -3,7 +3,6 @@ package com.tistory.devyongsik.index;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.lucene.index.IndexWriter;
@@ -16,8 +15,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
-import com.tistory.devyongsik.config.CollectionConfig;
-import com.tistory.devyongsik.domain.Collection;
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.domain.CrescentCollection;
+import com.tistory.devyongsik.domain.CrescentCollections;
 
 public class IndexWriterManager {
 
@@ -38,17 +38,15 @@ public class IndexWriterManager {
 	}
 	
 	private void initIndexWriter() throws IOException {
-		CollectionConfig collectionConfig = CollectionConfig.getInstance();
+		CrescentCollections collections = CrescentCollectionHandler.getInstance().getCrescentCollections();
 		
-		Map<String, Collection> collections = collectionConfig.getCollections();
-		Set<String> collectionNames = collections.keySet();
 		
-		for(String collectionName : collectionNames) {
+		
+		for(CrescentCollection crescentCollection : collections.getCrescentCollections()) {
 			
-			logger.info("collection name {}", collectionName);
+			logger.info("collection name {}", crescentCollection.getName());
 			
-			Collection collection = collections.get(collectionName);
-			String indexDir = collection.getIndexingDir();
+			String indexDir = crescentCollection.getIndexingDirectory();
 			
 			logger.info("index file dir ; {}", indexDir);
 			
@@ -57,9 +55,9 @@ public class IndexWriterManager {
 			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, new KoreanAnalyzer(true));
 			IndexWriter indexWriter = new IndexWriter(dir, conf);
 			TrackingIndexWriter trackingIndexWriter = new TrackingIndexWriter(indexWriter);
-			indexWritersByCollectionName.put(collectionName, trackingIndexWriter);
+			indexWritersByCollectionName.put(crescentCollection.getName(), trackingIndexWriter);
 			
-			logger.info("index writer for collection {} is initialized...", collectionName);
+			logger.info("index writer for collection {} is initialized...", crescentCollection.getName());
 		}
 	}
 	

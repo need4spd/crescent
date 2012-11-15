@@ -58,7 +58,7 @@ public class SearchServiceImpl implements SearchService {
 		
 		DefaultKeywordParser keywordParser = new DefaultKeywordParser();
 		Query query = keywordParser.parse(csrw.getCollectionName()
-				,csrw.getSearchFieldNames()
+				,csrw.getTargetSearchFields()
 				,csrw.getKeyword()
 				,new KoreanAnalyzer(false));
 		

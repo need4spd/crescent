@@ -2,6 +2,7 @@ package com.tistory.devyongsik.highlight;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -17,6 +18,7 @@ import org.apache.lucene.search.highlight.SimpleFragmenter;
 import org.junit.Test;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
+import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 
@@ -26,14 +28,17 @@ public class CrescentHighlighterTest {
 	public void highlightTest() {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setKeyword("입니다");
-		searchRequest.setCollectionName("glider_wiki");
-		searchRequest.setSearchField("we_wiki_title,we_wiki_text");
+		searchRequest.setCollectionName("sample");
+		searchRequest.setSearchField("title,dscr");
 		
 		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
+		List<CrescentCollectionField> targetSearchFields = csrw.getTargetSearchFields();
+		
+		System.out.println("####### : " + targetSearchFields);
 		
 		CrescentHighlighter highlighter = new CrescentHighlighter(csrw);
-		String r = highlighter.getBestFragment("we_wiki_title", "제목 입니다.텍스트 입니다.제목 입니다.");
-		String r2 = highlighter.getBestFragment("we_wiki_text", "텍스트 입니다. 제목.");
+		String r = highlighter.getBestFragment(csrw.getTargetSearchFields().get(0), "제목 입니다.텍스트 입니다.제목 입니다.");
+		String r2 = highlighter.getBestFragment(csrw.getTargetSearchFields().get(1), "텍스트 입니다. 제목.");
 		
 		System.out.println(r);
 		

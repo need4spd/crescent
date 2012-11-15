@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tistory.devyongsik.domain.CollectionField;
+import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.LuceneDocumentBuilder;
 
 /**
@@ -22,7 +22,7 @@ public class JsonDataHandler implements Handler {
 	private Logger logger = LoggerFactory.getLogger(JsonDataHandler.class);
 	
 	@Override
-	public List<Document> handledData(String jonsFormStr, Map<String, CollectionField> fieldsByName, List<String> sortFieldNames) {
+	public List<Document> handledData(String jonsFormStr, Map<String, CrescentCollectionField> fieldsByName) {
 
 		Type collectionType = new TypeToken<List<Map<String,String>>>(){}.getType();
 		Gson gson = new Gson();
@@ -32,7 +32,7 @@ public class JsonDataHandler implements Handler {
 		try {
 
 			List<Map<String,String>> indexingData = gson.fromJson(jonsFormStr, collectionType);
-			List<Document> docList = LuceneDocumentBuilder.buildDocumentList(indexingData, fieldsByName, sortFieldNames);
+			List<Document> docList = LuceneDocumentBuilder.buildDocumentList(indexingData, fieldsByName);
 			
 			return docList;
 			

@@ -9,8 +9,10 @@ import org.apache.lucene.document.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.config.CollectionConfig;
-import com.tistory.devyongsik.domain.Collection;
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.domain.CrescentCollection;
+import com.tistory.devyongsik.domain.CrescentCollectionField;
+import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.domain.SearchResult;
 import com.tistory.devyongsik.highlight.CrescentHighlighter;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
@@ -42,10 +44,10 @@ public class SearchModule {
 			List<Document> resultDocumentList = cds.search();
 			
 			if(resultDocumentList.size() > 0) { 
-							
-				Collection collection = CollectionConfig.getInstance().getCollection(csrw.getCollectionName());
+				CrescentCollections collections = CrescentCollectionHandler.getInstance().getCrescentCollections();
+				CrescentCollection collection = collections.getCrescentCollection(csrw.getCollectionName());
 				
-				List<String> fieldList = collection.getFieldNames();
+				List<CrescentCollectionField> fieldList = collection.getFields();
 				String value = null;
 				
 				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
@@ -56,10 +58,12 @@ public class SearchModule {
 					Map<String,String> resultMap = new HashMap<String, String>();
 					
 					//resultMap.put("docnum", Integer.toString(docnum++));
-					for(String fieldName : fieldList) {
-						//필드별 결과를 가져온다.
-						value = highlighter.getBestFragment(fieldName, doc.get(fieldName));
-						resultMap.put(fieldName, value);
+					for(CrescentCollectionField field : fieldList) {
+						if(field.isStore()) {
+							//필드별 결과를 가져온다.
+							value = highlighter.getBestFragment(field, doc.get(field.getName()));
+							resultMap.put(field.getName(), value);
+						}
 					}
 					
 					resultList.add(resultMap);

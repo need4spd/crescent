@@ -1,6 +1,6 @@
 package com.tistory.devyongsik.query;
 
-import java.util.Arrays;
+import java.util.List;
 
 import junit.framework.Assert;
 
@@ -8,6 +8,7 @@ import org.apache.lucene.search.Sort;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.SearchRequest;
 
 public class CrescentSearchRequestWrapperTest {
@@ -40,9 +41,14 @@ public class CrescentSearchRequestWrapperTest {
 	@Test
 	public void getSearchFieldNames() {
 		CrescentSearchRequestWrapper searchRequestWrapper = new CrescentSearchRequestWrapper(searchRequest);
-		String[] searchFieldNames = searchRequestWrapper.getSearchFieldNames();
-
-		Assert.assertEquals("[title, dscr]", Arrays.toString(searchFieldNames));
+		List<CrescentCollectionField> searchFields = searchRequestWrapper.getTargetSearchFields();
+		
+		String result = "[";
+		for(CrescentCollectionField f : searchFields) {
+			result += f.getName() + ", ";
+		}
+		result += "]";
+		Assert.assertEquals("[title, dscr, ]", result);
 	}
 
 	@Test

@@ -13,8 +13,7 @@ import org.apache.lucene.document.Field;
  */
 public class LuceneDocumentBuilder {
 	public static List<Document> buildDocumentList(List<Map<String, String>> docList, 
-												   Map<String, CollectionField> fieldsByName,
-												   List<String> sortFieldName) {
+												   Map<String, CrescentCollectionField> fieldsByName) {
 		
 		List<Document> documentList = new ArrayList<Document>();
 		
@@ -31,11 +30,6 @@ public class LuceneDocumentBuilder {
 				
 				Field field = luceneFieldBuilder.create(fieldsByName.get(fieldName), value);
 				document.add(field);
-				
-				if(sortFieldName.contains(fieldName+"_sort")) {
-					Field sortField = luceneFieldBuilder.create(fieldsByName.get(fieldName+"_sort"), value);
-					document.add(sortField);
-				}
 			}
 			
 			documentList.add(document);

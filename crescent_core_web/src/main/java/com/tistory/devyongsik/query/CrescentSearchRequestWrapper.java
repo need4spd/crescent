@@ -1,5 +1,7 @@
 package com.tistory.devyongsik.query;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.lucene.search.Sort;
@@ -7,9 +9,10 @@ import org.apache.lucene.search.SortField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.config.CollectionConfig;
-import com.tistory.devyongsik.domain.Collection;
-import com.tistory.devyongsik.domain.CollectionField;
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.domain.CrescentCollection;
+import com.tistory.devyongsik.domain.CrescentCollectionField;
+import com.tistory.devyongsik.domain.CrescentDefaultSearchField;
 import com.tistory.devyongsik.domain.SearchRequest;
 
 public class CrescentSearchRequestWrapper {
@@ -112,10 +115,10 @@ public class CrescentSearchRequestWrapper {
 					lst[i] = new SortField(null,SortField.SCORE, true);
 				}
 			} else {
-				Collection collection = CollectionConfig.getInstance().getCollection(searchRequest.getCollectionName());
-				Map<String, CollectionField> collectionFields = collection.getFieldsByName();
+				CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
+				Map<String, CrescentCollectionField> collectionFields = collection.getCrescentFieldByName();
 
-				CollectionField f = collectionFields.get(part);
+				CrescentCollectionField f = collectionFields.get(part);
 					
 				lst[i] = new SortField(f.getName(),f.getSortFieldType(),descending);
 			}
@@ -130,16 +133,30 @@ public class CrescentSearchRequestWrapper {
 		return new Sort(lst);
 	}
 
-	public String[] getSearchFieldNames() {
-		String fieldNames[] = null;
+	public List<CrescentCollectionField> getTargetSearchFields() {
+		List<CrescentCollectionField> searchFields = new ArrayList<CrescentCollectionField>();
+		CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
+		
+		Map<String, CrescentCollectionField> fieldMap = collection.getCrescentFieldByName();
+		
 		if(searchRequest.getSearchField() != null && !"".equals(searchRequest.getSearchField())) { 
-			fieldNames = searchRequest.getSearchField().split(",");
+			String[] requestSearchField = searchRequest.getSearchField().split(",");
+			for(String fieldName : requestSearchField) {
+				CrescentCollectionField field = fieldMap.get(fieldName);
+				if(field == null) {
+					throw new IllegalStateException("There is no Field in Collection [" + searchRequest.getCollectionName() + "] [" + fieldName + "]");
+				}
+				
+				searchFields.add(fieldMap.get(fieldName));
+			}
+			
 		} else {//검색 대상 필드가 지정되어 있지 않으면..
-			Collection collection = CollectionConfig.getInstance().getCollection(searchRequest.getCollectionName());
-			fieldNames = collection.getDefaultSearchFieldNames().toArray(new String[0]);
+			for(CrescentDefaultSearchField f : collection.getDefaultSearchFields()) {
+				searchFields.add(fieldMap.get(f.getName()));
+			}
 		}
 		
-		return fieldNames;
+		return searchFields;
 	}
 	
 	public String getUserIp() {

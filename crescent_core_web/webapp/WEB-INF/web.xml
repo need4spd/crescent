@@ -24,11 +24,6 @@
 		</param-value>
 	</context-param>
 	
-	<context-param>
-		<param-name>dictionary-charset</param-name>
-		<param-value>utf-8</param-value>
-	</context-param>
-	
 	<filter>
 		<filter-name>Set Character Encoding</filter-name>
 		<filter-class>common.filter.EncodingFilter</filter-class>

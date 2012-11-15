@@ -12,7 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.tistory.devyongsik.config.CollectionConfig;
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.handler.Handler;
 import com.tistory.devyongsik.handler.JsonDataHandler;
 import com.tistory.devyongsik.index.CrescentIndexerExecutor;
@@ -55,7 +56,8 @@ public class UpdateController {
 			
 			reader.close();
 			
-			CrescentIndexerExecutor excutor = new CrescentIndexerExecutor(CollectionConfig.getInstance().getCollection(collectionName), handler);
+			CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(collectionName);
+			CrescentIndexerExecutor excutor = new CrescentIndexerExecutor(collection, handler);
 			String message = excutor.execute(text.toString());
 			
 			Writer writer = null;

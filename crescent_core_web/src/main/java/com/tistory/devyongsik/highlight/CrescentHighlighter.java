@@ -3,7 +3,6 @@ package com.tistory.devyongsik.highlight;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -18,13 +17,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
+import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.query.DefaultKeywordParser;
 
 public class CrescentHighlighter {
 	private Logger logger = LoggerFactory.getLogger(CrescentHighlighter.class);
 	//private Highlighter highlighter;
-	private List<String> searchFieldsNameList;
+	private List<CrescentCollectionField> searchFieldList;
 	//TODO Analyzer 동적으로 생성하도록..
 	private Analyzer analyzer = new KoreanAnalyzer(false);
 	private CrescentSearchRequestWrapper csrw = null;
@@ -33,21 +33,22 @@ public class CrescentHighlighter {
     
 	public CrescentHighlighter(CrescentSearchRequestWrapper csrw) {
 		this.csrw = csrw;
-		this.searchFieldsNameList = new ArrayList<String>(Arrays.asList(csrw.getSearchFieldNames()));
+		this.searchFieldList = csrw.getTargetSearchFields();
 	
-		logger.debug("searchFieldsNameList : {}", searchFieldsNameList);
+		logger.debug("searchFieldsNameList : {}", searchFieldList);
 		
 	}
 	
-	public String getBestFragment(String fieldName, String value) {
+	public String getBestFragment(CrescentCollectionField field, String value) {
 		String fragment = "";
 		
-		logger.debug("fieldName : {}", fieldName);
+		logger.debug("fieldName : {}", field.getName());
 		
-		if(searchFieldsNameList.contains(fieldName)) {
+		if(searchFieldList.contains(field)) {
 			
 			try {
-				String[] fields = {fieldName};
+				List<CrescentCollectionField> fields = new ArrayList<CrescentCollectionField>();
+				fields.add(field);
 				Query query = keywordParser.parse(csrw.getCollectionName()
 						,fields
 						,csrw.getKeyword()
@@ -61,7 +62,7 @@ public class CrescentHighlighter {
 			    highlighter.setTextFragmenter(new SimpleFragmenter(50));
 			    
 				
-				TokenStream stream = analyzer.reusableTokenStream(fieldName, new StringReader(value));
+				TokenStream stream = analyzer.reusableTokenStream(field.getName(), new StringReader(value));
 				fragment = highlighter.getBestFragments(stream, value, 1, "...");
 				
 				if(fragment == null || "".equals(fragment)) {

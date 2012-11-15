@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.apache.lucene.analysis.kr.utils.StringUtil;
 
-import com.tistory.devyongsik.config.CollectionConfig;
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.exception.CrescentUnvalidRequestException;
 
 public class SearchRequestValidator {
@@ -12,7 +12,9 @@ public class SearchRequestValidator {
 	public boolean isValid(SearchRequest searchRequest) throws CrescentUnvalidRequestException {
 		
 		//collection name
-		Collection collection = CollectionConfig.getInstance().getCollection(searchRequest.getCollectionName());
+		CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections()
+													.getCrescentCollection(searchRequest.getCollectionName());
+		
 		if(collection == null) {
 			throw new CrescentUnvalidRequestException("Wrong Collection Name : " + searchRequest.getCollectionName());
 		}
@@ -23,7 +25,7 @@ public class SearchRequestValidator {
 		
 		if(requestSearchFieldNames != null && requestSearchFieldNames[0].length() > 0) {
 			for(String requestFieldName : requestSearchFieldNames) {
-				if(!collection.getFieldsByName().containsKey(requestFieldName)) {
+				if(!collection.getCrescentFieldByName().containsKey(requestFieldName)) {
 					throw new CrescentUnvalidRequestException("Wrong Search Field Name : " + searchRequest.getSearchField());
 				}
 			}
@@ -56,9 +58,9 @@ public class SearchRequestValidator {
 				}
 				
 				part = part.substring( 0, idx ).trim(); //part = field
-				Map<String, CollectionField> collectionFields = collection.getFieldsByName();
+				Map<String, CrescentCollectionField> collectionFields = collection.getCrescentFieldByName();
 				
-				CollectionField f = collectionFields.get(part);
+				CrescentCollectionField f = collectionFields.get(part);
 				
 				if(f == null) throw new CrescentUnvalidRequestException("요청된 필드가 존재하지 않습니다. ["+part+"]");
 				if(f.isAnalyze()) throw new CrescentUnvalidRequestException("Analyze 된 필드는 Sort가 불가능합니다. ["+part+"]");

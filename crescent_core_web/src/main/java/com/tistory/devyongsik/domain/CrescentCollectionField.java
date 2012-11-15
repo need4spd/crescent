@@ -1,11 +1,13 @@
-package com.tistory.devyongsik.config;
+package com.tistory.devyongsik.domain;
+
+import org.apache.lucene.search.BooleanClause.Occur;
+import org.apache.lucene.search.SortField;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 
 @XStreamAlias("field")
-public class NewCollectionField {
-
+public class CrescentCollectionField implements Cloneable {
 	@XStreamAsAttribute
 	private String name;
 	
@@ -28,7 +30,7 @@ public class NewCollectionField {
 	private boolean termoffset;
 	
 	@XStreamAsAttribute
-	private double boost;
+	private float boost;
 	
 	@XStreamAsAttribute
 	private boolean must;
@@ -78,10 +80,10 @@ public class NewCollectionField {
 	public void setTermoffset(boolean termoffset) {
 		this.termoffset = termoffset;
 	}
-	public double getBoost() {
+	public float getBoost() {
 		return boost;
 	}
-	public void setBoost(double boost) {
+	public void setBoost(float boost) {
 		this.boost = boost;
 	}
 	public boolean isMust() {
@@ -95,6 +97,52 @@ public class NewCollectionField {
 	}
 	public void setTermvector(boolean termvector) {
 		this.termvector = termvector;
+	}
+	public Occur getOccur() {
+		return must ? Occur.MUST : Occur.SHOULD;
+	}
+
+	public int getSortFieldType() {
+		if("string".equals(type)) return SortField.STRING;
+		if("integer".equals(type)) return SortField.INT;
+		if("long".equals(type)) return SortField.LONG;
+		else return SortField.STRING;
+	}
+	@Override
+	public String toString() {
+		return "CrescentCollectionField [name=" + name + ", store=" + store
+				+ ", index=" + index + ", type=" + type + ", analyze="
+				+ analyze + ", termposition=" + termposition + ", termoffset="
+				+ termoffset + ", boost=" + boost + ", must=" + must
+				+ ", termvector=" + termvector + "]";
+	}
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		Object o = super.clone();
+		return o;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CrescentCollectionField other = (CrescentCollectionField) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
 	}
 	
 	

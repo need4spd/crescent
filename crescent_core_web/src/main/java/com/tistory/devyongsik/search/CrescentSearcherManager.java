@@ -11,8 +11,9 @@ import org.apache.lucene.search.SearcherFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.config.CollectionConfig;
-import com.tistory.devyongsik.domain.Collection;
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.domain.CrescentCollection;
+import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.index.IndexWriterManager;
 
 /**
@@ -44,10 +45,11 @@ public class CrescentSearcherManager {
 		
 		logger.info("indexSearcherManager init start.....");
 		
-		CollectionConfig collectionConfig = CollectionConfig.getInstance();
+		CrescentCollections collections = CrescentCollectionHandler.getInstance().getCrescentCollections();
 		
-		Map<String, Collection> collections = collectionConfig.getCollections();
-		Set<String> collectionNames = collections.keySet();
+		Map<String, CrescentCollection> collectionsMap = collections.getCrescentCollectionsMap();
+		
+		Set<String> collectionNames = collectionsMap.keySet();
 		
 		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
 		

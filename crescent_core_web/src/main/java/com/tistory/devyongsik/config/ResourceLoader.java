@@ -2,6 +2,7 @@ package com.tistory.devyongsik.config;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Properties;
 
 import org.dom4j.Document;
@@ -30,11 +31,18 @@ public class ResourceLoader {
 		this.classLoader = getClassLoader();
 	}
 	
+	public ResourceLoader() {
+		
+		logger.info("ResourceLoader init.. base constructor");
+		
+		this.classLoader = getClassLoader();
+	}
+	
 	private ClassLoader getClassLoader() {
 		return Thread.currentThread().getContextClassLoader();
 	}
 	
-	private InputStream openResource(String name) {
+	protected InputStream openResource(String name) {
 		InputStream is = null;
 		
 		is = this.classLoader.getResourceAsStream(name);
@@ -45,6 +53,12 @@ public class ResourceLoader {
 		}
 		
 		return is;
+	}
+	
+	protected URL getURL(String name) {
+		URL url = this.classLoader.getResource(name);
+		
+		return url;
 	}
 	
 	private void buildDocument(InputStream is) {

@@ -3,7 +3,7 @@ package com.tistory.devyongsik.query;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -17,9 +17,7 @@ import org.apache.lucene.search.TermQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.config.CollectionConfig;
-import com.tistory.devyongsik.domain.Collection;
-import com.tistory.devyongsik.domain.CollectionField;
+import com.tistory.devyongsik.domain.CrescentCollectionField;
 
 /**
  * Query 생성 클래스
@@ -31,18 +29,10 @@ public class DefaultKeywordParser {
 
 	private Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
 	
-	public Query parse(String collectionName, String[] fieldNames, String keyword, Analyzer a) {
-		Collection collection = CollectionConfig.getInstance().getCollection(collectionName);
+	public Query parse(String collectionName, List<CrescentCollectionField> searchFields, String keyword, Analyzer a) {
+	
+		logger.debug("search fields : {}", searchFields);
 		
-		logger.debug("search fields : {}", Arrays.toString(fieldNames));
-		
-
-		//검색대상 필드를 가져온다.
-		CollectionField[] fields = new CollectionField[fieldNames.length];
-		for(int idx = 0; idx < fieldNames.length; idx++) {
-			fields[idx] = collection.getFieldsByName().get(fieldNames[idx].trim());
-		}
-
 		BooleanQuery resultQuery = new BooleanQuery();
 
 		//검색어를 split
@@ -53,19 +43,23 @@ public class DefaultKeywordParser {
 			ArrayList<String> analyzedTokenList = analyzedTokenList(a, keywords[i]);
 
 			//필드만큼 돌아간다..
-			for(int j = 0; j < fields.length; j++) {
+			for(CrescentCollectionField field : searchFields) {
 				if(analyzedTokenList.size() == 0) { //색인되어 나온 것이 없으면
-					Term t = new Term(fields[j].getName(), keywords[i]);
+					Term t = new Term(field.getName(), keywords[i]);
 					Query query = new TermQuery(t);
-					query.setBoost(fields[j].getFieldBoost());
+					if(field.getBoost() > 1F) {
+						query.setBoost(field.getBoost());
+					}
 					resultQuery.add(query, Occur.SHOULD);
 				} else {
 					int keySeq = 0; //처음 분석되어 나온 키워드를 찾기 위해..
 					for(String str : analyzedTokenList) {
-						Term t = new Term(fields[j].getName(), str);
+						Term t = new Term(field.getName(), str);
 						Query query = new TermQuery(t);
-						query.setBoost(fields[j].getFieldBoost());
-						resultQuery.add(query, (keySeq == 0) ? Occur.SHOULD : fields[j].getOccur());
+						if(field.getBoost() > 1F) {
+							query.setBoost(field.getBoost());
+						}
+						resultQuery.add(query, (keySeq == 0) ? Occur.SHOULD : field.getOccur());
 						keySeq++;
 					}
 				}
