@@ -13,6 +13,21 @@
 <html lang="en">
 <%@ include file="../common/header.jsp"%>
 <script>
+				function enterFind(e) {
+					if (e.keyCode == 13)
+						findWord();
+					return true;
+				};
+				function enterMorph(e){
+					if (e.keyCode == 13)
+						morphTest();
+					return true;
+				}
+				function enterAdd(e){
+					if(e.keyCode == 13)
+						addWord();
+					return true;
+				}
                 function prev() {
                         $('#pagingAction').val("prev");
                         $('#dictionaryForm').submit();
@@ -30,7 +45,7 @@
                 			newAlert('검색어를 입력해주세요.');
                 			return;
                 		}
-                        $('#dictionaryForm').attr('action', '/dictionaryManageAdd.devys').submit();
+                        $('#dictionaryForm').attr('action', 'dictionaryManageAdd.devys').submit();
                 }
 
                 function removeWord() {
@@ -42,11 +57,11 @@
 
                         $('#wordsToRemove').val(checked);
 
-                        $('#dictionaryForm').attr('action', '/dictionaryManageRemove.devys').submit();
+                        $('#dictionaryForm').attr('action', 'dictionaryManageRemove.devys').submit();
                 }
 
                 function findWord() {
-                $('#dictionaryForm').attr('action', '/dictionaryManageFind.devys').submit();
+                $('#dictionaryForm').attr('action', 'dictionaryManageFind.devys').submit();
                 }
 
                 /* function morphTest() {
@@ -93,7 +108,7 @@
 	<%@ include file="../common/menu.jsp"%>
 	<div class="container">
 		<form class="form-horizontal" id="dictionaryForm" method="post"
-			action="/dictionaryManage.devys">
+			action="dictionaryManage.devys">
 			<input type="hidden" id="dicType" name="dicType"
 				value="<%=dicType %>" /> <input type="hidden" id="startOffset"
 				name="startOffset" value="<%=startOffset%>" /> <input type="hidden"
@@ -122,13 +137,13 @@
 					<%=dictionarySize%>개
 				</p>
 				<a href="javascript:removeWord();" class="btn  btn-small btn-danger">선택단어삭제</a>
-				<a href="/adminMain.devys" class="btn  btn-small btn-success">관리자
+				<a href="adminMain.devys" class="btn  btn-small btn-success">관리자
 					메인으로</a>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="wordToAdd">단어추가</label>
 				<div class="controls">
-					<input type="text" id="wordToAdd" name="wordToAdd" value=""
+					<input type="text" id="wordToAdd" name="wordToAdd" onkeypress="enterAdd(event);" value=""
 						placeholder="추가할 단어를 입력해주세요." class="input-large search-query" />
 					<button class="btn btn-small btn-primary" type="button"
 						onclick="javascript:addWord();">단어추가</button>
@@ -138,7 +153,7 @@
 			<div class="control-group">
 				<label class="control-label" for="wordToFind">단어찾기</label>
 				<div class="controls">
-					<input type="text" id="wordToFind" name="wordToFind" value=""
+					<input type="text" id="wordToFind" name="wordToFind" onkeypress="enterFind(event);" value=""
 						placeholder="찾을 단어를 입력해주세요." class="input-large search-query" />
 					<button class="btn btn-small btn-primary" type="button"
 						onclick="javascript:findWord();">단어찾기</button>
@@ -148,7 +163,7 @@
 				<label class="control-label" for="wordToFind">형태소분석 테스트하기</label>
 				<div class="controls">
 
-					<input type="text" id="wordForTest" name="wordForTest" value=""
+					<input type="text" id="wordForTest" name="wordForTest" onkeypress="enterMorph(event)" value=""
 						placeholder="테스트할 단어를 입력해주세요." class="input-large search-query" />
 					<button class="btn btn-small btn-primary" type="button"
 						onclick="javascript:morphTest();">형태소분석 테스트하기</button>
