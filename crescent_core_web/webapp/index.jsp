@@ -4,7 +4,7 @@
 <%@ include file="jsp/common/header.jsp" %>
 <body>
 <%
-	String newLocn = "/adminMain.devys";
+	String newLocn = "adminMain.devys";
 	response.sendRedirect(newLocn);
  
  %>
