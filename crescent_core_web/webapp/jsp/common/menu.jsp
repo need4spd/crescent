@@ -8,7 +8,7 @@
 			<div class="nav-collapse collapse">
 				<ul class="nav">
 					<li id="Home"><a href="adminMain.devys">Home</a></li>
-					<li id="Collections"><a href="dicAdmin.devys">Collections</a></li>
+					<li id="Collections"><a href="collectionManageMain.devys">Collections</a></li>
 					<li id="Dictionary"><a href="dicAdmin.devys">Dictionary</a></li>
 					<li id="MorphTest"><a href="morphMain.devys">MorphTest</a></li>
 					<li id="IndexFile"><a href="morphMain.devys">IndexFile</a></li>
