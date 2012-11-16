@@ -24,54 +24,61 @@
 	<%@ include file="../common/menu.jsp"%>
 
 	<script>
+	function enterKey(e) {
+		if (e.keyCode ==13) {
+			search();
+		}
+		return true;
+	};
 		function search() {
 			if ($('#keyword').val() == '') {
 				newAlert('검색어를 입력해주세요.');
 				//$('#keyword_alert').show();
 				return;
 			}
-			$('#searchForm').attr('action', '/searchTest.devys').submit();
+			$('#searchForm').attr('action', 'searchTest.devys').submit();
 		}
 	</script>
 	<div class="container">
-		<form class="form-horizontal" id="searchForm" name="searchForm" action="/searchTest.devys" method="post">
+		<form class="form-horizontal" id="searchForm" name="searchForm" action="searchTest.devys" method="post">
 			<div class="control-group">
 				<label class="control-label" for="col_name">검색대상 Collection</label>
 				<div class="controls">
-					<input type="text" id="col_name" placeholder="Default Sample">
+					<input type="text" id="col_name" onkeypress="enterKey(event);" placeholder="Default Sample">
 				</div>
 			</div>
 			<div id="alert-area"></div>
 			<div class="control-group">
 				<label class="control-label" for="keyword">검색어</label>
 				<div class="controls">
-					<input type="text" id="keyword" name="keyword" placeholder="keyword">
+					<input type="text" id="keyword" name="keyword" onkeypress="enterKey(event);" placeholder="keyword">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="search_field">검색대상필드</label>
 				<div class="controls">
-					<input type="text" id="search_field" name="search_field"
+					<input type="text" id="search_field" name="search_field" onkeypress="enterKey(event);" 
 						placeholder="검색대상필드 - 없으면 Default">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="sort">정렬조건</label>
 				<div class="controls">
-					<input type="text" id="sort" name="sort" placeholder="정렬조건 - 없으면 Doc Score">
+					<input type="text" id="sort" name="sort" onkeypress="enterKey(event);" 
+													placeholder="정렬조건 - 없으면 Doc Score">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="page_num">Page Number</label>
 				<div class="controls">
-					<input type="text" id="page_num" name="page_num"
-						placeholder="Page Number - Default 1">
+					<input type="text" id="page_num" onkeypress="enterKey(event);" 
+						name="page_num" placeholder="Page Number - Default 1">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="page_size">Page Size</label>
 				<div class="controls">
-					<input type="text" id="page_size" name="page_size"
+					<input type="text" id="page_size" name="page_size" onkeypress="enterKey(event);" 
 						placeholder="Page Size - Default 20">
 				</div>
 			</div>
