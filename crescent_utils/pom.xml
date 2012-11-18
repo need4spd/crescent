@@ -40,7 +40,7 @@
 	    <manifest>
 	      <addClasspath>true</addClasspath>
 	      <classpathPrefix>lib</classpathPrefix>
-	      <mainClass>com.tistory.devyongsik.utils.IndexingUtil</mainClass>
+	      <!-- mainClass>com.tistory.devyongsik.utils.IndexingUtil</mainClass -->
 	    </manifest>
 	  </archive>
 	</configuration>

@@ -23,5 +23,10 @@
         id="searchService"
         class="com.tistory.devyongsik.service.SearchServiceImpl" >
     </bean>
+    
+    <bean
+        id="collectionManageService"
+        class="com.tistory.devyongsik.admin.CollectionManageServiceImpl" >
+    </bean>
 
 </beans>

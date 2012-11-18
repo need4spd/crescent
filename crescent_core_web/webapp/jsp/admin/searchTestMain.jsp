@@ -32,7 +32,7 @@
 	};
 		function search() {
 			if ($('#keyword').val() == '') {
-				newAlert('검색어를 입력해주세요.');
+				newAlert('검색어를 입력해주세요.', 'alert-area');
 				//$('#keyword_alert').show();
 				return;
 			}
