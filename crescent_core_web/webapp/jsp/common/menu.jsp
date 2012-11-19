@@ -11,7 +11,7 @@
 					<li id="Collections"><a href="collectionManageMain.devys">Collections</a></li>
 					<li id="Dictionary"><a href="dicAdmin.devys">Dictionary</a></li>
 					<li id="MorphTest"><a href="morphMain.devys">MorphTest</a></li>
-					<li id="IndexFile"><a href="morphMain.devys">IndexFile</a></li>
+					<li id="IndexFile"><a href="indexFileManageMain.devys">IndexFile</a></li>
 					<li id="SearchTest"><a href="searchTestMain.devys">SearchTest</a></li>
 				</ul>
 			</div>
