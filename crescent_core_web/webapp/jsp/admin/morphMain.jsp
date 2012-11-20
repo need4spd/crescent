@@ -25,11 +25,11 @@
 </script>
 <body>
 	<%@include file="../common/menu.jsp"%>
+	<div class="container">
 	<form id="morphForm" method="post" action="doMorphTest.devys">
 		<input type="text" id="keyword" name="keyword" onkeypress="enterKey(event);" value="" size="50" />
 		&nbsp;&nbsp; <a href="javascript:doMorphTest();" >형태소분석 결과보기</a>
 	</form>
-	<div>
 		색인모드<br />
 		<%
                         if(resultTokenListIndexingMode != null) {

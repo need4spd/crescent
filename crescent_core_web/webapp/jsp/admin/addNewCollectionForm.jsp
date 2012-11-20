@@ -72,7 +72,7 @@
 </script>
 <body>
 	<%@ include file="../common/menu.jsp"%>
-	<div class="container">
+	<div style="padding-left:10px;">
       <form class="form-horizontal" id="collectionManageForm" name="collectionManageForm" method="post" action="collectionManageMain.devys">
         <div class="control-group">
           <label class="control-label">Collection Name</label>

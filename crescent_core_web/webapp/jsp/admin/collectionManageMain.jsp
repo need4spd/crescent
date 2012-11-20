@@ -111,7 +111,7 @@
 			<button class="btn btn-primary" onClick="javascript:deleteCollection();">Yes</button>
 		</div>
 	</div>
-	<div class="container">
+	<div style="padding-left:10px;">
       <form class="form-horizontal" id="collectionManageForm" name="collectionManageForm" method="post" action="collectionManageMain.devys">
         <div class="control-group">
           <label class="control-label">Collection Name</label>

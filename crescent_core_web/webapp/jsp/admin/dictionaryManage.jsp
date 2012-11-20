@@ -106,7 +106,7 @@
         </script>
 <body>
 	<%@ include file="../common/menu.jsp"%>
-	<div class="container">
+	<div>
 		<form class="form-horizontal" id="dictionaryForm" method="post"
 			action="dictionaryManage.devys">
 			<input type="hidden" id="dicType" name="dicType"
@@ -114,23 +114,25 @@
 				name="startOffset" value="<%=startOffset%>" /> <input type="hidden"
 				id="pagingAction" name="pagingAction" value="" /> <input
 				type="hidden" id="wordsToRemove" name="wordsToRemove" value="" />
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>선택</th>
-						<th>단어</th>
-					</tr>
-				</thead>
-				<tbody>
-					<% for(String word : dictionary) { %>
-					<tr>
-						<td><input type="checkbox" id="<%=word%>"
-							name="wordToRemove[]" value="<%=word %>" /></td>
-						<td><%=word %></td>
-					</tr>
-					<% } %>
-				</tbody>
-			</table>
+			<div class="container">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th width="30px">선택</th>
+							<th style="text-align:center;">단어</th>
+						</tr>
+					</thead>
+					<tbody>
+						<% for(String word : dictionary) { %>
+						<tr>
+							<td><input type="checkbox" id="<%=word%>"
+								name="wordToRemove[]" value="<%=word %>" /></td>
+							<td style="text-align:center;"><%=word %></td>
+						</tr>
+						<% } %>
+					</tbody>
+				</table>
+			</div>
 			<div class="form-inline">
 				<p class="text-info">
 					단어개수
