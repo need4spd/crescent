@@ -148,7 +148,7 @@
 				<a href="adminMain.devys" class="btn  btn-small btn-success">관리자
 					메인으로</a>
 			</div>
-			<div class="control-group">
+			<div class="control-group" style="padding-top:20px;">
 				<label class="control-label" for="wordToAdd">단어추가</label>
 				<div class="controls">
 					<input type="text" id="wordToAdd" name="wordToAdd" onkeypress="enterAdd(event);" value=""
