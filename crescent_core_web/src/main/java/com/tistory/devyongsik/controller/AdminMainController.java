@@ -37,14 +37,6 @@ public class AdminMainController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/dicAdmin")
-	public ModelAndView dictionaryAdminMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/admin/dicAdminMain");
-		
-		return modelAndView;
-	}
-	
 	@RequestMapping("/dictionaryManage")
 	public ModelAndView dictionaryManage(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String dicType = request.getParameter("dicType");

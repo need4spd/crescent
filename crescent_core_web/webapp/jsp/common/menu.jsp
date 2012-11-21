@@ -9,10 +9,11 @@
 				<ul class="nav">
 					<li id="Home"><a href="adminMain.devys">Home</a></li>
 					<li id="Collections"><a href="collectionManageMain.devys">Collections</a></li>
-					<li id="Dictionary"><a href="dicAdmin.devys">Dictionary</a></li>
+					<li id="Dictionary"><a href="dictionaryManage.devys?dicType=noun">Dictionary</a></li>
 					<li id="MorphTest"><a href="morphMain.devys">MorphTest</a></li>
 					<li id="IndexFile"><a href="indexFileManageMain.devys">IndexFile</a></li>
 					<li id="SearchTest"><a href="searchTestMain.devys">SearchTest</a></li>
+					<li id="Statistic"><a href="searchTestMain.devys">Statistic</a></li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->

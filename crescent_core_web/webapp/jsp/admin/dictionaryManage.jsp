@@ -107,13 +107,19 @@
 <body>
 	<%@ include file="../common/menu.jsp"%>
 	<div>
-		<form class="form-horizontal" id="dictionaryForm" method="post"
-			action="dictionaryManage.devys">
-			<input type="hidden" id="dicType" name="dicType"
-				value="<%=dicType %>" /> <input type="hidden" id="startOffset"
-				name="startOffset" value="<%=startOffset%>" /> <input type="hidden"
-				id="pagingAction" name="pagingAction" value="" /> <input
-				type="hidden" id="wordsToRemove" name="wordsToRemove" value="" />
+		<div>
+			<ul class="nav nav-tabs">
+				<li <%="noun".equals(dicType) ? "class=\"active\"" : "" %>><a href="dictionaryManage.devys?dicType=noun">명사사전</a></li>
+				<li <%="stop".equals(dicType) ? "class=\"active\"" : "" %>><a href="dictionaryManage.devys?dicType=stop">불용어사전</a></li>
+				<li <%="syn".equals(dicType) ? "class=\"active\"" : "" %>><a href="dictionaryManage.devys?dicType=syn">동의어사전</a></li>
+				<li <%="compound".equals(dicType) ? "class=\"active\"" : "" %>><a href="dictionaryManage.devys?dicType=compound">복합명사사전</a></li>
+			</ul>
+		</div>
+		<form class="form-horizontal" id="dictionaryForm" method="post" action="dictionaryManage.devys">
+			<input type="hidden" id="dicType" name="dicType" value="<%=dicType %>" /> 
+			<input type="hidden" id="startOffset" name="startOffset" value="<%=startOffset%>" /> 
+			<input type="hidden" id="pagingAction" name="pagingAction" value="" /> 
+			<input 	type="hidden" id="wordsToRemove" name="wordsToRemove" value="" />
 			<div class="container">
 				<table class="table table-bordered">
 					<thead>
