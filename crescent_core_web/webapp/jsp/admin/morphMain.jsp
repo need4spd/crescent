@@ -26,33 +26,66 @@
 <body>
 	<%@include file="../common/menu.jsp"%>
 	<div class="container">
-	<form id="morphForm" method="post" action="doMorphTest.devys">
-		<input type="text" id="keyword" name="keyword" onkeypress="enterKey(event);" value="" size="50" />
-		&nbsp;&nbsp; <a href="javascript:doMorphTest();" >형태소분석 결과보기</a>
-	</form>
-		색인모드<br />
-		<%
-                        if(resultTokenListIndexingMode != null) {
-                                for(Token t : resultTokenListIndexingMode) {
-                %>
-		<li><%=t.toString() %> : (<%=t.startOffset() %>, <%=t.endOffset() %>)
-			[<%=t.type() %>]</li>
-		<%
-                                }
-                        }
-                %>
-		<br /> 쿼리모드<br />
-		<%
-                        if(resultTokenListQueryMode != null) {
-                                for(Token t : resultTokenListQueryMode) {
-                %>
-		<li><%=t.toString() %> : (<%=t.startOffset() %>, <%=t.endOffset() %>)
-			[<%=t.type() %>]</li>
-		<%
-                                }
-                        }
-                %>
-
+		<form id="morphForm" method="post" action="doMorphTest.devys">
+			<input type="text" id="keyword" name="keyword" onkeypress="enterKey(event);" value="" size="50" />
+			&nbsp;&nbsp; <a href="javascript:doMorphTest();" >형태소분석 결과보기</a>
+		</form>
+		<div class="row">
+				<div class="span6">
+					<table class="table table-striped">
+							<caption>색인용 형태소분석</caption>
+							<thead>
+								<tr>
+									<th>분석단어</th>
+									<th>타입</th>
+									<th>위치정보</th>
+								</tr>
+							</thead>
+							<tbody>
+								<%
+									if(resultTokenListIndexingMode != null) {
+										for(Token t :resultTokenListIndexingMode) {	
+								%>
+								<tr>
+									<td><%=t.toString() %></td>
+									<td><%=t.type() %></td>
+									<td><%=t.startOffset() %>, <%=t.endOffset() %></td>
+								</tr>
+								<%
+										}
+									}
+								%>
+							</tbody>
+						</table>
+				</div>
+				<div class="span6">
+					<table class="table table-striped">
+							<caption>쿼리 분석용 형태소분석</caption>
+							<thead>
+								<tr>
+									<th>분석단어</th>
+									<th>타입</th>
+									<th>위치정보</th>
+								</tr>
+							</thead>
+							<tbody>
+								<%
+									if(resultTokenListQueryMode != null) {
+										for(Token t :resultTokenListQueryMode) {	
+								%>
+								<tr>
+									<td><%=t.toString() %></td>
+									<td><%=t.type() %></td>
+									<td><%=t.startOffset() %>, <%=t.endOffset() %></td>
+								</tr>
+								<%
+										}
+									}
+								%>
+							</tbody>
+						</table>
+				</div>
+		</div>
 	</div>
 </body>
 </html>
