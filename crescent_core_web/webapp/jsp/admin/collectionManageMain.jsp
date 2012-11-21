@@ -150,6 +150,7 @@
               <th>store</th>
               <th>index</th>
               <th>type</th>
+              <th>must</th>
               <th>termposition</th>
               <th>termoffset</th>
               <th>boost</th>
@@ -174,6 +175,7 @@
               		<option value="LONG" <%="LONG".equals(field.getType()) ? "selected" : "" %>>LONG</option>
               	</select>
               </td>
+              <td style="text-align: center;"><input type="checkbox" id="must" name="must" <%=field.isMust() ? "checked" : "" %>></td>
               <td style="text-align: center;"><input type="checkbox" id="termposition" name="termposition" <%=field.isTermposition() ? "checked" : "" %>></td>
               <td style="text-align: center;"><input type="checkbox" id="termoffset" name="termoffset" <%=field.isTermoffset() ? "checked" : "" %>></td>
               <td style="text-align: center;"><input type="text" class="input-midium" id="boost" name="boost" value="<%=field.getBoost() %>"></td>

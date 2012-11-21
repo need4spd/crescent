@@ -1,48 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <collections>
-	<collection name="sample">
-		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
-		<indexingDirectory>/Users/need4spd/Programming/Java/crescent_index/sample</indexingDirectory>
-		<!-- indexingDirectory>/data1/lucene_index/sample</indexingDirectory -->
-		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/sample</indexingDirectory -->
-		<fields>
-			<!-- type : string, long, int -->
-			<field name="board_id" store="true" index="true" type="long" analyze="false" termposition="false" termoffset="false" />
-			<field name="title" store="true" index="true" type="string"	analyze="true" boost="2.0" />
-			<field name="dscr" store="true" index="true" type="string" analyze="true" must="true" termvector="true" />
-			<field name="creuser" store="true" index="false" type="string" analyze="false" />
-		</fields>
-		<defaultSearchFields>
-			<defaultSearchField name="title" />
-			<defaultSearchField name="dscr" />
-		</defaultSearchFields>
-		<sortFields>
-			<sortField source="title" dest="title_sort" />
-			<sortField source="board_id" dest="board_id_sort" />
-		</sortFields>
-	</collection>
-	
-	<collection name="sample_wiki">
-		<analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
-		<indexingDirectory>/Users/need4spd/Programming/Java/crescent_index/sample_wiki</indexingDirectory>
-		<!-- indexingDirectory>/data1/lucene_index/glider_wiki</indexingDirectory -->
-		<!--  indexingDirectory>/Users/need4spd/Programming/Java/workspace/crescent/test/crescent_index/glider_wiki</indexingDirectory -->
-		<fields>
-			<!-- type : string, long, int -->
-			<field name="wiki_idx" store="true" index="true" type="long" analyze="false" />
-			<field name="space_idx" store="true" index="true" type="long"	analyze="false"  />
-			<field name="wiki_text" store="true" index="true" type="string" analyze="true" must="true" termvector="true" />
-			<field name="wiki_title" store="true" index="true" type="string" analyze="true" must="true" boost="2.0" />
-			<field name="ins_user" store="true" index="true" type="string" analyze="false" />
-			<field name="ins_date" store="true" index="true" type="long" analyze="false" />			
-		</fields>
-		<defaultSearchFields>
-			<defaultSearchField name="wiki_title" />
-			<defaultSearchField name="wiki_text" />
-		</defaultSearchFields>
-		<sortFields>
-			<sortField source="ins_date" dest="ins_date_sort" />
-			<sortField source="wiki_idx" dest="wiki_idx_sort" />
-		</sortFields>
-	</collection>
+  <collection name="sample">
+    <analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
+    <indexingDirectory>/Users/need4spd/Programming/Java/crescent_index/sample</indexingDirectory>
+    <!-- indexingDirectory>/data1/lucene_index/sample</indexingDirectory -->
+    <fields>
+      <field name="board_id" store="true" index="true" type="STRING" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
+      <field name="title" store="true" index="true" type="STRING" analyze="true" termposition="false" termoffset="false" boost="2.0" must="false" termvector="false"/>
+      <field name="dscr" store="true" index="true" type="STRING" analyze="true" termposition="false" termoffset="false" boost="0.0" must="true" termvector="true"/>
+      <field name="creuser" store="true" index="false" type="STRING" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
+    </fields>
+    <defaultSearchFields>
+      <defaultSearchField name="title"/>
+      <defaultSearchField name="dscr"/>
+    </defaultSearchFields>
+    <sortFields>
+      <sortField source="title" dest="title_sort"/>
+      <sortField source="board_id" dest="board_id_sort"/>
+    </sortFields>
+  </collection>
+  <collection name="sample_wiki">
+    <analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
+    <indexingDirectory>/Users/need4spd/Programming/Java/crescent_index/sample_wiki</indexingDirectory>
+    <!-- indexingDirectory>/data1/lucene_index/sample_wiki</indexingDirectory -->
+    <fields>
+      <field name="wiki_idx" store="true" index="true" type="long" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
+      <field name="space_idx" store="true" index="true" type="long" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
+      <field name="wiki_text" store="true" index="true" type="string" analyze="true" termposition="false" termoffset="false" boost="0.0" must="true" termvector="true"/>
+      <field name="wiki_title" store="true" index="true" type="string" analyze="true" termposition="false" termoffset="false" boost="2.0" must="true" termvector="false"/>
+      <field name="ins_user" store="true" index="true" type="string" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
+      <field name="ins_date" store="true" index="true" type="long" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
+    </fields>
+    <defaultSearchFields>
+      <defaultSearchField name="wiki_title"/>
+      <defaultSearchField name="wiki_text"/>
+    </defaultSearchFields>
+    <sortFields>
+      <sortField source="ins_date" dest="ins_date_sort"/>
+      <sortField source="wiki_idx" dest="wiki_idx_sort"/>
+    </sortFields>
+  </collection>
 </collections>

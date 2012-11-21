@@ -103,6 +103,7 @@
               <th>store</th>
               <th>index</th>
               <th>type</th>
+              <th>must</th>
               <th>termposition</th>
               <th>termoffset</th>
               <th>boost</th>
@@ -123,6 +124,7 @@
               		<option value="LONG">LONG</option>
               	</select>
               </td>
+              <td style="text-align: center;"><input type="checkbox" id="must" name="must"></td>
               <td style="text-align: center;"><input type="checkbox" id="termposition" name="termposition"></td>
               <td style="text-align: center;"><input type="checkbox" id="termoffset" name="termoffset"></td>
               <td style="text-align: center;"><input type="text" class="input-midium" id="boost" name="boost"></td>

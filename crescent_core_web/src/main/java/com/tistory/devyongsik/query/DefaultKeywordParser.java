@@ -29,7 +29,7 @@ public class DefaultKeywordParser {
 
 	private Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
 	
-	public Query parse(String collectionName, List<CrescentCollectionField> searchFields, String keyword, Analyzer a) {
+	public Query parse(String collectionName, List<CrescentCollectionField> searchFields, String keyword, Analyzer analyzer) {
 	
 		logger.debug("search fields : {}", searchFields);
 		
@@ -38,9 +38,8 @@ public class DefaultKeywordParser {
 		//검색어를 split
 		String[] keywords = keyword.split( " " );
 
-
 		for(int i = 0; i < keywords.length; i++) {
-			ArrayList<String> analyzedTokenList = analyzedTokenList(a, keywords[i]);
+			ArrayList<String> analyzedTokenList = analyzedTokenList(analyzer, keywords[i]);
 
 			//필드만큼 돌아간다..
 			for(CrescentCollectionField field : searchFields) {
@@ -52,15 +51,15 @@ public class DefaultKeywordParser {
 					}
 					resultQuery.add(query, Occur.SHOULD);
 				} else {
-					int keySeq = 0; //처음 분석되어 나온 키워드를 찾기 위해..
 					for(String str : analyzedTokenList) {
+						
 						Term t = new Term(field.getName(), str);
 						Query query = new TermQuery(t);
 						if(field.getBoost() > 1F) {
 							query.setBoost(field.getBoost());
 						}
-						resultQuery.add(query, (keySeq == 0) ? Occur.SHOULD : field.getOccur());
-						keySeq++;
+						
+						resultQuery.add(query, field.getOccur());
 					}
 				}
 			}
@@ -72,12 +71,12 @@ public class DefaultKeywordParser {
 		return resultQuery;
 	}
 
-	private ArrayList<String> analyzedTokenList(Analyzer a, String splitedKeyword) {
+	private ArrayList<String> analyzedTokenList(Analyzer analyzer, String splitedKeyword) {
 		Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
 		
 		ArrayList<String> rst = new ArrayList<String>();
 		//split된 검색어를 Analyze..
-		TokenStream stream = a.tokenStream("", new StringReader(splitedKeyword));
+		TokenStream stream = analyzer.tokenStream("", new StringReader(splitedKeyword));
 		CharTermAttribute charTerm = stream.getAttribute(CharTermAttribute.class);
 		
 
