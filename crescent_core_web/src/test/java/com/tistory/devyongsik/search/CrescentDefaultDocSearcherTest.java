@@ -16,7 +16,7 @@ public class CrescentDefaultDocSearcherTest {
 	@Test
 	public void search() throws IOException {
 		SearchRequest searchRequest = new SearchRequest();
-		searchRequest.setKeyword("제목");
+		searchRequest.setKeyword("1");
 		searchRequest.setCollectionName("sample_wiki");
 		
 		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);

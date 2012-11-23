@@ -13,7 +13,7 @@ public class SearchModuleTest {
 	@Test
 	public void search() {
 		SearchRequest searchRequest = new SearchRequest();
-		searchRequest.setKeyword("제목");
+		searchRequest.setKeyword("텍스트");
 		searchRequest.setCollectionName("sample");
 		
 		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
@@ -23,13 +23,13 @@ public class SearchModuleTest {
 		
 		Assert.assertTrue(searchResult.getTotalHitsCount() > 0);
 		Assert.assertTrue(searchResult.getResultList().size() > 0);
-		Assert.assertTrue(searchResult.getResultList().size() == 100);
+		Assert.assertTrue(searchResult.getResultList().size() == 20);
 	}
 	
 	@Test
 	public void searchChangePageSize10() {
 		SearchRequest searchRequest = new SearchRequest();
-		searchRequest.setKeyword("제목");
+		searchRequest.setKeyword("텍스트");
 		searchRequest.setCollectionName("sample");
 		searchRequest.setPageSize("10");
 		
@@ -46,7 +46,7 @@ public class SearchModuleTest {
 	@Test
 	public void searchChangePageSize30() {
 		SearchRequest searchRequest = new SearchRequest();
-		searchRequest.setKeyword("제목");
+		searchRequest.setKeyword("텍스트");
 		searchRequest.setCollectionName("sample");
 		searchRequest.setPageSize("30");
 		
@@ -63,7 +63,7 @@ public class SearchModuleTest {
 	@Test
 	public void searchChangePageSize80() {
 		SearchRequest searchRequest = new SearchRequest();
-		searchRequest.setKeyword("제목");
+		searchRequest.setKeyword("텍스트");
 		searchRequest.setCollectionName("sample");
 		searchRequest.setPageSize("80");
 		
@@ -80,7 +80,7 @@ public class SearchModuleTest {
 	@Test
 	public void searchChangePageNum5() {
 		SearchRequest searchRequest = new SearchRequest();
-		searchRequest.setKeyword("제목");
+		searchRequest.setKeyword("텍스트");
 		searchRequest.setCollectionName("sample");
 		searchRequest.setPageSize("5");
 		searchRequest.setPageNum("5");
