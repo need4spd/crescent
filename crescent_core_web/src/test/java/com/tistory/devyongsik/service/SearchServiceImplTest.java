@@ -15,7 +15,7 @@ public class SearchServiceImplTest {
 	public void search() throws IOException {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
-		searchRequest.setKeyword("타이틀");
+		searchRequest.setKeyword("1");
 		
 		SearchService searchService = new SearchServiceImpl();
 		SearchResult searchResult = searchService.search(searchRequest);

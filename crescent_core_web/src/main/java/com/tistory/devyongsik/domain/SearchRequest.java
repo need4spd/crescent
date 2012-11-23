@@ -9,22 +9,22 @@ public class SearchRequest {
 	private String keyword;
 	
 	@RequestParamName(name="page_num", defaultValue="1")
-	private String pageNum;
+	private String pageNum = "1";
 	
 	@RequestParamName(name="page_size", defaultValue="10")
-	private String pageSize;
+	private String pageSize = "10";
 	
 	@RequestParamName(name="sort", defaultValue="")
-	private String sort;
+	private String sort = "";
 	
 	@RequestParamName(name="search_field", defaultValue="")
-	private String searchField;
+	private String searchField = "";
 
-	private String userIp;
+	private String userIp = "";
 	
-	private String userId;
+	private String userId = "";
 	
-	private String pcId;
+	private String pcId = "";
 	
 	
 	
