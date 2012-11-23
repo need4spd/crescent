@@ -21,21 +21,24 @@ public class SearchRequestValidator {
 		
 		
 		//request search field
-		String[] requestSearchFieldNames = searchRequest.getSearchField().split(",");
-		
-		if(requestSearchFieldNames != null && requestSearchFieldNames[0].length() > 0) {
-			for(String requestFieldName : requestSearchFieldNames) {
-				if(!collection.getCrescentFieldByName().containsKey(requestFieldName)) {
-					throw new CrescentUnvalidRequestException("Wrong Search Field Name : " + searchRequest.getSearchField());
+		if(searchRequest.getSearchField() != null) {
+			String[] requestSearchFieldNames = searchRequest.getSearchField().split(",");
+			
+			if(requestSearchFieldNames != null && requestSearchFieldNames[0].length() > 0) {
+				for(String requestFieldName : requestSearchFieldNames) {
+					if(!collection.getCrescentFieldByName().containsKey(requestFieldName)) {
+						throw new CrescentUnvalidRequestException("Wrong Search Field Name : " + searchRequest.getSearchField());
+					}
 				}
 			}
 		}
 		
 		//page num
-		if(!StringUtil.isNumeric(searchRequest.getPageNum())) {
-			throw new CrescentUnvalidRequestException("Page_Num parameter value is must positive number: " + searchRequest.getPageNum());
+		if(searchRequest.getPageNum() != null) {
+			if(!StringUtil.isNumeric(searchRequest.getPageNum())) {
+				throw new CrescentUnvalidRequestException("Page_Num parameter value is must positive number: " + searchRequest.getPageNum());
+			}
 		}
-	
 		
 		//request sort field
 		String sortQueryString = searchRequest.getSort();
