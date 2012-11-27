@@ -49,8 +49,7 @@ public class CrescentHighlighter {
 			try {
 				List<CrescentCollectionField> fields = new ArrayList<CrescentCollectionField>();
 				fields.add(field);
-				Query query = keywordParser.parse(csrw.getCollectionName()
-						,fields
+				Query query = keywordParser.parse(fields
 						,csrw.getKeyword()
 						, analyzer);
 				

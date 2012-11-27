@@ -29,7 +29,7 @@ public class DefaultKeywordParser {
 
 	private Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
 	
-	public Query parse(String collectionName, List<CrescentCollectionField> searchFields, String keyword, Analyzer analyzer) {
+	public Query parse(List<CrescentCollectionField> searchFields, String keyword, Analyzer analyzer) {
 	
 		logger.debug("search fields : {}", searchFields);
 		

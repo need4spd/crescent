@@ -56,8 +56,7 @@ public class CrescentSortDocSearcher implements CrescentDocSearcher {
 			logger.debug("sort : {}", sort);
 			
 			DefaultKeywordParser keywordParser = new DefaultKeywordParser();
-			Query query = keywordParser.parse(csrw.getCollectionName()
-					,csrw.getTargetSearchFields()
+			Query query = keywordParser.parse(csrw.getTargetSearchFields()
 					,csrw.getKeyword()
 					, new KoreanAnalyzer(false));
 			

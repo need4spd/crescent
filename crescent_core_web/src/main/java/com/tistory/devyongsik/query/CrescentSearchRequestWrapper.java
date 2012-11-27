@@ -170,4 +170,8 @@ public class CrescentSearchRequestWrapper {
 	public String getPcId() {
 		return searchRequest.getPcId();
 	}
+	
+	public String getCustomQuery() {
+		return searchRequest.getCustomQuery();
+	}
 }

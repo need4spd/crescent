@@ -20,8 +20,7 @@ public class DefaultKeywordParserTest {
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
 		DefaultKeywordParser parser = new DefaultKeywordParser();
-		Query query = parser.parse(csrw.getCollectionName()
-				,csrw.getTargetSearchFields()
+		Query query = parser.parse(csrw.getTargetSearchFields()
 				,csrw.getKeyword()
 				,new KoreanAnalyzer(false));
 		

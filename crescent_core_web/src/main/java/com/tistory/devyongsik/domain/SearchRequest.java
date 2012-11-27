@@ -26,8 +26,17 @@ public class SearchRequest {
 	
 	private String pcId;
 	
+	@RequestParamName(name="cq", defaultValue="")
+	private String customQuery;
 	
-	
+	public String getCustomQuery() {
+		return customQuery;
+	}
+
+	public void setCustomQuery(String customQuery) {
+		this.customQuery = customQuery;
+	}
+
 	public String getPcId() {
 		return pcId;
 	}
@@ -103,10 +112,9 @@ public class SearchRequest {
 	@Override
 	public String toString() {
 		return "SearchRequest [collectionName=" + collectionName + ", keyword="
-				+ keyword + ", pageNum=" + pageNum + ", pageSize="
-				+ pageSize + ", sort=" + sort + ", searchField=" + searchField
-				+ "]";
+				+ keyword + ", pageNum=" + pageNum + ", pageSize=" + pageSize
+				+ ", sort=" + sort + ", searchField=" + searchField
+				+ ", userIp=" + userIp + ", userId=" + userId + ", pcId="
+				+ pcId + ", customQuery=" + customQuery + "]";
 	}
-	
-	
 }
