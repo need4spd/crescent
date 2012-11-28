@@ -28,6 +28,8 @@ public class CrescentSearchRequestWrapper {
 	//디폴트로 몇 페이지까지 검색 넘어갈 수 있도록?
 	private final int DEFAULT_HITS_PAGE = 5;
 	
+	private List<CrescentCollectionField> searchFields = new ArrayList<CrescentCollectionField>();
+	private List<CrescentCollectionField> indexedFields = new ArrayList<CrescentCollectionField>();
 
 	public CrescentSearchRequestWrapper(SearchRequest searchRequest) {
 		this.searchRequest = searchRequest;	
@@ -134,7 +136,11 @@ public class CrescentSearchRequestWrapper {
 	}
 
 	public List<CrescentCollectionField> getTargetSearchFields() {
-		List<CrescentCollectionField> searchFields = new ArrayList<CrescentCollectionField>();
+		
+		if(searchFields.size() > 0) {
+			return searchFields;
+		}
+		
 		CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
 		
 		Map<String, CrescentCollectionField> fieldMap = collection.getCrescentFieldByName();
@@ -157,6 +163,24 @@ public class CrescentSearchRequestWrapper {
 		}
 		
 		return searchFields;
+	}
+	
+	public List<CrescentCollectionField> getIndexedFields() {
+		if(indexedFields.size() > 0) {
+			return indexedFields;
+		}
+		
+		CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
+		
+		Map<String, CrescentCollectionField> fieldMap = collection.getCrescentFieldByName();
+		for(String fieldName : fieldMap.keySet()) {
+			CrescentCollectionField f = fieldMap.get(fieldName);
+			if(f.isIndex()) {
+				indexedFields.add(f);
+			}
+		}
+		
+		return indexedFields;
 	}
 	
 	public String getUserIp() {

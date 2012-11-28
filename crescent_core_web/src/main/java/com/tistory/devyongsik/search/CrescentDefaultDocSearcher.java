@@ -17,6 +17,7 @@ import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.logger.CrescentLogger;
 import com.tistory.devyongsik.logger.LogInfo;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
+import com.tistory.devyongsik.query.CustomQueryStringParser;
 import com.tistory.devyongsik.query.DefaultKeywordParser;
 
 public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
@@ -51,10 +52,20 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		try {
 			indexSearcher = nrtManager.acquire();
 			
-			DefaultKeywordParser keywordParser = new DefaultKeywordParser();
-			Query query = keywordParser.parse(csrw.getTargetSearchFields()
-					,csrw.getKeyword()
-					,new KoreanAnalyzer(false));
+			Query query = null;
+			
+			if(csrw.getCustomQuery() != null && csrw.getCustomQuery().length() > 0) {
+				CustomQueryStringParser customQueryParser = new CustomQueryStringParser();
+				query = customQueryParser.getQueryFromCustomQuery(csrw.getIndexedFields()
+						,csrw.getCustomQuery()
+						, new KoreanAnalyzer(false));
+				
+			} else {
+				DefaultKeywordParser keywordParser = new DefaultKeywordParser();
+				query = keywordParser.parse(csrw.getTargetSearchFields()
+						,csrw.getKeyword()
+						,new KoreanAnalyzer(false));
+			}
 			
 			logger.debug("query : {}" , query);
 			

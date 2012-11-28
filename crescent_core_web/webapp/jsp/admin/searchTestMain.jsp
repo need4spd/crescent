@@ -31,8 +31,8 @@
 		return true;
 	};
 		function search() {
-			if ($('#keyword').val() == '') {
-				newAlert('검색어를 입력해주세요.', 'alert-area');
+			if ($('#keyword').val() == '' && $('#cq').val() == '') {
+				newAlert('검색어나 커스텀쿼리 중 하나는 꼭 입력해주세요.', 'alert-area');
 				//$('#keyword_alert').show();
 				return;
 			}
@@ -45,6 +45,13 @@
 				<label class="control-label" for="col_name">검색대상 Collection</label>
 				<div class="controls">
 					<input type="text" id="col_name" onkeypress="enterKey(event);" placeholder="Default Sample">
+				</div>
+			</div>
+			<div id="alert-area"></div>
+			<div class="control-group">
+				<label class="control-label" for="keyword">커스텀쿼리</label>
+				<div class="controls">
+					<input type="text" id="cq" name="cq" onkeypress="enterKey(event);" placeholder="커스텀쿼리-최우선조건">
 				</div>
 			</div>
 			<div id="alert-area"></div>
