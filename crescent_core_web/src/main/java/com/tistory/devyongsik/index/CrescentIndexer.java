@@ -61,7 +61,7 @@ public class CrescentIndexer {
 //				
 //			}
 			
-			//trackingIndexWriter.commit();
+			trackingIndexWriter.getIndexWriter().commit();
 			//indexWriter.close();
 			
 			logger.info("end");

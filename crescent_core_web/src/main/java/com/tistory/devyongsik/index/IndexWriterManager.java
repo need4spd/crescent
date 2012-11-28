@@ -53,6 +53,8 @@ public class IndexWriterManager {
 			Directory dir = FSDirectory.open(new File(indexDir));
 			
 			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, new KoreanAnalyzer(true));
+			//conf.setIndexDeletionPolicy(new LastCommitDeletePolicy());
+			
 			IndexWriter indexWriter = new IndexWriter(dir, conf);
 			TrackingIndexWriter trackingIndexWriter = new TrackingIndexWriter(indexWriter);
 			indexWritersByCollectionName.put(crescentCollection.getName(), trackingIndexWriter);
