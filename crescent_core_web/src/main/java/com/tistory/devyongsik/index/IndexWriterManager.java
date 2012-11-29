@@ -7,7 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.search.NRTManager.TrackingIndexWriter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
@@ -22,7 +21,7 @@ import com.tistory.devyongsik.domain.CrescentCollections;
 public class IndexWriterManager {
 
 	private static IndexWriterManager indexWriterManager = new IndexWriterManager();
-	private Map<String, TrackingIndexWriter> indexWritersByCollectionName = new ConcurrentHashMap<String, TrackingIndexWriter>();
+	private Map<String, IndexWriter> indexWritersByCollectionName = new ConcurrentHashMap<String, IndexWriter>();
 	private Logger logger = LoggerFactory.getLogger(IndexWriterManager.class);
 	
 	private IndexWriterManager() {
@@ -53,17 +52,17 @@ public class IndexWriterManager {
 			Directory dir = FSDirectory.open(new File(indexDir));
 			
 			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, new KoreanAnalyzer(true));
+			//conf.setOpenMode(OpenMode.CREATE);
 			//conf.setIndexDeletionPolicy(new LastCommitDeletePolicy());
 			
 			IndexWriter indexWriter = new IndexWriter(dir, conf);
-			TrackingIndexWriter trackingIndexWriter = new TrackingIndexWriter(indexWriter);
-			indexWritersByCollectionName.put(crescentCollection.getName(), trackingIndexWriter);
+			indexWritersByCollectionName.put(crescentCollection.getName(), indexWriter);
 			
 			logger.info("index writer for collection {} is initialized...", crescentCollection.getName());
 		}
 	}
 	
-	public TrackingIndexWriter getTrackingIndexWriterBy(String collectionName) {
+	public IndexWriter getIndexWriter(String collectionName) {
 		return indexWritersByCollectionName.get(collectionName);
 	}
 }

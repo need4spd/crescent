@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.lucene.search.NRTManager;
-import org.apache.lucene.search.NRTManager.TrackingIndexWriter;
+import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.search.SearcherFactory;
+import org.apache.lucene.search.SearcherManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +23,7 @@ public class CrescentSearcherManager {
 
 	private static CrescentSearcherManager searcherManager = new CrescentSearcherManager();
 	
-	private Map<String, NRTManager> nrtManagerByCollection = new ConcurrentHashMap<String, NRTManager>();
+	private Map<String, SearcherManager> searcherManagerByCollection = new ConcurrentHashMap<String, SearcherManager>();
 	//private Map<String, IndexReader> indexReadersByCollection = new ConcurrentHashMap<String, IndexReader>();
 
 	private Logger logger = LoggerFactory.getLogger(CrescentSearcherManager.class);
@@ -58,31 +58,31 @@ public class CrescentSearcherManager {
 			logger.info("collection name {}", collectionName);
 			
 			SearcherFactory searcherFactory = new SearcherFactory();
-			TrackingIndexWriter trackingIndexWriter = indexWriterManager.getTrackingIndexWriterBy(collectionName);
-			NRTManager nrtManager = new NRTManager(trackingIndexWriter, searcherFactory);
+			IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
+			SearcherManager searcherManager = new SearcherManager(indexWriter, true, searcherFactory);
 			
-			nrtManagerByCollection.put(collectionName, nrtManager);
+			searcherManagerByCollection.put(collectionName, searcherManager);
 			
 			logger.info("searcher manager created....");
 		}
 	}
 	
-	public synchronized NRTManager getSearcherManager(String collectionName) {
-		NRTManager nrtManager = nrtManagerByCollection.get(collectionName);
+	public synchronized SearcherManager getSearcherManager(String collectionName) {
+		SearcherManager searcherManager = searcherManagerByCollection.get(collectionName);
 		
 		try {
 			
-			nrtManager.maybeRefresh();
+			searcherManager.maybeRefresh();
 		
 		} catch (IOException e) {
 		
 			logger.error("exception in CrescentSearcherManager : {}", e);
-			new IllegalStateException("NRT Manager maybeRefresh Exception in " + collectionName + ".");
+			new IllegalStateException("SearcherManager maybeRefresh Exception in " + collectionName + ".");
 		
 		}
 		
-		logger.info("current searcher generation : {}", nrtManager.getCurrentSearchingGen());
+		//logger.info("current searcher generation : {}", nrtManager.getCurrentSearchingGen());
 		
-		return nrtManager;
+		return searcherManager;
 	}
 }

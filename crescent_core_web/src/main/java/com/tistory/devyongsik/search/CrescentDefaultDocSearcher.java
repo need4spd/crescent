@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.NRTManager;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TopScoreDocCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,14 +43,14 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		//5page * 50
 		int numOfHits = csrw.getDefaultHitsPage() * csrw.getHitsForPage();
 		IndexSearcher indexSearcher = null;
-		NRTManager nrtManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
+		SearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
 		
 		TopScoreDocCollector collector = TopScoreDocCollector.create(numOfHits, true);
 		
 		List<Document> resultList = new ArrayList<Document>();
 		
 		try {
-			indexSearcher = nrtManager.acquire();
+			indexSearcher = searcherManager.acquire();
 			
 			Query query = null;
 			
@@ -127,7 +127,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			errorCode = -1;
 			
 		} finally {
-			nrtManager.release(indexSearcher);
+			searcherManager.release(indexSearcher);
 			indexSearcher = null;
 		}
 		

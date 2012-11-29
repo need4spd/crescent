@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.search.NRTManager.TrackingIndexWriter;
+import org.apache.lucene.index.IndexWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,14 +43,14 @@ public class CrescentIndexer {
 			logger.info("indexing start................");
 			
 			IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
-			TrackingIndexWriter trackingIndexWriter = indexWriterManager.getTrackingIndexWriterBy(collectionName);
+			IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
 			//File file = new File(dataSourceDir);
 			//String[] files = file.list();
 			
 			//logger.info("data files : {}", Arrays.toString(files));
 			
 			for(Document doc : documentList) {
-				trackingIndexWriter.addDocument(doc);
+				indexWriter.addDocument(doc);
 			}
 			
 //			Handler handler = new JsonDataHandler();
@@ -61,7 +61,7 @@ public class CrescentIndexer {
 //				
 //			}
 			
-			trackingIndexWriter.getIndexWriter().commit();
+			indexWriter.commit();
 			//indexWriter.close();
 			
 			logger.info("end");

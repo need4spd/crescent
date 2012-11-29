@@ -3,7 +3,7 @@ package com.tistory.devyongsik.search;
 import junit.framework.Assert;
 
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.NRTManager;
+import org.apache.lucene.search.SearcherManager;
 import org.junit.Test;
 
 public class SearcherManagerTest {
@@ -18,9 +18,9 @@ public class SearcherManagerTest {
 	@Test
 	public void getSearcher() {
 		IndexSearcher indexSearcher = null;
-		NRTManager nrtManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager("sample");
+		SearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager("sample");
 		
-		indexSearcher = nrtManager.acquire();
+		indexSearcher = searcherManager.acquire();
 		
 		Assert.assertNotNull(indexSearcher);
 	}

@@ -40,8 +40,10 @@ public class UpdateController {
 		}
 		
 		String collectionName = request.getParameter("collection_name");
+		//String isIncrementalIndexing = StringUtils.defaultString(request.getParameter("isIncIndex"), "N");
 		
 		logger.info("collection name : {}", collectionName);
+		//logger.info("is incremental indexing : {}", isIncrementalIndexing);
 		
 		StringBuilder text = new StringBuilder();
 		
