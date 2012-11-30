@@ -19,7 +19,21 @@ public class CrescentIndexerExecutor {
 		this.handler = handler;
 	}
 
-	public String execute(String jsonFormStr) {
+	public String bulkIndexing(String jsonFormStr) {
+		
+		List<Document> documentList = handler.handledData(jsonFormStr, collection.getCrescentFieldByName());		
+		CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getName());
+		crescentIndexer.indexing(documentList);
+		
+		crescentIndexer.commit();
+		
+		String logMessage = collection.getName() + "의 " + documentList.size() + "건 색인 완료";
+		logger.info("{} 의 {}건 인덱싱이 완료되었습니다.", new String[] {collection.getName(), String.valueOf(documentList.size())});
+		
+		return logMessage;
+	}
+	
+	public String incrementalIndexing(String jsonFormStr) {
 		
 		List<Document> documentList = handler.handledData(jsonFormStr, collection.getCrescentFieldByName());		
 		CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getName());
@@ -29,36 +43,5 @@ public class CrescentIndexerExecutor {
 		logger.info("{} 의 {}건 인덱싱이 완료되었습니다.", new String[] {collection.getName(), String.valueOf(documentList.size())});
 		
 		return logMessage;
-		
-		//ExecutorService threadExecutor = Executors.newFixedThreadPool(1);
-		//for(int part = 0; part < numberOfIndexFiles; part++) {
-		//	threadExecutor.execute(new IndexExecutor(String.valueOf(part)));
-		//}
-		
-//		threadExecutor.shutdown();
-//		
-//		while(!threadExecutor.isTerminated()) {
-//			logger.info("waiting...");
-//			
-//			try {
-//				Thread.sleep(1000);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//		}
 	}
-	
-//	private class IndexExecutor implements Runnable {
-//
-//		//private String jobPart = null;
-//
-////		public IndexExecutor(String part) {
-////			this.jobPart = part;
-////		}
-//
-//		@Override
-//		public void run() {
-//			
-//		}
-//	}
 }

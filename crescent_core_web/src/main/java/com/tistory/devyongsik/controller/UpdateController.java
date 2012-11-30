@@ -7,6 +7,7 @@ import java.io.Writer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -25,7 +26,7 @@ import com.tistory.devyongsik.index.CrescentIndexerExecutor;
 @Controller
 public class UpdateController {
 	
-	Logger logger = LoggerFactory.getLogger(UpdateController.class);
+	private Logger logger = LoggerFactory.getLogger(UpdateController.class);
 	
 	@RequestMapping("/update")
 	public void updateDocument(HttpServletRequest request, HttpServletResponse response) {
@@ -40,10 +41,10 @@ public class UpdateController {
 		}
 		
 		String collectionName = request.getParameter("collection_name");
-		//String isIncrementalIndexing = StringUtils.defaultString(request.getParameter("isIncIndex"), "N");
+		String isIncrementalIndexing = StringUtils.defaultString(request.getParameter("isIncIndex"), "N");
 		
 		logger.info("collection name : {}", collectionName);
-		//logger.info("is incremental indexing : {}", isIncrementalIndexing);
+		logger.info("is incremental indexing : {}", isIncrementalIndexing);
 		
 		StringBuilder text = new StringBuilder();
 		
@@ -60,7 +61,14 @@ public class UpdateController {
 			
 			CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(collectionName);
 			CrescentIndexerExecutor excutor = new CrescentIndexerExecutor(collection, handler);
-			String message = excutor.execute(text.toString());
+			
+			String message = "";
+			
+			if("Y".equals(isIncrementalIndexing)) {
+				message = excutor.incrementalIndexing(text.toString());
+			} else {
+				message = excutor.bulkIndexing(text.toString());
+			}
 			
 			Writer writer = null;
 			
