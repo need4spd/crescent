@@ -10,7 +10,13 @@
 		<param-value>moon.root</param-value>
 	</context-param -->
 
-
+	<servlet>
+	    <servlet-name>InitializeServlet</servlet-name>
+	    <servlet-class>com.tistory.devyongsik.servlets.InitializeServlet</servlet-class>
+	    
+	    <load-on-startup>1</load-on-startup>
+	</servlet>
+	
 	<listener>
 		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>

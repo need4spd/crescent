@@ -94,6 +94,12 @@
         </div>
       </div>
       <div id="alert-area-indexingDirectory"></div>
+       <div class="control-group">
+        <label class="control-label">Searcher Reload Schedule</label>
+        <div class="controls">
+          <input type="text" id="searcherReloadScheduleMin" name="searcherReloadScheduleMin" class="input-mideum" value=""> 
+        </div>
+      </div>
       <div>
         <table class="table table-striped" id="fieldTable">
           <thead>

@@ -34,10 +34,14 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 
 		CrescentCollection selectedCollection = crescentCollections.getCrescentCollection(selectedCollectionName);
 		selectedCollection.setAnalyzer(request.getParameter("analyzer"));
+		
+		selectedCollection.setSearcherReloadScheduleMin(StringUtils.defaultIfEmpty(request.getParameter("searcherReloadScheduleMin"), "10"));
 
 		if(logger.isDebugEnabled()) {
-			logger.debug(request.getParameter("analyzer"));
-			logger.debug(request.getParameter("collectionName"));
+			logger.debug("analyzer : {} ", request.getParameter("analyzer"));
+			logger.debug("collection Name : {} ", request.getParameter("collectionName"));
+			logger.debug("indexing Directory : {} ", request.getParameter("indexingDirectory"));
+			logger.debug("searcher reload schedule min : {} ", request.getParameter("searcherReloadScheduleMin"));
 		}
 
 		List<CrescentCollectionField> crescentCollectionFieldList = selectedCollection.getFields();
@@ -119,11 +123,14 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		newCollection.setName(selectedCollectionName);
 		newCollection.setAnalyzer(request.getParameter("analyzer"));
 		newCollection.setIndexingDirectory(request.getParameter("indexingDirectory"));
+		
+		newCollection.setSearcherReloadScheduleMin(StringUtils.defaultIfEmpty(request.getParameter("searcherReloadScheduleMin"), "10"));
 
 		if(logger.isDebugEnabled()) {
 			logger.debug("analyzer : {} ", request.getParameter("analyzer"));
 			logger.debug("collection Name : {} ", request.getParameter("collectionName"));
 			logger.debug("indexing Directory : {} ", request.getParameter("indexingDirectory"));
+			logger.debug("searcher reload schedule min : {} ", request.getParameter("searcherReloadScheduleMin"));
 		}
 
 		//필드들을 걸러낸다.

@@ -16,6 +16,8 @@ public class CrescentCollection {
 	
 	private String indexingDirectory;
 	
+	private String searcherReloadScheduleMin;
+	
 	@XStreamOmitField
 	private Map<String, CrescentCollectionField> crescentFieldByName;
 	
@@ -69,10 +71,18 @@ public class CrescentCollection {
 			Map<String, CrescentCollectionField> crescentFieldByName) {
 		this.crescentFieldByName = crescentFieldByName;
 	}
+	public String getSearcherReloadScheduleMin() {
+		return searcherReloadScheduleMin;
+	}
+	public void setSearcherReloadScheduleMin(String searcherReloadScheduleMin) {
+		this.searcherReloadScheduleMin = searcherReloadScheduleMin;
+	}
 	@Override
 	public String toString() {
 		return "CrescentCollection [analyzer=" + analyzer + ", name=" + name
-				+ ", indexingDirectory=" + indexingDirectory + ", fields="
+				+ ", indexingDirectory=" + indexingDirectory
+				+ ", searcherReloadScheduleMin=" + searcherReloadScheduleMin
+				+ ", crescentFieldByName=" + crescentFieldByName + ", fields="
 				+ fields + ", defaultSearchFields=" + defaultSearchFields
 				+ ", sortFields=" + sortFields + "]";
 	}

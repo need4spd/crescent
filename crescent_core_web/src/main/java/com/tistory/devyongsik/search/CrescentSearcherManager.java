@@ -67,7 +67,7 @@ public class CrescentSearcherManager {
 		}
 	}
 	
-	public synchronized SearcherManager getSearcherManager(String collectionName) {
+	public SearcherManager getSearcherManager(String collectionName) {
 		SearcherManager searcherManager = searcherManagerByCollection.get(collectionName);
 		
 		try {
