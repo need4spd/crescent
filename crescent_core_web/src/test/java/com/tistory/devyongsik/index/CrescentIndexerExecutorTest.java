@@ -6,8 +6,6 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexWriter;
-import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
