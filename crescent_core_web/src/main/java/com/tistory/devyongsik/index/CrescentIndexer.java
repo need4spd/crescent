@@ -6,6 +6,8 @@ import java.util.List;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,15 +26,51 @@ public class CrescentIndexer {
 		indexWriter = indexWriterManager.getIndexWriter(collectionName);
 	}
 	
-	public void indexing(List<Document> documentList) {
+	public void addDocument(List<Document> documentList) {
 		try {
 			
 			logger.info("collectionName : {}", collectionName);			
-			logger.info("indexing start................");
+			logger.info("add indexing start................");
 			
 			for(Document doc : documentList) {
 				indexWriter.addDocument(doc);
 			}
+					
+			logger.info("end");
+			
+		} catch (IOException e) {
+			
+			logger.error("error : ", e);
+			throw new RuntimeException("색인 중 에러가 발생하였습니다. ["+e.getMessage()+"]");
+			
+		}
+	}
+	
+	public void updateDocument(Term term, Document document) {
+		try {
+			
+			logger.info("collectionName : {}", collectionName);			
+			logger.info("update indexing start................{}, {}", term, document);
+			
+			indexWriter.updateDocument(term, document);
+					
+			logger.info("end");
+			
+		} catch (IOException e) {
+			
+			logger.error("error : ", e);
+			throw new RuntimeException("색인 중 에러가 발생하였습니다. ["+e.getMessage()+"]");
+			
+		}
+	}
+	
+	public void deleteDocument(Query query) {
+		try {
+			
+			logger.info("collectionName : {}", collectionName);			
+			logger.info("delete indexing start................ {]", query);
+			
+			indexWriter.deleteDocuments(query);
 					
 			logger.info("end");
 			

@@ -1,9 +1,11 @@
-package com.tistory.devyongsik.domain;
+package com.tistory.devyongsik.index;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.tistory.devyongsik.domain.CrescentCollectionField;
 
 /**
  * author : need4spd, need4spd@naver.com, 2012. 3. 4.

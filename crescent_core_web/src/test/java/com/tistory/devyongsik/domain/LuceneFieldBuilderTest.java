@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.index.LuceneFieldBuilder;
 
 public class LuceneFieldBuilderTest {
 

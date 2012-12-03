@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.handler.Handler;
+import com.tistory.devyongsik.handler.IndexingRequestForm;
 import com.tistory.devyongsik.handler.JsonDataHandler;
 import com.tistory.devyongsik.index.CrescentIndexerExecutor;
 
@@ -41,10 +42,8 @@ public class UpdateController {
 		}
 		
 		String collectionName = request.getParameter("collection_name");
-		String isIncrementalIndexing = StringUtils.defaultString(request.getParameter("isIncIndex"), "N");
 		
 		logger.info("collection name : {}", collectionName);
-		logger.info("is incremental indexing : {}", isIncrementalIndexing);
 		
 		StringBuilder text = new StringBuilder();
 		
@@ -58,17 +57,12 @@ public class UpdateController {
 			}
 			
 			reader.close();
+			IndexingRequestForm indexingRequestForm = handler.handledData(text.toString());
 			
 			CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(collectionName);
-			CrescentIndexerExecutor excutor = new CrescentIndexerExecutor(collection, handler);
+			CrescentIndexerExecutor executor = new CrescentIndexerExecutor(collection, indexingRequestForm);
 			
-			String message = "";
-			
-			if("Y".equals(isIncrementalIndexing)) {
-				message = excutor.incrementalIndexing(text.toString());
-			} else {
-				message = excutor.bulkIndexing(text.toString());
-			}
+			String message = executor.indexing();
 			
 			Writer writer = null;
 			

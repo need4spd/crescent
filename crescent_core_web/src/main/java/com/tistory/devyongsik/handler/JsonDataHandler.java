@@ -1,17 +1,9 @@
 package com.tistory.devyongsik.handler;
 
-import java.lang.reflect.Type;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.lucene.document.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.tistory.devyongsik.domain.CrescentCollectionField;
-import com.tistory.devyongsik.domain.LuceneDocumentBuilder;
 
 /**
  * author : need4spd, need4spd@naver.com, 2012. 3. 17.
@@ -22,19 +14,17 @@ public class JsonDataHandler implements Handler {
 	private Logger logger = LoggerFactory.getLogger(JsonDataHandler.class);
 	
 	@Override
-	public List<Document> handledData(String jonsFormStr, Map<String, CrescentCollectionField> fieldsByName) {
-
-		Type collectionType = new TypeToken<List<Map<String,String>>>(){}.getType();
+	public IndexingRequestForm handledData(String jonsFormStr) {
+		
 		Gson gson = new Gson();
 		
 		logger.debug("jonsFormStr : {}", jonsFormStr);
 		
 		try {
-
-			List<Map<String,String>> indexingData = gson.fromJson(jonsFormStr, collectionType);
-			List<Document> docList = LuceneDocumentBuilder.buildDocumentList(indexingData, fieldsByName);
 			
-			return docList;
+			IndexingRequestForm indexingRequestForm = gson.fromJson(jonsFormStr, IndexingRequestForm.class);
+			
+			return indexingRequestForm;
 			
 		} catch (Exception e) {
 			logger.error("error : ", e);
