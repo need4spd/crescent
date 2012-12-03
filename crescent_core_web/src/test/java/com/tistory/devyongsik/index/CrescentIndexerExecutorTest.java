@@ -20,13 +20,13 @@ import com.tistory.devyongsik.utils.FormattedTextBuilder;
 
 public class CrescentIndexerExecutorTest {
 	
-	@AfterClass
-	public static void closeIndexWriter() throws CorruptIndexException, IOException {
-		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
-		IndexWriter indexWriter = indexWriterManager.getIndexWriter("sample");
-		
-		indexWriter.close();
-	}
+//	@AfterClass
+//	public static void closeIndexWriter() throws CorruptIndexException, IOException {
+//		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
+//		IndexWriter indexWriter = indexWriterManager.getIndexWriter("sample");
+//		
+//		indexWriter.close();
+//	}
 	
 	@Test
 	public void addDocument() throws CorruptIndexException, IOException {
