@@ -23,6 +23,6 @@ public class CrescentIndexerExecutorTest {
 		String jsonFormStr = "[{\"space_idx\":\"0\",\"wiki_title\":\"제목 입니다0\",\"wiki_idx\":\"0\",\"wiki_text\":\"본문 입니다.0\",\"ins_date\":\"20120819\"" +
 				",\"ins_user\":\"need4spd\"}]";
 		CrescentIndexerExecutor executor = new CrescentIndexerExecutor(sampleCollection, handler);
-		executor.execute(jsonFormStr);
+		executor.bulkIndexing(jsonFormStr);
 	}
 }
