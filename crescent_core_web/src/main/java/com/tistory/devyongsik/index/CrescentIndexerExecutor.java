@@ -25,7 +25,6 @@ public class CrescentIndexerExecutor {
 	public String indexing() {
 		logger.info("indexingRequestForm : {}", indexingRequestForm);
 		
-		List<Document> documentList = LuceneDocumentBuilder.buildDocumentList(indexingRequestForm.getDocumentList(), collection.getCrescentFieldByName());
 		IndexingType indexingType = IndexingType.valueOf(indexingRequestForm.getIndexingType().toUpperCase());
 		IndexingCommand indexingCommand = IndexingCommand.valueOf(indexingRequestForm.getCommand().toUpperCase());
 		String query = indexingRequestForm.getQuery();
@@ -38,13 +37,14 @@ public class CrescentIndexerExecutor {
 		CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getName());
 		
 		if(IndexingCommand.ADD == indexingCommand) {
-			
+			List<Document> documentList = LuceneDocumentBuilder.buildDocumentList(indexingRequestForm.getDocumentList(), collection.getCrescentFieldByName());
 			crescentIndexer.addDocument(documentList);
 		
 			resultMessage = documentList.size() + "건의 색인이 완료되었습니다.";
 			
 		} else if (IndexingCommand.UPDATE == indexingCommand) {
 			
+			List<Document> documentList = LuceneDocumentBuilder.buildDocumentList(indexingRequestForm.getDocumentList(), collection.getCrescentFieldByName());
 			if(documentList.size() > 1) {
 				logger.error("Update에는 업데이트 할 document가 한개 이상일 수 없습니다.");
 				throw new IllegalStateException("Update에는 업데이트 할 document가 한개 이상일 수 없습니다.");
@@ -67,7 +67,7 @@ public class CrescentIndexerExecutor {
 			
 			logger.info("field : {}, value : {}", field, value);
 			
-			Term updateTerm = new Term(field, query);
+			Term updateTerm = new Term(field, value);
 			
 			crescentIndexer.updateDocument(updateTerm, updateDoc);
 			
@@ -85,7 +85,7 @@ public class CrescentIndexerExecutor {
 			
 			logger.info("field : {}, value : {}", field, value);
 			
-			Term deleteTerm = new Term(field, query);
+			Term deleteTerm = new Term(field, value);
 			Query deleteTermQuery = new TermQuery(deleteTerm);
 			
 			crescentIndexer.deleteDocument(deleteTermQuery);

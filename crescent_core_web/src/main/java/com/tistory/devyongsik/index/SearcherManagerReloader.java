@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.search.SearcherManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +47,23 @@ public class SearcherManagerReloader {
 			List<Runnable> rList = exec.shutdownNow();
 			
 			logger.info("Reloader Shutdown.. {}", rList.toString());
+		}
+		
+		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		
+		for(CrescentCollection collection : crescentCollectionList) {
+			IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
+			IndexWriter indexWriter = indexWriterManager.getIndexWriter(collection.getName());
+			
+			try {
+				indexWriter.close();
+			} catch (CorruptIndexException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			logger.error("IndexWriter close....{}", collection.getName());
 		}
 	}
 	

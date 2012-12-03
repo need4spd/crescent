@@ -28,6 +28,7 @@ public class IndexWriterManager {
 		try {
 			initIndexWriter();
 		} catch (IOException e) {
+			logger.error("IndexWriter 생성 실패", e);
 			throw new IllegalStateException("IndexWriter 생성 실패");
 		}
 	}

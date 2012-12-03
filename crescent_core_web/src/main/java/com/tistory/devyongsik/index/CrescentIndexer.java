@@ -68,7 +68,7 @@ public class CrescentIndexer {
 		try {
 			
 			logger.info("collectionName : {}", collectionName);			
-			logger.info("delete indexing start................ {]", query);
+			logger.info("delete indexing start................ {}", query);
 			
 			indexWriter.deleteDocuments(query);
 					
