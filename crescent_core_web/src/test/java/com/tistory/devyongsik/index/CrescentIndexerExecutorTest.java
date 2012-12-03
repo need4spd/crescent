@@ -7,6 +7,7 @@ import junit.framework.Assert;
 
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
+import org.junit.AfterClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
@@ -18,6 +19,15 @@ import com.tistory.devyongsik.handler.JsonDataHandler;
 import com.tistory.devyongsik.utils.FormattedTextBuilder;
 
 public class CrescentIndexerExecutorTest {
+	
+	@AfterClass
+	public static void closeIndexWriter() throws CorruptIndexException, IOException {
+		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
+		IndexWriter indexWriter = indexWriterManager.getIndexWriter("sample");
+		
+		indexWriter.close();
+	}
+	
 	@Test
 	public void addDocument() throws CorruptIndexException, IOException {
 		CrescentCollections crescentCollections = CrescentCollectionHandler.getInstance().getCrescentCollections();
@@ -32,11 +42,6 @@ public class CrescentIndexerExecutorTest {
 		String returnMessage = executor.indexing();
 		
 		Assert.assertEquals("1건의 색인이 완료되었습니다.", returnMessage);
-		
-		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
-		IndexWriter indexWriter = indexWriterManager.getIndexWriter("sample");
-		
-		indexWriter.close();
 	}
 	
 	@Test
@@ -53,11 +58,6 @@ public class CrescentIndexerExecutorTest {
 		String returnMessage = executor.indexing();
 		
 		Assert.assertEquals("creuser:test에 대한 delete가 완료되었습니다.", returnMessage);
-		
-		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
-		IndexWriter indexWriter = indexWriterManager.getIndexWriter("sample");
-		
-		indexWriter.close();
 	}
 	
 	@Test
@@ -68,16 +68,11 @@ public class CrescentIndexerExecutorTest {
 		CrescentCollection sampleCollection = collections.get("sample");
 
 		Handler handler = new JsonDataHandler();
-		IndexingRequestForm indexingRequestForm = handler.handledData(FormattedTextBuilder.getDeleteDocBulkJsonForm());
+		IndexingRequestForm indexingRequestForm = handler.handledData(FormattedTextBuilder.getUpdateDocBulkJsonForm());
 		
 		CrescentIndexerExecutor executor = new CrescentIndexerExecutor(sampleCollection, indexingRequestForm);
 		String returnMessage = executor.indexing();
 		
 		Assert.assertEquals("creuser:test에 대한 update가 완료되었습니다.", returnMessage);
-		
-		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
-		IndexWriter indexWriter = indexWriterManager.getIndexWriter("sample");
-		
-		indexWriter.close();
 	}
 }
