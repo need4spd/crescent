@@ -56,6 +56,11 @@
 		<level value="debug" />
 		<appender-ref ref="CONSOLE"/>
 	</logger>
+	
+	<logger name="com.tistory.devyongsik.admin.IndexFileManageServiceImpl" additivity="false">
+		<level value="debug" />
+		<appender-ref ref="CONSOLE"/>
+	</logger>
 
 	 <root>
 	  	<level value="warn"/>
