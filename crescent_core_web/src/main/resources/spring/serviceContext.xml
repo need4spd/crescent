@@ -28,5 +28,10 @@
         id="collectionManageService"
         class="com.tistory.devyongsik.admin.CollectionManageServiceImpl" >
     </bean>
+    
+    <bean
+        id="indexFileManageService"
+        class="com.tistory.devyongsik.admin.IndexFileManageServiceImpl" >
+    </bean>
 
 </beans>
