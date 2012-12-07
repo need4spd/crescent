@@ -36,6 +36,17 @@ public class SearchRequest {
 	public void setCustomQuery(String customQuery) {
 		this.customQuery = customQuery;
 	}
+	
+	@RequestParamName(name="ft", defaultValue="")
+	private String filter;
+
+	public String getFilter() {
+		return filter;
+	}
+
+	public void setFilter(String filter) {
+		this.filter = filter;
+	}
 
 	public String getPcId() {
 		return pcId;

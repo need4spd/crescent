@@ -4,16 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.lucene.search.Filter;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.CrescentDefaultSearchField;
 import com.tistory.devyongsik.domain.SearchRequest;
+import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 
 public class CrescentSearchRequestWrapper {
 	private Logger logger = LoggerFactory.getLogger(CrescentSearchRequestWrapper.class);
@@ -31,8 +36,13 @@ public class CrescentSearchRequestWrapper {
 	private List<CrescentCollectionField> searchFields = new ArrayList<CrescentCollectionField>();
 	private List<CrescentCollectionField> indexedFields = new ArrayList<CrescentCollectionField>();
 
+	private CrescentCollection collection = null;
+	private Map<String, CrescentCollectionField> collectionFieldsMap = null;
+	
 	public CrescentSearchRequestWrapper(SearchRequest searchRequest) {
 		this.searchRequest = searchRequest;	
+		this.collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
+		this.collectionFieldsMap = collection.getCrescentFieldByName();
 	}
 
 	public String getKeyword() {
@@ -117,10 +127,8 @@ public class CrescentSearchRequestWrapper {
 					lst[i] = new SortField(null,SortField.SCORE, true);
 				}
 			} else {
-				CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
-				Map<String, CrescentCollectionField> collectionFields = collection.getCrescentFieldByName();
 
-				CrescentCollectionField f = collectionFields.get(part);
+				CrescentCollectionField f = collectionFieldsMap.get(part);
 					
 				lst[i] = new SortField(f.getName(),f.getSortFieldType(),descending);
 			}
@@ -135,30 +143,84 @@ public class CrescentSearchRequestWrapper {
 		return new Sort(lst);
 	}
 
+	public Query getQuery() throws CrescentInvalidRequestException {
+		
+		Query resultQuery = null;
+		
+		String customQueryString = searchRequest.getCustomQuery();
+		
+		if(customQueryString != null && customQueryString.length() > 0) {
+			CustomQueryStringParser queryParser = new CustomQueryStringParser();
+			
+			try {
+				
+				resultQuery = queryParser.getQuery(getIndexedFields(), customQueryString, new KoreanAnalyzer(false));
+			
+			} catch (Exception e) {
+				logger.error("Error In getQuery ", e);
+				throw new CrescentInvalidRequestException(e.getMessage());
+			}
+			
+		} else {
+			
+			if (getKeyword() == null || getKeyword().length() == 0) {
+				throw new CrescentInvalidRequestException("Keyword is Null");
+			}
+			
+			DefaultKeywordParser queryParser = new DefaultKeywordParser();
+			resultQuery = queryParser.parse(searchFields, getKeyword(), new KoreanAnalyzer(false));
+		
+		}
+		
+		return resultQuery;
+	}
+	
+	public Filter getFilter() throws CrescentInvalidRequestException {
+		String filterQueryString = searchRequest.getFilter();
+		
+		if(filterQueryString != null && filterQueryString.length() > 0) {
+			CustomQueryStringParser queryParser = new CustomQueryStringParser();
+			
+			try {
+				
+				Query query = queryParser.getQuery(getIndexedFields(), filterQueryString, new KoreanAnalyzer(false));
+			
+				Filter filter = new QueryWrapperFilter(query);
+				
+				return filter;
+				
+			} catch (Exception e) {
+				logger.error("Error In getFilter ", e);
+				throw new CrescentInvalidRequestException(e.getMessage());
+			}
+			
+		} else {
+			
+			return null;
+		
+		}
+	}
+	
 	public List<CrescentCollectionField> getTargetSearchFields() {
 		
 		if(searchFields.size() > 0) {
 			return searchFields;
 		}
 		
-		CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
-		
-		Map<String, CrescentCollectionField> fieldMap = collection.getCrescentFieldByName();
-		
 		if(searchRequest.getSearchField() != null && !"".equals(searchRequest.getSearchField())) { 
 			String[] requestSearchField = searchRequest.getSearchField().split(",");
 			for(String fieldName : requestSearchField) {
-				CrescentCollectionField field = fieldMap.get(fieldName);
+				CrescentCollectionField field = collectionFieldsMap.get(fieldName);
 				if(field == null) {
 					throw new IllegalStateException("There is no Field in Collection [" + searchRequest.getCollectionName() + "] [" + fieldName + "]");
 				}
 				
-				searchFields.add(fieldMap.get(fieldName));
+				searchFields.add(collectionFieldsMap.get(fieldName));
 			}
 			
 		} else {//검색 대상 필드가 지정되어 있지 않으면..
 			for(CrescentDefaultSearchField f : collection.getDefaultSearchFields()) {
-				searchFields.add(fieldMap.get(f.getName()));
+				searchFields.add(collectionFieldsMap.get(f.getName()));
 			}
 		}
 		
@@ -170,11 +232,8 @@ public class CrescentSearchRequestWrapper {
 			return indexedFields;
 		}
 		
-		CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
-		
-		Map<String, CrescentCollectionField> fieldMap = collection.getCrescentFieldByName();
-		for(String fieldName : fieldMap.keySet()) {
-			CrescentCollectionField f = fieldMap.get(fieldName);
+		for(String fieldName : collectionFieldsMap.keySet()) {
+			CrescentCollectionField f = collectionFieldsMap.get(fieldName);
 			if(f.isIndex()) {
 				indexedFields.add(f);
 			}
@@ -193,9 +252,5 @@ public class CrescentSearchRequestWrapper {
 	
 	public String getPcId() {
 		return searchRequest.getPcId();
-	}
-	
-	public String getCustomQuery() {
-		return searchRequest.getCustomQuery();
 	}
 }
