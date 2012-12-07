@@ -168,7 +168,7 @@ public class CrescentSearchRequestWrapper {
 			}
 			
 			DefaultKeywordParser queryParser = new DefaultKeywordParser();
-			resultQuery = queryParser.parse(searchFields, getKeyword(), new KoreanAnalyzer(false));
+			resultQuery = queryParser.parse(getTargetSearchFields(), getKeyword(), new KoreanAnalyzer(false));
 		
 		}
 		
