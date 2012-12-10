@@ -23,15 +23,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.domain.CrescentCollectionField;
-import com.tistory.devyongsik.exception.CrescentUnvalidRequestException;
+import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 
 public class CustomQueryStringParser {
 
 	private Logger logger = LoggerFactory.getLogger(CustomQueryStringParser.class);
 	private static Pattern pattern = Pattern.compile("(.*?)(:)(\".*?\")");
+	private Query resultQuery = null;
 	
-	public Query getQueryFromCustomQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer) 
-			throws CrescentUnvalidRequestException {
+	protected Query getQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer) throws CrescentInvalidRequestException {
+		if(resultQuery != null) {
+			return this.resultQuery;
+		} else {
+			return getQueryFromCustomQuery(indexedFields, customQueryString, analyzer);
+		}
+	}
+	
+	private Query getQueryFromCustomQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer) 
+			throws CrescentInvalidRequestException {
 		
 		//패턴분석
 		Matcher m = pattern.matcher(customQueryString);
@@ -48,7 +57,7 @@ public class CustomQueryStringParser {
 		
 		while(m.find()) {
 			if(m.groupCount() != 3) {
-				throw new CrescentUnvalidRequestException("쿼리 문법 오류. [" + customQueryString + "]");
+				throw new CrescentInvalidRequestException("쿼리 문법 오류. [" + customQueryString + "]");
 			}
 			
 			fieldName = m.group(1).trim();
@@ -74,7 +83,7 @@ public class CustomQueryStringParser {
 			
 			if(any) {
 				logger.error("검색 할 수 없는 필드입니다. {} " , fieldName);
-				throw new CrescentUnvalidRequestException("검색 할 수 없는 필드입니다. [" + fieldName + "]");
+				throw new CrescentInvalidRequestException("검색 할 수 없는 필드입니다. [" + fieldName + "]");
 			}
 			
 			
@@ -110,7 +119,7 @@ public class CustomQueryStringParser {
 					
 				} catch (ParseException e) {
 					logger.error("Exception in CustomQuery Parser ", e);
-					throw new CrescentUnvalidRequestException("Range Query 문법 오류 [" + userRequestQuery + "]");
+					throw new CrescentInvalidRequestException("Range Query 문법 오류 [" + userRequestQuery + "]");
 				}
 			} else {
 				//쿼리 생성..
@@ -165,6 +174,8 @@ public class CustomQueryStringParser {
 				}
 			}
 		}
+		
+		this.resultQuery = resultQuery;
 		
 		return resultQuery;
 	}

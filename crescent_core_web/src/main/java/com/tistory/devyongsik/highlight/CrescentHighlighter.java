@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
+import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
-import com.tistory.devyongsik.query.DefaultKeywordParser;
 
 public class CrescentHighlighter {
 	private Logger logger = LoggerFactory.getLogger(CrescentHighlighter.class);
@@ -28,7 +28,6 @@ public class CrescentHighlighter {
 	//TODO Analyzer 동적으로 생성하도록..
 	private Analyzer analyzer = new KoreanAnalyzer(false);
 	private CrescentSearchRequestWrapper csrw = null;
-	private DefaultKeywordParser keywordParser = new DefaultKeywordParser();
 	private SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
     
 	public CrescentHighlighter(CrescentSearchRequestWrapper csrw) {
@@ -39,7 +38,7 @@ public class CrescentHighlighter {
 		
 	}
 	
-	public String getBestFragment(CrescentCollectionField field, String value) {
+	public String getBestFragment(CrescentCollectionField field, String value) throws CrescentInvalidRequestException {
 		String fragment = "";
 		
 		logger.debug("fieldName : {}", field.getName());
@@ -49,9 +48,7 @@ public class CrescentHighlighter {
 			try {
 				List<CrescentCollectionField> fields = new ArrayList<CrescentCollectionField>();
 				fields.add(field);
-				Query query = keywordParser.parse(fields
-						,csrw.getKeyword()
-						, analyzer);
+				Query query = csrw.getQuery();
 				
 				logger.debug("query for highlighter : {}" , query);
 				

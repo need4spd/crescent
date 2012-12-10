@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.lucene.document.Document;
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
@@ -13,12 +14,9 @@ import org.apache.lucene.search.TopScoreDocCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.logger.CrescentLogger;
 import com.tistory.devyongsik.logger.LogInfo;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
-import com.tistory.devyongsik.query.CustomQueryStringParser;
-import com.tistory.devyongsik.query.DefaultKeywordParser;
 
 public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 
@@ -52,25 +50,20 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		try {
 			indexSearcher = searcherManager.acquire();
 			
-			Query query = null;
-			
-			if(csrw.getCustomQuery() != null && csrw.getCustomQuery().length() > 0) {
-				CustomQueryStringParser customQueryParser = new CustomQueryStringParser();
-				query = customQueryParser.getQueryFromCustomQuery(csrw.getIndexedFields()
-						,csrw.getCustomQuery()
-						, new KoreanAnalyzer(false));
-				
-			} else {
-				DefaultKeywordParser keywordParser = new DefaultKeywordParser();
-				query = keywordParser.parse(csrw.getTargetSearchFields()
-						,csrw.getKeyword()
-						,new KoreanAnalyzer(false));
-			}
+			Query query = csrw.getQuery();
+			Filter filter = csrw.getFilter();
 			
 			logger.debug("query : {}" , query);
+			logger.debug("filter : {}" , filter);
 			
 			long startTime = System.currentTimeMillis();
-			indexSearcher.search(query, collector);
+			
+			if(filter == null) {
+				indexSearcher.search(query, collector);
+			} else {
+				indexSearcher.search(query, filter, collector);
+			}
+			
 			long endTime = System.currentTimeMillis();
 			
 			//전체 검색 건수
