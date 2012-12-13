@@ -24,19 +24,19 @@ public class CustomQueryStringParserTest {
 	public void rangeQuery() throws ParseException, CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
-		searchRequest.setCustomQuery("title:\"[10 TO 100000]\"");
+		searchRequest.setCustomQuery("board_id:\"[10 TO 100000]\"");
 		
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
 		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getTargetSearchFields()
+		Query query = parser.getQuery(csrw.getIndexedFields()
 				,searchRequest.getCustomQuery()
 				,new KoreanAnalyzer(false));
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:[10 TO 100000]", query.toString());
+		Assert.assertEquals("board_id:[10 TO 100000]", query.toString());
 	}
 	
 	@Test(expected = CrescentInvalidRequestException.class)
@@ -49,7 +49,7 @@ public class CustomQueryStringParserTest {
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
 		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getTargetSearchFields()
+		Query query = parser.getQuery(csrw.getIndexedFields()
 				,searchRequest.getCustomQuery()
 				,new KoreanAnalyzer(false));
 		
@@ -67,7 +67,7 @@ public class CustomQueryStringParserTest {
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
 		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getTargetSearchFields()
+		Query query = parser.getQuery(csrw.getIndexedFields()
 				,searchRequest.getCustomQuery()
 				,new KoreanAnalyzer(false));
 		
@@ -86,7 +86,7 @@ public class CustomQueryStringParserTest {
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
 		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getTargetSearchFields()
+		Query query = parser.getQuery(csrw.getIndexedFields()
 				,searchRequest.getCustomQuery()
 				,new KoreanAnalyzer(false));
 		
@@ -105,7 +105,7 @@ public class CustomQueryStringParserTest {
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
 		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getTargetSearchFields()
+		Query query = parser.getQuery(csrw.getIndexedFields()
 				,searchRequest.getCustomQuery()
 				,new KoreanAnalyzer(false));
 		
@@ -124,7 +124,7 @@ public class CustomQueryStringParserTest {
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
 		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getTargetSearchFields()
+		Query query = parser.getQuery(csrw.getIndexedFields()
 				,searchRequest.getCustomQuery()
 				,new KoreanAnalyzer(false));
 		
@@ -143,7 +143,7 @@ public class CustomQueryStringParserTest {
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
 		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getTargetSearchFields()
+		Query query = parser.getQuery(csrw.getIndexedFields()
 				,searchRequest.getCustomQuery()
 				,new KoreanAnalyzer(false));
 		
@@ -152,8 +152,8 @@ public class CustomQueryStringParserTest {
 		Assert.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0", query.toString());
 	}
 	
-	@Test
-	public void complexQueryWithDefaultFieldBoostAndCustomBoost() throws ParseException, CrescentInvalidRequestException {
+	@Test(expected = CrescentInvalidRequestException.class)
+	public void complexQueryWithDefaultFieldBoostAndCustomBoostException() throws ParseException, CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부^10\" dscr:\"파이썬 프로그래밍 공부^10\" title:\"[50 TO 50000]\"");
@@ -162,13 +162,32 @@ public class CustomQueryStringParserTest {
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
 		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getTargetSearchFields()
+		Query query = parser.getQuery(csrw.getIndexedFields()
 				,searchRequest.getCustomQuery()
 				,new KoreanAnalyzer(false));
 		
 		System.out.println(query);
 		
 		Assert.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0 title:[50 TO 50000]", query.toString());
+	}
+	
+	@Test
+	public void complexQueryWithDefaultFieldBoostAndCustomBoost() throws ParseException, CrescentInvalidRequestException {
+		SearchRequest searchRequest = new SearchRequest();
+		searchRequest.setCollectionName("sample");
+		searchRequest.setCustomQuery("title:\"파이썬 프로그래밍 공부^10\" dscr:\"파이썬 프로그래밍 공부^10\" board_id:\"[50 TO 50000]\"");
+		
+		CrescentSearchRequestWrapper csrw 
+			= new CrescentSearchRequestWrapper(searchRequest);
+		
+		CustomQueryStringParser parser = new CustomQueryStringParser();
+		Query query = parser.getQuery(csrw.getIndexedFields()
+				,searchRequest.getCustomQuery()
+				,new KoreanAnalyzer(false));
+		
+		System.out.println(query);
+		
+		Assert.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0 board_id:[50 TO 50000]", query.toString());
 	}
 	
 	@Test

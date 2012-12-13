@@ -3,7 +3,7 @@ package com.tistory.devyongsik.domain;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Fieldable;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class LuceneFieldBuilderTest {
 		
 		for(String fieldName : fieldNames) {
 			CrescentCollectionField field = fieldsByName.get(fieldName);
-			Field luceneField = luceneFieldBuilder.create(field, "");
+			Fieldable luceneField = luceneFieldBuilder.create(field, "30");
 			
 			System.out.println(luceneField);
 			

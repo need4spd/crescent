@@ -8,17 +8,17 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.ParseException;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
-import org.apache.lucene.util.Version;
+import org.apache.lucene.search.TermRangeQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,10 +71,15 @@ public class CustomQueryStringParser {
 			
 			//field가 검색 대상에 있는지 확인..
 			boolean any = true;
+			boolean isLongField = false;
+			boolean isAnalyzed = false;
 			for(CrescentCollectionField crescentField : indexedFields) {
 				if(fieldName.equals(crescentField.getName())) {
 					any = false;
 					searchTargetField = crescentField;
+					
+					isLongField = "LONG".equals(crescentField.getType());
+					isAnalyzed = crescentField.isAnalyze();
 					
 					logger.debug("selected searchTargetField : {} ", searchTargetField);
 					break;
@@ -108,25 +113,64 @@ public class CustomQueryStringParser {
 			//range쿼리인 경우에는 RangeQuery 생성
 			if(isRangeQuery) {
 	
-				QueryParser qp = new QueryParser(Version.LUCENE_36, fieldName, analyzer);
-	
-				try {
-					Query query = qp.parse(userRequestQuery.replace("to", "TO"));
-					resultQuery.add(query, occur);
-					
-					logger.debug("Query : {} ", query);
-					logger.debug("Result Query : {} ", resultQuery);
-					
-				} catch (ParseException e) {
-					logger.error("Exception in CustomQuery Parser ", e);
-					throw new CrescentInvalidRequestException("Range Query 문법 오류 [" + userRequestQuery + "]");
+				//QueryParser qp = new QueryParser(Version.LUCENE_36, fieldName, analyzer);
+				String minValue = "";
+				String maxValue = "";
+				boolean isIncludeMin = false;
+				boolean isIncludeMax = false;
+				
+				String[] splitQuery = userRequestQuery.split("TO");
+				logger.info("splitQuery : {}", Arrays.toString(splitQuery));
+				
+				if(splitQuery.length != 2) {
+					logger.error("문법 오류 확인바랍니다. {} " , userRequestQuery);
+					throw new CrescentInvalidRequestException("문법 오류 확인바랍니다. [" + userRequestQuery + "]");
 				}
+				
+				if(splitQuery[0].trim().startsWith("[")) {
+					isIncludeMin = true;
+				}
+				
+				if(splitQuery[1].trim().endsWith("]")) {
+					isIncludeMax = true;
+				}
+				
+				logger.info("minInclude : {}, maxInclude : {}", isIncludeMin, isIncludeMax);
+				
+				minValue = splitQuery[0].trim().substring(1);
+				maxValue = splitQuery[1].trim().substring(0, splitQuery[1].trim().length() - 1);
+				
+				logger.info("minValue : {}, maxValue : {}", minValue, maxValue);
+				
+				boolean isNumeric = false;
+				isNumeric = StringUtils.isNumeric(minValue) && StringUtils.isNumeric(maxValue);
+				
+				logger.info("isLongField : {}", isLongField);
+				logger.info("is numeric : {}", isNumeric);
+				
+				Query query = null;
+				
+				if(isAnalyzed) {
+					logger.error("범위검색 대상 field는 analyzed값이 false이어야 합니다. {} " , userRequestQuery);
+					throw new CrescentInvalidRequestException("범위검색 대상 field는 analyzed값이 false이어야 합니다. [" + userRequestQuery + "]");
+				}
+				if(isLongField && isNumeric) {
+					query = NumericRangeQuery.newLongRange(fieldName, Long.parseLong(minValue), Long.parseLong(maxValue), isIncludeMin, isIncludeMax);
+				} else if (!(isLongField && isNumeric)){
+					query = new TermRangeQuery(fieldName, minValue, maxValue, isIncludeMin, isIncludeMax);
+				} else {
+					logger.error("범위검색은 필드의 타입과 쿼리의 타입이 맞아야 합니다. {} " , userRequestQuery);
+					throw new CrescentInvalidRequestException("범위검색은 필드의 타입과 쿼리의 타입이 맞아야 합니다. [" + userRequestQuery + "]");
+				}
+				
+				resultQuery.add(query, occur);
+				
 			} else {
 				//쿼리 생성..
 				String[] keywords = userRequestQuery.split( " " );
 				
 				if(logger.isDebugEnabled()) {
-					logger.debug("split keyword : {}", Arrays.toString(keywords));
+					logger.info("split keyword : {}", Arrays.toString(keywords));
 				}
 				
 				for(int i = 0; i < keywords.length; i++) {
