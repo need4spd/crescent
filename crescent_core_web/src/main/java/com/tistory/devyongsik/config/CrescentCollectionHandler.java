@@ -59,6 +59,18 @@ public class CrescentCollectionHandler {
 			throw new IllegalStateException(errorMsg);
 		}
 		
+		// indexingDirectory가 절대경로가 아닌경우 임의로 경로 수정,  maven local profile에서 사용
+		List<CrescentCollection> list = crescentCollections.getCrescentCollections();
+		for (CrescentCollection collection : list) {
+			String path = collection.getIndexingDirectory();
+			File file = new File(path);
+			if (!file.isAbsolute()) {
+				String webRoot = System.getProperty("webapp.root");
+				if (webRoot != null)
+					collection.setIndexingDirectory(webRoot + path);
+			}
+		}
+		
 		try {
 			inputStream.close();
 		} catch (Exception e) {
