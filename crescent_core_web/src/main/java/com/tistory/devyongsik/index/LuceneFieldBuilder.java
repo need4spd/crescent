@@ -2,6 +2,8 @@ package com.tistory.devyongsik.index;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Fieldable;
+import org.apache.lucene.document.NumericField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,18 +15,32 @@ import com.tistory.devyongsik.domain.CrescentCollectionField;
 public class LuceneFieldBuilder {
 	private Logger logger = LoggerFactory.getLogger(LuceneFieldBuilder.class);
 
-	public Field create(CrescentCollectionField collectionField, String value) {
-		Field f = new Field(collectionField.getName(),
-				StringUtils.defaultString(value, ""),
-				getFieldStore(collectionField),
-				getFieldIndex(collectionField),
-				getFieldTermVector(collectionField));
+	public Fieldable create(CrescentCollectionField collectionField, String value) {
 
-		f.setBoost(collectionField.getBoost());
+		if("STRING".equalsIgnoreCase(collectionField.getType())) {
+			Field f = new Field(collectionField.getName(),
+					StringUtils.defaultString(value, ""),
+					getFieldStore(collectionField),
+					getFieldIndex(collectionField),
+					getFieldTermVector(collectionField));
 
-		logger.debug("Field : {}", f);
+			f.setBoost(collectionField.getBoost());
+			
+			logger.debug("Field : {}", f);
 
-		return f;
+			return f;
+
+		} else if("LONG".equalsIgnoreCase(collectionField.getType())) {
+			NumericField numField = new NumericField(collectionField.getName(), getFieldStore(collectionField), collectionField.isIndex());
+			numField.setLongValue(Long.parseLong(value));
+			
+			logger.debug("Field : {}", numField);
+			
+			return numField;
+		
+		} else {
+			return null;
+		}
 	}
 
 	private Field.Store getFieldStore(CrescentCollectionField field) {

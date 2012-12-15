@@ -20,12 +20,13 @@ import org.junit.Test;
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.SearchRequest;
+import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 
 public class CrescentHighlighterTest {
 
 	@Test
-	public void highlightTest() {
+	public void highlightTest() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setKeyword("입니다");
 		searchRequest.setCollectionName("sample");

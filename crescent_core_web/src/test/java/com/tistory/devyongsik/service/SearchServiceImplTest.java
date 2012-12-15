@@ -22,4 +22,16 @@ public class SearchServiceImplTest {
 		
 		Assert.assertTrue(searchResult.getTotalHitsCount() > 0);	
 	}
+	
+	@Test
+	public void searchNullKeyword() throws IOException {
+		SearchRequest searchRequest = new SearchRequest();
+		searchRequest.setCollectionName("sample");
+		
+		SearchService searchService = new SearchServiceImpl();
+		SearchResult searchResult = searchService.search(searchRequest);
+		
+		Assert.assertTrue(searchResult.getTotalHitsCount() == 0);
+		Assert.assertEquals("Keyword is Null", searchResult.getErrorMsg());
+	}
 }

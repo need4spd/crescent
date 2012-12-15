@@ -10,13 +10,11 @@ import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.domain.SearchRequestValidator;
 import com.tistory.devyongsik.domain.SearchResult;
-import com.tistory.devyongsik.exception.CrescentUnvalidRequestException;
+import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
-import com.tistory.devyongsik.query.DefaultKeywordParser;
 import com.tistory.devyongsik.search.SearchModule;
 
 public class SearchServiceImpl implements SearchService {
@@ -26,12 +24,19 @@ public class SearchServiceImpl implements SearchService {
 	@Override
 	public SearchResult search(SearchRequest searchRequest) throws IOException {
 		
+		Query query = null;
+		CrescentSearchRequestWrapper csrw 
+				= new CrescentSearchRequestWrapper(searchRequest);
+	
 		try {
 			
 			SearchRequestValidator validator = new SearchRequestValidator();
 			validator.isValid(searchRequest);
 			
-		} catch (CrescentUnvalidRequestException e) {
+			
+			query = csrw.getQuery();
+		
+		} catch (CrescentInvalidRequestException e) {
 			SearchResult searchResult = new SearchResult();
 			
 			Map<String, Object> result = new HashMap<String, Object>();
@@ -52,14 +57,7 @@ public class SearchServiceImpl implements SearchService {
 			return searchResult;
 		}
 		
-		CrescentSearchRequestWrapper csrw 
-			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		
-		DefaultKeywordParser keywordParser = new DefaultKeywordParser();
-		Query query = keywordParser.parse(csrw.getTargetSearchFields()
-				,csrw.getKeyword()
-				,new KoreanAnalyzer(false));
 		
 		logger.debug("query : {}" , query);
 		

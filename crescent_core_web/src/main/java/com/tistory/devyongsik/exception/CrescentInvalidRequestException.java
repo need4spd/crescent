@@ -1,13 +1,13 @@
 package com.tistory.devyongsik.exception;
 
-public class CrescentUnvalidRequestException extends Exception {
+public class CrescentInvalidRequestException extends Exception {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public CrescentUnvalidRequestException(String exceptionMessage) {
+	public CrescentInvalidRequestException(String exceptionMessage) {
 		super(exceptionMessage);
 	}
 }

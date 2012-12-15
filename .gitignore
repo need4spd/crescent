@@ -7,3 +7,4 @@
 crescent_utils/target
 crescent_core_web/target
 crescent_core_web/logs
+crescent_core_web/src/main/resources/rebel.xml

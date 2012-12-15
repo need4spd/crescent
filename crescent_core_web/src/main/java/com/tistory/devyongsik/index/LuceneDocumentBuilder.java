@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
+import org.apache.lucene.document.Fieldable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +41,14 @@ public class LuceneDocumentBuilder {
 					throw new IllegalStateException("해당 collection에 존재하지 않는 필드입니다. ["+fieldName+"]");
 				}
 				
-				Field field = luceneFieldBuilder.create(fieldsByName.get(fieldName), value);
-				document.add(field);
+				Fieldable fieldAble = luceneFieldBuilder.create(fieldsByName.get(fieldName), value);
+				document.add(fieldAble);
+				
+				CrescentCollectionField crescentSortField = fieldsByName.get(fieldName+"_sort");
+				if(crescentSortField != null) {
+					Fieldable sortFieldAble = luceneFieldBuilder.create(fieldsByName.get(fieldName+"_sort"), value);
+					document.add(sortFieldAble);
+				}
 			}
 			
 			documentList.add(document);
