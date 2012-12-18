@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- for aws -->
+<!-- for production -->
 <collections>
   <collection name="sample">
     <analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
-    <indexingDirectory>/data1/lucene_index/sample</indexingDirectory>
+    <indexingDirectory>crescent_index/sample</indexingDirectory>
     <searcherReloadScheduleMin>1</searcherReloadScheduleMin>
+    <!-- indexingDirectory>/data1/lucene_index/sample</indexingDirectory -->
     <fields>
       <field name="board_id" store="true" index="true" type="LONG" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
       <field name="title" store="true" index="true" type="STRING" analyze="true" termposition="false" termoffset="false" boost="2.0" must="false" termvector="false"/>
@@ -22,8 +23,9 @@
   </collection>
   <collection name="sample_wiki">
     <analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
+    <indexingDirectory>crescent_index/sample_wiki</indexingDirectory>
     <searcherReloadScheduleMin>1</searcherReloadScheduleMin>
-    <indexingDirectory>/data1/lucene_index/sample_wiki</indexingDirectory>
+    <!-- indexingDirectory>/data1/lucene_index/sample_wiki</indexingDirectory -->
     <fields>
       <field name="wiki_idx" store="true" index="true" type="long" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
       <field name="space_idx" store="true" index="true" type="long" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
