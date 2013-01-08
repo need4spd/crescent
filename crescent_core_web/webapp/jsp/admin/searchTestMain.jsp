@@ -1,8 +1,19 @@
 <%@page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:set var="col_name" value="${USER_REQUEST.collectionName }" />
+<c:set var="custom_query" value="${USER_REQUEST.customQuery }" />
+<c:set var="keyword" value="${USER_REQUEST.keyword }" />
+<c:set var="search_field" value="${USER_REQUEST.searchField }" />
+<c:set var="sort" value="${USER_REQUEST.sort }" />
+<c:set var="page_num" value="${USER_REQUEST.pageNum }" />
+<c:set var="page_size" value="${USER_REQUEST.pageSize }" />
+
 <!DOCTYPE html>
 
 <%@page import="com.tistory.devyongsik.domain.SearchResult"%>
+<%@page import="com.tistory.devyongsik.domain.SearchRequest"%>
 <%@page import="java.util.*"%>
 <%
 	SearchResult searchResult = (SearchResult) request.getAttribute("searchResult");
@@ -16,10 +27,20 @@
 		resultList = searchResult.getResultList();
 		firstCallPage = false;
 	}
-
 %>
 <html lang="en">
 <%@ include file="../common/header.jsp"%>
+<script>
+	$(document).ready(function() {
+		$('#col_name').val('${col_name}');
+		$('#cq').val('${custom_query}');
+		$('#keyword').val('${keyword}');
+		$('#search_field').val('${search_field}');
+		$('#sort').val('${sort}');
+		$('#page_num').val('${page_num}');
+		$('#page_size').val('${page_size}');
+	});
+</script>
 <body>
 	<%@ include file="../common/menu.jsp"%>
 

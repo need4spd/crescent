@@ -1,5 +1,8 @@
 package com.tistory.devyongsik.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,10 +45,20 @@ public class SearchTestMainController {
 		System.out.println("!!!! : " + request.getParameter("keyword"));
 		RequestBuilder<SearchRequest> requestBuilder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = requestBuilder.mappingRequestParam(request, SearchRequest.class);
+		
+		Map<String, Object> userRequest = new HashMap<String, Object>();
+		userRequest.put("collectionName",searchRequest.getCollectionName());
+		userRequest.put("customQuery",searchRequest.getCustomQuery());
+		userRequest.put("keyword",searchRequest.getKeyword());
+		userRequest.put("searchField",searchRequest.getSearchField());
+		userRequest.put("sort",searchRequest.getSort());
+		userRequest.put("pageNum",searchRequest.getPageNum());
+		userRequest.put("pageSize",searchRequest.getPageSize());
 
 		SearchResult searchResult = searchService.search(searchRequest);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("searchResult", searchResult);
+		modelAndView.addObject("USER_REQUEST", userRequest);
 		modelAndView.setViewName("/admin/searchTestMain");
 
 		return modelAndView;
