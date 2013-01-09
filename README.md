@@ -5,8 +5,8 @@ Crescent (Search Engine)
 2. 웹 어플리케이션으로 개발되어있으며, Lucene을 기반으로 하고 있습니다.
 현재 3.6.1버전으로 개발되어있습니다.
 
-3. 한글 분석기 (Korean Analyzer)는 저의 또다른 프로젝트인 (https://github.com/need4spd/lucene-Korean-Analyzer)를
-사용합니다. maven 빌드를하면 위 repository에서 필요한 lucene Korean Analyzer를 자동으로 다운받아 사용합니다.
+3. 한글 분석기 (Korean Analyzer)는 저의 또다른 프로젝트인 (https://github.com/need4spd/lucene-Korean-Analyzer)
+를 사용합니다. maven 빌드를하면 위 repository에서 필요한 lucene Korean Analyzer를 자동으로 다운받아 사용합니다.
 
 4. 설치 및 검색 방법은 Wiki 페이지를 참고하여 주세요.
 
