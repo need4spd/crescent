@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connectionInfoList>
+  <connectionInfo name="aws_mysql" url="" username="" password="" jdbcDriver="">
+      <fieldMapping>
+          <field column="user_seq" to="userSeq"/>
+          <field column="user_id" to="userId"/>
+          <field column="user_name" to="userName"/>
+          <field column="password" to="password"/>
+      </fieldMapping>
+      <jsonFileDir>/Users/need4spd/Programming/Java/crescent_aws_mysql_json</jsonFileDir>
+      <limitRowsEachFile>50000</limitRowsEachFile>
+      <sql>
+          select user_seq, user_name, user_id, password from User
+      </sql>
+  </connectionInfo>
+  <connectionInfo name="local_mysql" url="" username="" password="" jdbcDriver="">
+      <fieldMapping>
+          <field column="user_seq" to="userSeq"/>
+          <field column="user_id" to="userId"/>
+          <field column="user_name" to="userName"/>
+          <field column="password" to="password"/>
+      </fieldMapping>
+      <jsonFileDir>/Users/need4spd/Programming/Java/crescent_local_mysql_json</jsonFileDir>
+      <limitRowsEachFile>50000</limitRowsEachFile>
+      <sql>
+          select user_seq, user_name, user_id, password from User
+      </sql>
+  </connectionInfo>
+</connectionInfoList>
