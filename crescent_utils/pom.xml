@@ -27,34 +27,34 @@
     </resources>
     <plugins>
       <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-dependency-plugin</artifactId>
-	<executions>
-	  <execution>
-	    <id>copy-dependencies</id>
-	    <phase>pakage</phase>
-	    <goals>
-	      <goal>copy-dependencies</goal>
-	    </goals>
-	    <configuration>
-	      <outputDirectory>${project.build.directory}/lib</outputDirectory>
-	    </configuration>
-	  </execution>
-	</executions>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-dependency-plugin</artifactId>
+		<executions>
+	  		<execution>
+	    		<id>copy-dependencies</id>
+	    		<phase>package</phase>
+	    		<goals>
+	      			<goal>copy-dependencies</goal>
+	    		</goals>
+	    		<configuration>
+	      			<outputDirectory>${project.build.directory}/lib</outputDirectory>
+	    		</configuration>
+	  		</execution>
+		</executions>
       </plugin>
       <plugin>
-	<groupId>org.apache.maven.plugins</groupId>
-	<artifactId>maven-jar-plugin</artifactId>
-	<version>2.4</version>
-	<configuration>
-	  <archive>
-	    <manifest>
-	      <addClasspath>true</addClasspath>
-	      <classpathPrefix>lib</classpathPrefix>
-	      <!-- mainClass>com.tistory.devyongsik.utils.IndexingUtil</mainClass -->
-	    </manifest>
-	  </archive>
-	</configuration>
+		<groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-jar-plugin</artifactId>
+		<version>2.4</version>
+			<configuration>
+	  			<archive>
+	    			<manifest>
+	      				<addClasspath>true</addClasspath>
+	      				<classpathPrefix>lib</classpathPrefix>
+	      				<!-- mainClass>com.tistory.devyongsik.utils.IndexingUtil</mainClass -->
+	    			</manifest>
+	  			</archive>
+			</configuration>
       </plugin>
     </plugins>
   </build>
