@@ -73,6 +73,8 @@ public class MakeJsonFormFileFromDB {
 		Gson gson = new Gson();
 		
 		while(rs.next()) {
+			rowCount++;
+			
 			Map<String, String> row = new HashMap<String, String>();
 				
 			for(Field f : fieldInfoList) {
@@ -87,6 +89,12 @@ public class MakeJsonFormFileFromDB {
 				String timeText = sdf.format(date);
 				
 				File targetFile = new File(connectionInfo.getJsonFileDir()+"/"+connectionInfo.getName()+"_"+timeText+".txt");
+				
+				System.out.println("targetFile : " + targetFile.exists());
+				
+				if(!targetFile.exists()) {
+					targetFile.createNewFile();
+				}
 				
 				OutputStream os = new FileOutputStream(targetFile);
 				OutputStreamWriter osw = new OutputStreamWriter(os);
@@ -107,6 +115,40 @@ public class MakeJsonFormFileFromDB {
 				resultSetMapList.clear();
 			}
 		}
+		
+		{
+			//남은 것 처리 영역
+			Date date = new Date();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyymmdd-hhmmss");
+			String timeText = sdf.format(date);
+			File targetFile = new File(connectionInfo.getJsonFileDir()+"/"+connectionInfo.getName()+"_"+timeText+".txt");
+			
+			System.out.println("targetFile : " + targetFile.exists());
+			
+			if(!targetFile.exists()) {
+				targetFile.createNewFile();
+			}
+			
+			OutputStream os = new FileOutputStream(targetFile);
+			OutputStreamWriter osw = new OutputStreamWriter(os);
+			BufferedWriter bw = new BufferedWriter(osw);
+			
+			System.out.println("file write start ... [" + targetFile.getName() + "]");
+			
+			String jsonForm = gson.toJson(resultSetMapList);
+			
+			bw.write(jsonForm);
+			
+			System.out.println("file write end ... [" + targetFile.getName() + "]");
+			
+			bw.close();
+			osw.close();
+			os.close();
+		}
+		
+		rs.close();
+		psmt.close();
+		conn.close();
 	}
 	
 	private void initConnectionInfoList() {
