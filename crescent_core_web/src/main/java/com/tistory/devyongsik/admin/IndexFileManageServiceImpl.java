@@ -3,6 +3,7 @@ package com.tistory.devyongsik.admin;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,10 +12,11 @@ import java.util.Map;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.document.NumericField;
+import org.apache.lucene.index.FieldInfo.IndexOptions;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.index.TermDocs;
 import org.apache.lucene.index.TermEnum;
-import org.apache.lucene.index.FieldInfo.IndexOptions;
 import org.apache.lucene.search.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -25,6 +27,8 @@ import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.CrescentCollections;
+import com.tistory.devyongsik.utils.RankingTerm;
+import com.tistory.devyongsik.utils.TopRankingTerms;
 
 public class IndexFileManageServiceImpl implements IndexFileManageService {
 	//TODO 호출할때마다 계산하는게 아니라, 색인시간 체크해서 보여주도록
@@ -56,8 +60,10 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 		try {
 			Directory directory = FSDirectory.open(new File(collection.getIndexingDirectory()));
 			IndexReader reader = IndexReader.open(directory);
+			TopRankingTerms topRankingTerms = new TopRankingTerms(10, new RankingTermComparator());
 			
 			TermEnum terms = reader.terms();
+			
 			int termFreq = 0;
 			int termCount = 0;
 			Term beforeTerm = null;
@@ -77,6 +83,15 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 					fieldTermCount.put(beforeTerm.field(), termCount);
 					termCount = 1;
 					beforeTerm = currTerm;
+				}
+				
+				TermDocs termDocs = reader.termDocs(currTerm);
+				
+				while (termDocs.next()) {
+					if (topRankingTerms.isOffer(termDocs.freq()) && !currTerm.field().equals("board_id")) {
+						RankingTerm e = new RankingTerm(currTerm.text(), currTerm.field(), termDocs.freq());
+						topRankingTerms.push(e);
+					}
 				}
 				termFreq++;
 			}
@@ -229,4 +244,23 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 		return result;
 	}
 
+}
+
+class RankingTermComparator implements Comparator<RankingTerm>
+{
+    @Override
+    public int compare(RankingTerm x, RankingTerm y)
+    {
+        // Assume neither string is null. Real code should
+        // probably be more robust
+        if (x.getCount() < y.getCount())
+        {
+            return -1;
+        }
+        if (x.getCount() > y.getCount())
+        {
+            return 1;
+        }
+        return 0;
+    }
 }

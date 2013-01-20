@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class IndexingUtil {
 	private URL serverURL;
-	private String DEFAULT_SERVER_URL = "http://127.0.0.1:8080/update.devys";
+	private String DEFAULT_SERVER_URL = "http://127.0.0.1:8080/crescent_core_web/update.devys";
 	private Map<String, String> mimeMap;
 	private String sourceFileName = "";
 	private String fileType = "json";
