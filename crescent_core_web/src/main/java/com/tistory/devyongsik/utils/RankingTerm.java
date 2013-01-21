@@ -1,6 +1,6 @@
 package com.tistory.devyongsik.utils;
 
-public class RankingTerm {
+public class RankingTerm implements Comparable<RankingTerm>{
 	private String text;
 	private String field;
 	private int count;
@@ -27,5 +27,20 @@ public class RankingTerm {
 	}
 	public void setCount(int count) {
 		this.count = count;
+	}
+	
+	public String toString() {
+		return this.text + ", " + this.count;
+	}
+	
+	
+	public int compareTo(RankingTerm x) {
+		if (this.count < x.count) {
+			return -1;
+		} else if (this.count == x.count) {
+			return 0;
+		} else {
+			return 1;
+		}
 	}
 }

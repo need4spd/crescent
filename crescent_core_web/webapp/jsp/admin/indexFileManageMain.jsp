@@ -13,6 +13,8 @@
 <c:set var="last_modify" value="${RESULT.lastModify }" />
 <c:set var="term_count" value="${RESULT.termCount }" />
 <c:set var="top_ranking" value="${RESULT.topRanking }" />
+<c:set var="field_name" value="${RESULT.fieldName }" />
+
 
 <!DOCTYPE html>
 <%@ page import="java.util.Map" %>
@@ -170,30 +172,15 @@
 								</tr>
 							</thead>
 							<tbody>
+								<c:forEach items="${top_ranking }" var="product" varStatus="status">
 								<tr>
-									<td>1</td>
-									<td>42212</td>
-									<td>logDate</td>
-									<td>20120202</td>
+									<td>${status.count }</td>
+									<td>${product.count }</td>
+									<td>${product.field }</td>
+									<td>${product.text }</td>
+									
 								</tr>
-								<tr>
-									<td>1</td>
-									<td>42212</td>
-									<td>logDate</td>
-									<td>20120202</td>
-								</tr>
-								<tr>
-									<td>1</td>
-									<td>42212</td>
-									<td>logDate</td>
-									<td>20120202</td>
-								</tr>
-								<tr>
-									<td>1</td>
-									<td>42212</td>
-									<td>logDate</td>
-									<td>20120202</td>
-								</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
