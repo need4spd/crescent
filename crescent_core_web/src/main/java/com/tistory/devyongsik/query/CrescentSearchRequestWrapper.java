@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.lucene.search.Filter;
+import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.QueryWrapperFilter;
 import org.apache.lucene.search.Sort;
@@ -164,7 +165,9 @@ public class CrescentSearchRequestWrapper {
 		} else {
 			
 			if (getKeyword() == null || getKeyword().length() == 0) {
-				throw new CrescentInvalidRequestException("Keyword is Null");
+				resultQuery = new MatchAllDocsQuery();
+				return resultQuery;
+			
 			}
 			
 			DefaultKeywordParser queryParser = new DefaultKeywordParser();

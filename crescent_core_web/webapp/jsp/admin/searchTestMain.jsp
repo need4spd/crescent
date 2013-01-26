@@ -9,6 +9,7 @@
 <c:set var="sort" value="${USER_REQUEST.sort }" />
 <c:set var="page_num" value="${USER_REQUEST.pageNum }" />
 <c:set var="page_size" value="${USER_REQUEST.pageSize }" />
+<c:set var="ft" value="${USER_REQUEST.filter }" />
 
 <!DOCTYPE html>
 
@@ -39,6 +40,7 @@
 		$('#sort').val('${sort}');
 		$('#page_num').val('${page_num}');
 		$('#page_size').val('${page_size}');
+		$('#ft').val('${ft}');
 	});
 </script>
 <body>
@@ -52,11 +54,11 @@
 		return true;
 	};
 		function search() {
-			if ($('#keyword').val() == '' && $('#cq').val() == '') {
-				newAlert('검색어나 커스텀쿼리 중 하나는 꼭 입력해주세요.', 'alert-area');
+			//if ($('#keyword').val() == '' && $('#cq').val() == '' && $('#ft').val() == '') {
+			//	newAlert('검색어나 커스텀쿼리 혹은 필터 중 하나는 꼭 입력해주세요.', 'alert-area');
 				//$('#keyword_alert').show();
-				return;
-			}
+			//	return;
+			//}
 			$('#searchForm').attr('action', 'searchTest.devys').submit();
 		}
 	</script>
@@ -87,6 +89,13 @@
 				<div class="controls">
 					<input type="text" id="search_field" name="search_field" onkeypress="enterKey(event);" 
 						placeholder="검색대상필드 - 없으면 Default">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="filter">필터</label>
+				<div class="controls">
+					<input type="text" id="ft" name="ft" onkeypress="enterKey(event);" 
+						placeholder="Filter 조건 - 없으면 Default">
 				</div>
 			</div>
 			<div class="control-group">

@@ -47,7 +47,7 @@ public class SearchServiceImpl implements SearchService {
 			result.put("error_code", -1);
 			result.put("error_msg", e.getMessage());
 			
-			logger.error("검색 중 에러 발생함." + e);
+			logger.error("검색 중 에러 발생함." , e);
 			
 			searchResult.setErrorCode(-1);
 			searchResult.setErrorMsg(e.getMessage());
