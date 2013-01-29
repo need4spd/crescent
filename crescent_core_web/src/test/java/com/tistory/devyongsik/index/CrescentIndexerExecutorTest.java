@@ -6,6 +6,7 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import org.apache.lucene.index.CorruptIndexException;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
@@ -14,17 +15,15 @@ import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.handler.Handler;
 import com.tistory.devyongsik.handler.IndexingRequestForm;
 import com.tistory.devyongsik.handler.JsonDataHandler;
+import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import com.tistory.devyongsik.utils.FormattedTextBuilder;
 
 public class CrescentIndexerExecutorTest {
 	
-//	@AfterClass
-//	public static void closeIndexWriter() throws CorruptIndexException, IOException {
-//		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
-//		IndexWriter indexWriter = indexWriterManager.getIndexWriter("sample");
-//		
-//		indexWriter.close();
-//	}
+	@BeforeClass
+	public static void init() {
+		CrescentTestCaseUtil.init();
+	}
 	
 	@Test
 	public void addDocument() throws CorruptIndexException, IOException {

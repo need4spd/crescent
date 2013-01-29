@@ -14,7 +14,7 @@ public class ResourceLoaderTest {
 
 	@Test
 	public void documentRead() {
-		ResourceLoader resourceLoader = new ResourceLoader("collection/collections.xml");
+		ResourceLoader resourceLoader = new ResourceLoader("collection/test-collections.xml");
 		Document document = resourceLoader.getDocument();
 		
 		Assert.assertNotNull(document);
@@ -22,7 +22,7 @@ public class ResourceLoaderTest {
 	
 	@Test
 	public void readElements() {
-		ResourceLoader resourceLoader = new ResourceLoader("collection/collections.xml");
+		ResourceLoader resourceLoader = new ResourceLoader("collection/test-collections.xml");
 		Document document = resourceLoader.getDocument();
 		
 		//get collection list

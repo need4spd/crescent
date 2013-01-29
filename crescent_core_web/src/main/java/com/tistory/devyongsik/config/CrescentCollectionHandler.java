@@ -26,16 +26,27 @@ import com.tistory.devyongsik.domain.CrescentSortField;
 public class CrescentCollectionHandler {
 	private  Logger logger = LoggerFactory.getLogger(CrescentCollectionHandler.class);
 
-	private final String DEFAULT_CONFIG_XML = "collection/collections.xml";
+	private COLLECTIONS_XML CONFIG_XML = COLLECTIONS_XML.DEFAULT;
+	
 	private CrescentCollections crescentCollections = null;
 	
 	private static CrescentCollectionHandler instance = new CrescentCollectionHandler();
 
+	private String mode = null;
+	
 	public static CrescentCollectionHandler getInstance() {
 		return instance;
 	}
 
 	private CrescentCollectionHandler() {
+		mode = System.getProperty("runningMode", "real");
+		
+		if("test".equals(mode)) {
+			CONFIG_XML = COLLECTIONS_XML.TEST;
+		}
+		
+		logger.info("mode : {}, config_xml : {} ", mode, CONFIG_XML);
+		
 		loadFromXML();
 		makeFieldsMap();
 		makeAddtionalFields();
@@ -48,12 +59,12 @@ public class CrescentCollectionHandler {
 		stream.addImplicitCollection( CrescentCollections.class, "crescentCollections" );
 		
 		ResourceLoader resourceLoader = new ResourceLoader();
-		InputStream inputStream = resourceLoader.openResource(DEFAULT_CONFIG_XML);
+		InputStream inputStream = resourceLoader.openResource(CONFIG_XML.getXmlDir());
 		
 		crescentCollections = (CrescentCollections)stream.fromXML(inputStream);
 		
 		if(crescentCollections == null) {
-			String errorMsg = "Crescent Collections is not loaded from xml : ["+DEFAULT_CONFIG_XML+"]";
+			String errorMsg = "Crescent Collections is not loaded from xml : ["+CONFIG_XML+"]";
 			logger.error(errorMsg);
 			
 			throw new IllegalStateException(errorMsg);
@@ -85,7 +96,7 @@ public class CrescentCollectionHandler {
 	public void writeToXML() {
 		
 		ResourceLoader resourceLoader = new ResourceLoader();
-		URL collectionXmlUrl = resourceLoader.getURL(DEFAULT_CONFIG_XML);
+		URL collectionXmlUrl = resourceLoader.getURL(CONFIG_XML.getXmlDir());
 		
 		XStream stream = new XStream();
 		stream.processAnnotations(CrescentCollections.class);

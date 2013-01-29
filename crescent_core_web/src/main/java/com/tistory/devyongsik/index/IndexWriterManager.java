@@ -9,6 +9,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,13 @@ public class IndexWriterManager {
 			
 			logger.info("index file dir ; {}", indexDir);
 			
-			Directory dir = FSDirectory.open(new File(indexDir));
+			Directory dir = null;
+			
+			if(indexDir.equals("memory")) {
+				dir = new RAMDirectory();
+			} else {
+				dir = FSDirectory.open(new File(indexDir));
+			}
 			
 			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, new KoreanAnalyzer(true));
 			//conf.setOpenMode(OpenMode.CREATE);

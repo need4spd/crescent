@@ -3,13 +3,20 @@ package com.tistory.devyongsik.config;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollections;
+import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
 public class CrescentCollectionHandlerTest {
 
+	@BeforeClass
+	public static void init() {
+		CrescentTestCaseUtil.init();
+	}
+	
 	@Test
 	public void loadFromXML() {
 		CrescentCollectionHandler handler = CrescentCollectionHandler.getInstance();

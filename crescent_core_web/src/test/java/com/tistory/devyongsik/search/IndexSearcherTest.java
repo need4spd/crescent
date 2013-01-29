@@ -10,10 +10,17 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
 public class IndexSearcherTest {
 
+	@BeforeClass
+	public static void init() {
+		CrescentTestCaseUtil.init();
+	}
 	@Test
 	public void defaultSearch() throws IOException {
 		SearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager("sample");

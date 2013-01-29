@@ -15,6 +15,7 @@ import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
@@ -22,9 +23,15 @@ import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
+import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
 public class CrescentHighlighterTest {
 
+	@BeforeClass
+	public static void init() {
+		CrescentTestCaseUtil.init();
+	}
+	
 	@Test
 	public void highlightTest() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
