@@ -18,6 +18,6 @@ Crescent (Search Engine)
 
 8. 테스트 페이지는 아래의 url로 접속하여주세요.
 
-http://ec2-54-248-115-161.ap-northeast-1.compute.amazonaws.com/
+http://ec2-54-248-115-161.ap-northeast-1.compute.amazonaws.com:8080/crescent
 
 
