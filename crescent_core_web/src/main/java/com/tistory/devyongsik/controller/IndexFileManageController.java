@@ -25,8 +25,9 @@ public class IndexFileManageController {
 		modelAndView.setViewName("/admin/indexFileManageMain");
 		
 		String collection = request.getParameter("collection");
+		String topRankingField = request.getParameter("topRankingField");
 		
-		if (indexFileManageService.reload(collection) == false)
+		if (indexFileManageService.reload(collection, topRankingField) == false)
 			return modelAndView;
 		
 		Map<String, Object> result = new HashMap<String, Object>();

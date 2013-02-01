@@ -3,6 +3,8 @@ package com.tistory.devyongsik.admin;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,10 +13,11 @@ import java.util.Map;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
 import org.apache.lucene.document.NumericField;
+import org.apache.lucene.index.FieldInfo.IndexOptions;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.index.TermDocs;
 import org.apache.lucene.index.TermEnum;
-import org.apache.lucene.index.FieldInfo.IndexOptions;
 import org.apache.lucene.search.Similarity;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -25,21 +28,25 @@ import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.CrescentCollections;
+import com.tistory.devyongsik.utils.RankingTerm;
+import com.tistory.devyongsik.utils.TopRankingQueue;
 
 public class IndexFileManageServiceImpl implements IndexFileManageService {
 	//TODO 호출할때마다 계산하는게 아니라, 색인시간 체크해서 보여주도록
 	private Logger logger = LoggerFactory.getLogger(IndexFileManageServiceImpl.class);
 	private Map<String, Integer>fieldTermCount = new HashMap<String, Integer>();
+	private RankingTerm[] topRankingTerms = null;
 	Map<String, Object> result = new HashMap<String, Object>();
 	
 	public enum View { Overview, Document };
+	private final static int DEFAULT_TOPRANKING_TERM = 8;
 	
 	String[] resultField1 = {"collectionName", "indexName", "numOfField", "numOfDoc", "numOfTerm",
 						"hasDel", "isOptimize", "indexVersion", "lastModify", "termCount", "topRanking"};
 	
 	
 	@Override
-	public boolean reload(String collectionName) {
+	public boolean reload(String collectionName, String topRankingField) {
 		if (collectionName == null) {
 			return false;
 		}
@@ -53,11 +60,27 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 			return false;
 		}
 		
+		if (topRankingField == null) {
+			if (collection.getDefaultSearchFields().get(0) != null) {
+				topRankingField = collection.getDefaultSearchFields().get(0).getName();
+			} else {
+				logger.debug("doesn't defaultSearchField => {}", collectionName);
+				init(View.Overview);
+				return false;
+			}
+		}
+		
+		List<String> fieldName = new ArrayList<String>();
+		for (CrescentCollectionField field : collection.getFields())
+			fieldName.add(field.getName());
+		TopRankingQueue topRankingQueue = new TopRankingQueue(DEFAULT_TOPRANKING_TERM, new RankingTermComparator());
+		
 		try {
 			Directory directory = FSDirectory.open(new File(collection.getIndexingDirectory()));
 			IndexReader reader = IndexReader.open(directory);
 			
 			TermEnum terms = reader.terms();
+
 			int termFreq = 0;
 			int termCount = 0;
 			Term beforeTerm = null;
@@ -65,6 +88,8 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 			fieldTermCount.clear();
 			for (CrescentCollectionField field : collection.getFields())
 				fieldTermCount.put(field.getName(), 0);
+			topRankingQueue.clear();
+			
 			while(terms.next()) {
 				Term currTerm = terms.term();
 				if (beforeTerm == null) {
@@ -77,6 +102,15 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 					fieldTermCount.put(beforeTerm.field(), termCount);
 					termCount = 1;
 					beforeTerm = currTerm;
+				}
+				
+				TermDocs termDocs = reader.termDocs(currTerm);
+				
+				while (termDocs.next()) {
+					if (currTerm.field().equals(topRankingField)) {
+						RankingTerm e = new RankingTerm(currTerm.text(), currTerm.field(), termDocs.freq());
+						topRankingQueue.add(e);
+					}
 				}
 				termFreq++;
 			}
@@ -94,12 +128,16 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 			e.printStackTrace();
 			return false;
 		}
-		
+		if (topRankingQueue.size() != 0) {
+			topRankingTerms = topRankingQueue.toArray();
+			Arrays.sort(topRankingTerms);
+		}
 		result.put("collectionName", collectionName);
 		result.put("indexName", collection.getIndexingDirectory());
 		result.put("numOfField", collection.getFields().size());
 		result.put("termCount", fieldTermCount);
-		result.put("topRanking", null);
+		result.put("topRanking", topRankingTerms);
+		result.put("fieldName", fieldName);
 		
 		return true;
 	}
@@ -229,4 +267,23 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 		return result;
 	}
 
+}
+
+class RankingTermComparator implements Comparator<RankingTerm>
+{
+    @Override
+    public int compare(RankingTerm x, RankingTerm y)
+    {
+        // Assume neither string is null. Real code should
+        // probably be more robust
+        if (x.getCount() < y.getCount())
+        {
+            return -1;
+        }
+        if (x.getCount() > y.getCount())
+        {
+            return 1;
+        }
+        return 0;
+    }
 }
