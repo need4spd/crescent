@@ -94,20 +94,18 @@
 					<caption>검색 결과</caption>
 					<thead>
 						<tr>
-							<c:forEach var="result" items="${resultList}" varStatus="status">
-								<c:set var="fieldNameSet" value="${result.keys}" />
-								<c:forEach var="fieldName" items="${fieldNameSet}">
-									<th width="40%">${fieldName}</th>
-								</c:forEach>
+							<c:set var="firstRowMap" value="${resultList[0]}" />
+							<c:forEach var="firstRow" items="${firstRowMap}" varStatus="status">
+								<th width="40%">${firstRow.key}</th>
 							</c:forEach>
 						</tr>
 					</thead>
 					
 					<tbody>
-						<c:forEach var="resultRow" items="${resultList}" varStatus="status">
-							<c:out value="${resultRow.key}" />
+						<c:forEach var="resultMap" items="${resultList}" varStatus="status">
+							<c:out value="${resultMap.key}" />
 							<tr>
-								<c:forEach var="result" items="${resultRow}">
+								<c:forEach var="result" items="${resultMap}">
 									<td>${result.value}</td>
 								</c:forEach>
 							</tr>
