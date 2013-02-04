@@ -1,48 +1,17 @@
-<%@page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<c:set var="col_name" value="${USER_REQUEST.collectionName }" />
-<c:set var="custom_query" value="${USER_REQUEST.customQuery }" />
-<c:set var="keyword" value="${USER_REQUEST.keyword }" />
-<c:set var="search_field" value="${USER_REQUEST.searchField }" />
-<c:set var="sort" value="${USER_REQUEST.sort }" />
-<c:set var="page_num" value="${USER_REQUEST.pageNum }" />
-<c:set var="page_size" value="${USER_REQUEST.pageSize }" />
-<c:set var="ft" value="${USER_REQUEST.filter }" />
+<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"  %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <!DOCTYPE html>
 
-<%@page import="com.tistory.devyongsik.domain.SearchResult"%>
-<%@page import="com.tistory.devyongsik.domain.SearchRequest"%>
-<%@page import="java.util.*"%>
-<%
-	SearchResult searchResult = (SearchResult) request.getAttribute("searchResult");
-	List<Map<String, String>> resultList = null;
-	
-	boolean firstCallPage = true;
-	
-	if(searchResult == null) {
-		resultList = new ArrayList<Map<String, String>>();
-	} else {
-		resultList = searchResult.getResultList();
-		firstCallPage = false;
-	}
-%>
+<c:set var="firstCallPage" value="true" />
+<c:if test="${searchResult != null}">
+	<c:set var="firstCallPage" value="false" />
+</c:if>
+<c:set var="resultList" value="${searchResult.resultList}" />
+
 <html lang="en">
 <%@ include file="../common/header.jsp"%>
-<script>
-	$(document).ready(function() {
-		$('#col_name').val('${col_name}');
-		$('#cq').val('${custom_query}');
-		$('#keyword').val('${keyword}');
-		$('#search_field').val('${search_field}');
-		$('#sort').val('${sort}');
-		$('#page_num').val('${page_num}');
-		$('#page_size').val('${page_size}');
-		$('#ft').val('${ft}');
-	});
-</script>
 <body>
 	<%@ include file="../common/menu.jsp"%>
 
@@ -54,11 +23,11 @@
 		return true;
 	};
 		function search() {
-			//if ($('#keyword').val() == '' && $('#cq').val() == '' && $('#ft').val() == '') {
-			//	newAlert('검색어나 커스텀쿼리 혹은 필터 중 하나는 꼭 입력해주세요.', 'alert-area');
+			if ($('#keyword').val() == '' && $('#cq').val() == '') {
+				newAlert('검색어나 커스텀쿼리 중 하나는 꼭 입력해주세요.', 'alert-area');
 				//$('#keyword_alert').show();
-			//	return;
-			//}
+				return;
+			}
 			$('#searchForm').attr('action', 'searchTest.devys').submit();
 		}
 	</script>
@@ -92,13 +61,6 @@
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label" for="filter">필터</label>
-				<div class="controls">
-					<input type="text" id="ft" name="ft" onkeypress="enterKey(event);" 
-						placeholder="Filter 조건 - 없으면 Default">
-				</div>
-			</div>
-			<div class="control-group">
 				<label class="control-label" for="sort">정렬조건</label>
 				<div class="controls">
 					<input type="text" id="sort" name="sort" onkeypress="enterKey(event);" 
@@ -127,53 +89,39 @@
 			</div>
 		</form>
 		<div class="container">
-		<%
-			if(resultList.size() > 0) {
-				Set<String> fieldNameSet = resultList.get(0).keySet();
-				int columnSize = fieldNameSet.size();
-		%>
-			<table class="table table-hover">
-				<caption>검색 결과</caption>
-				<thead>
-					<tr>
-						<%
-							for(String fieldName : fieldNameSet) {
-						%>
-							<th width="40%"><%=fieldName %></th>
-						<%
-							}
-						%>
-					</tr>
-				</thead>
-				<tbody>
-					<%
-						for(Map<String, String> resultRow : resultList) {
-					%>
-					<tr>
-						<%
-							for(String fieldName : fieldNameSet) {
-						%>
-							<td><%=resultRow.get(fieldName) %></td>
-						<%
-							}
-						%>
-					</tr>
-					<%
-						}
-					%>
-				</tbody>
-			</table>
-		<%
-			} else if (!firstCallPage){
-		%>
-			검색결과가 없거나, 잘못된 요청입니다. <br/>
-			
-			totalCount : <%=searchResult.getTotalHitsCount() %> <br/>
-			ErrorCode : <%=searchResult.getErrorCode() %> <br/>
-			ErrorMessage : <%=searchResult.getErrorMsg() %> <br/>
-		<% 
-			}
-		%>
+			<c:if test="${fn:length(resultList) gt 0}">
+				<table class="table table-hover">
+					<caption>검색 결과</caption>
+					<thead>
+						<tr>
+							<c:forEach var="result" items="${resultList}" varStatus="status">
+								<c:set var="fieldNameSet" value="${result.keys}" />
+								<c:forEach var="fieldName" items="${fieldNameSet}">
+									<th width="40%">${fieldName}</th>
+								</c:forEach>
+							</c:forEach>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<c:forEach var="resultRow" items="${resultList}" varStatus="status">
+							<c:out value="${resultRow.key}" />
+							<tr>
+								<c:forEach var="result" items="${resultRow}">
+									<td>${result.value}</td>
+								</c:forEach>
+							</tr>
+						</c:forEach>
+					</tbody>
+				</table>
+			</c:if>
+			<c:if test="${fn:length(resultList) == 0 and firstCallPage == false}">
+				검색결과가 없거나, 잘못된 요청입니다. <br/>
+				
+				totalCount : ${searchResult.totalHitsCount} <br/>
+				ErrorCode : ${searchResult.errorCode} <br/>
+				ErrorMessage : ${searchResult.errorMsg} <br/>
+			</c:if>
 		</div>
 	</div>
 </body>
