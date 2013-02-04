@@ -1,15 +1,9 @@
 <%@page language="java" contentType="*/json" pageEncoding="utf-8" %>
-<%@ page import="java.util.*" %>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"  %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<%
-        String resultTokenListIndexingMode = (String)request.getAttribute("resultTokenListIndexingMode");
-        String resultTokenListQueryMode = (String)request.getAttribute("resultTokenListQueryMode");
-%>
+"색인모드"
+${resultTokenListIndexingMode}
 
-<%="색인모드"%>
-<%=resultTokenListIndexingMode%>
-
-
-
-<%="쿼리모드"%>
-<%=resultTokenListQueryMode%>
+"쿼리모드"
+${resultTokenListQueryMode}

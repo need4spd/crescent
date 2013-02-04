@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.lucene.analysis.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.tistory.devyongsik.admin.MorphService;
 import com.tistory.devyongsik.domain.MorphResult;
+import com.tistory.devyongsik.domain.MorphToken;
 
 @Controller
 public class MorphAdminMainController {
@@ -47,14 +47,14 @@ public class MorphAdminMainController {
 		
 		logger.debug("keyword : {}", keyword);
 		
-		List<Token> resultTokenListIndexingMode = morphService.getTokens(keyword, true);
-		List<Token> resultTokenListQueryMode = morphService.getTokens(keyword, false);
+		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true);
+		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/admin/morphMain");
 
-		modelAndView.addObject("resultTokenListIndexingMode", resultTokenListIndexingMode);
-		modelAndView.addObject("resultTokenListQueryMode", resultTokenListQueryMode);
+		modelAndView.addObject("indexingModeList", resultTokenListIndexingMode);
+		modelAndView.addObject("queryModeList", resultTokenListQueryMode);
 		
 		return modelAndView;
 	}
@@ -66,8 +66,8 @@ public class MorphAdminMainController {
 		
 		logger.debug("keyword : {}", keyword);
 		
-		List<Token> resultTokenListIndexingMode = morphService.getTokens(keyword, true);
-		List<Token> resultTokenListQueryMode = morphService.getTokens(keyword, false);
+		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true);
+		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false);
 		
 		List<MorphResult> morphIndexingTestResult = new ArrayList<MorphResult>();
 		List<MorphResult> morphQueryTestResult = new ArrayList<MorphResult>();
@@ -76,22 +76,22 @@ public class MorphAdminMainController {
 		
 		Map<String, List<MorphResult>> morphTestResultSet = new HashMap<String, List<MorphResult>>();
 		
-		for(Token token : resultTokenListIndexingMode) {
+		for(MorphToken token : resultTokenListIndexingMode) {
 			MorphResult morphResult = new MorphResult();
-			morphResult.setWord(token.toString());
-			morphResult.setType(token.type());
-			morphResult.setStartOffset(token.startOffset());
-			morphResult.setEndOffset(token.endOffset());
+			morphResult.setWord(token.getTerm());
+			morphResult.setType(token.getType());
+			morphResult.setStartOffset(token.getStartOffset());
+			morphResult.setEndOffset(token.getEndOffset());
 			
 			morphIndexingTestResult.add(morphResult);
 		}
 		
-		for(Token token : resultTokenListQueryMode) {
+		for(MorphToken token : resultTokenListQueryMode) {
 			MorphResult morphResult = new MorphResult();
-			morphResult.setWord(token.toString());
-			morphResult.setType(token.type());
-			morphResult.setStartOffset(token.startOffset());
-			morphResult.setEndOffset(token.endOffset());
+			morphResult.setWord(token.getTerm());
+			morphResult.setType(token.getType());
+			morphResult.setStartOffset(token.getStartOffset());
+			morphResult.setEndOffset(token.getEndOffset());
 			
 			morphQueryTestResult.add(morphResult);
 		}

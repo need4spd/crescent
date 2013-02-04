@@ -1,15 +1,8 @@
-<%@page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"  %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 
-<%@ page import="java.util.*"%>
-<%@ page import="org.apache.lucene.analysis.Token"%>
-
-<%
-        List<Token> resultTokenListIndexingMode = (List<Token>)request.getAttribute("resultTokenListIndexingMode");
-        List<Token> resultTokenListQueryMode = (List<Token>)request.getAttribute("resultTokenListQueryMode");
-
-%>
 <html lang="en">
 <%@include file="../common/header.jsp"%>
 <script>
@@ -42,19 +35,13 @@
 								</tr>
 							</thead>
 							<tbody>
-								<%
-									if(resultTokenListIndexingMode != null) {
-										for(Token t :resultTokenListIndexingMode) {	
-								%>
-								<tr>
-									<td><%=t.toString() %></td>
-									<td><%=t.type() %></td>
-									<td><%=t.startOffset() %>, <%=t.endOffset() %></td>
-								</tr>
-								<%
-										}
-									}
-								%>
+								<c:forEach var="token" items="${indexingModeList}" varStatus="status">
+									<tr>
+										<td>${token.term}</td>
+										<td>${token.type}</td>
+										<td>${token.startOffset}, ${token.endOffset}</td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 				</div>
@@ -69,19 +56,13 @@
 								</tr>
 							</thead>
 							<tbody>
-								<%
-									if(resultTokenListQueryMode != null) {
-										for(Token t :resultTokenListQueryMode) {	
-								%>
-								<tr>
-									<td><%=t.toString() %></td>
-									<td><%=t.type() %></td>
-									<td><%=t.startOffset() %>, <%=t.endOffset() %></td>
-								</tr>
-								<%
-										}
-									}
-								%>
+								<c:forEach var="token" items="${queryModeList}" varStatus="status">
+									<tr>
+										<td>${token.term}</td>
+										<td>${token.type}</td>
+										<td>${token.startOffset}, ${token.endOffset}</td>
+									</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 				</div>

@@ -3,8 +3,8 @@ package com.tistory.devyongsik.admin;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.lucene.analysis.Token;
+import com.tistory.devyongsik.domain.MorphToken;
 
 public interface MorphService {
-	List<Token> getTokens(String keyword, boolean isIndexingMode) throws IOException;
+	List<MorphToken> getTokens(String keyword, boolean isIndexingMode) throws IOException;
 }
