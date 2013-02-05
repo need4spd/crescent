@@ -1,17 +1,7 @@
-<%@page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
-<%@ page import="java.util.*"%>
-<%@ page import="com.tistory.devyongsik.domain.*" %>
-<%@ page import="com.tistory.devyongsik.config.*" %>
+<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"  %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<%
-	CrescentCollectionHandler collectionHandler = CrescentCollectionHandler.getInstance();
-	CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-
-	List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
-	String selectedCollectionName = (String)request.getAttribute("selectedCollectionName");
-	CrescentCollection selectedCollection = crescentCollections.getCrescentCollection(selectedCollectionName);
-%>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -92,7 +82,7 @@
 	}
 	
 	$(window).load(function () {
-		$("#collectionName > option[value = <%=selectedCollectionName%>]").attr("selected", "ture");
+		$("#collectionName > option[value = '${selectedCollectionName}']").attr("selected", "ture");
 	});
 	
 </script>
@@ -117,34 +107,30 @@
           <label class="control-label">Collection Name</label>
           <div class="controls">
             <select id="collectionName" name="collectionName" onChange="javascript:changeCollection();">
-            <%
-            	for(CrescentCollection collection : crescentCollectionList) {
-            %>
-              <option value="<%=collection.getName() %>"><%=collection.getName() %></option>
-            <%
-            	}
-            %>
+            <c:forEach var="collection" items="${crescentCollectionList}">
+            	<option value="${collection.name}">${collection.name}</option>
+            </c:forEach>
             </select>
           </div>
         </div>
       <div class="control-group">
         <label class="control-label">Analyzer</label>
         <div class="controls">
-          <input type="text" id="analyzer" name="analyzer" class="input-xxlarge" value="<%=selectedCollection.getAnalyzer()%>"> 
+          <input type="text" id="analyzer" name="analyzer" class="input-xxlarge" value="${selectedCollection.analyzer}"> 
         </div>
       </div>
       <div id="alert-area-analyzer"></div>
       <div class="control-group">
         <label class="control-label">Indexing Directory</label>
         <div class="controls">
-          <input type="text" id="indexingDirectory" name="indexingDirectory" class="input-xxlarge" value="<%=selectedCollection.getIndexingDirectory()%>"> 
+          <input type="text" id="indexingDirectory" name="indexingDirectory" class="input-xxlarge" value="${selectedCollection.indexingDirectory}"> 
         </div>
       </div>
       <div id="alert-area-indexingDirectory"></div>
       <div class="control-group">
         <label class="control-label">Searcher Reload Schedule</label>
         <div class="controls">
-          <input type="text" id="searcherReloadScheduleMin" name="searcherReloadScheduleMin" class="input-mideum" value="<%=selectedCollection.getSearcherReloadScheduleMin()%>"> 
+          <input type="text" id="searcherReloadScheduleMin" name="searcherReloadScheduleMin" class="input-mideum" value="${selectedCollection.searcherReloadScheduleMin}"> 
         </div>
       </div>
       <div>
@@ -166,52 +152,44 @@
             </tr>
           </thead>
           <tbody>
-          	<% 
-          		List<CrescentCollectionField> fieldsList = selectedCollection.getFields();
-          		for(CrescentCollectionField field : fieldsList) {
-          	%>
-            <tr>
-              <td><input type="text" class="input-midium" id="fieldName" name="fieldName" value="<%=field.getName() %>" disabled></td>
-              <td style="text-align: center;"><input type="checkbox" id="analyze" name="analyze" <%=field.isAnalyze() ? "checked" : "" %>></td>
-              <td style="text-align: center;"><input type="checkbox" id="store" name="store" <%=field.isStore() ? "checked" : "" %>></td>
-              <td style="text-align: center;"><input type="checkbox" id="index" name="index" <%=field.isIndex() ? "checked" : "" %>></td>
-              <td style="text-align: center;">
-              	<select id="type" name="type">
-              		<option value="STRING" <%="STRING".equals(field.getType()) ? "selected" : "" %>>STRING</option>
-              		<option value="LONG" <%="LONG".equals(field.getType()) ? "selected" : "" %>>LONG</option>
-              	</select>
-              </td>
-              <td style="text-align: center;"><input type="checkbox" id="must" name="must" <%=field.isMust() ? "checked" : "" %>></td>
-              <td style="text-align: center;"><input type="checkbox" id="termposition" name="termposition" <%=field.isTermposition() ? "checked" : "" %>></td>
-              <td style="text-align: center;"><input type="checkbox" id="termoffset" name="termoffset" <%=field.isTermoffset() ? "checked" : "" %>></td>
-              <td style="text-align: center;"><input type="text" class="input-midium" id="boost" name="boost" value="<%=field.getBoost() %>"></td>
-              <td style="text-align: center;"><input type="checkbox" id="termvector" name="termvector" <%=field.isTermvector() ? "checked" : "" %>></td>
-              <%
-              	List<CrescentDefaultSearchField> defaultSearchFieldList = selectedCollection.getDefaultSearchFields();
-              	boolean isDefaultSearchField = false;
-              	for(CrescentDefaultSearchField defaultSearchField : defaultSearchFieldList) {
-              		if(field.getName().equals(defaultSearchField.getName())) {
-              			isDefaultSearchField = true;
-              			break;
-              		}
-              	}
-              %>
-              <td style="text-align: center;"><input type="checkbox" id="defaultSearchField" name="defaultSearchField" <%=isDefaultSearchField ? "checked" : "" %>></td>
-              <%
-              	List<CrescentSortField> sortFieldList = selectedCollection.getSortFields();
-              	boolean isSortField = false;
-              	for(CrescentSortField sortField : sortFieldList) {
-              		if(field.getName().equals(sortField.getSource())) {
-              			isSortField = true;
-              			break;
-              		}
-              	}
-              %>
-              <td style="text-align: center;"><input type="checkbox" id="sortField" name="sortField" <%=isSortField ? "checked" : "" %>></td>
-            </tr>
-            <%
-          		}
-            %>
+          	<c:forEach var="field" items="${selectedCollection.fields}">
+	          	<tr>
+	              <td><input type="text" class="input-midium" id="fieldName" name="fieldName" value="${field.name}" disabled></td>
+	              <td style="text-align: center;"><input type="checkbox" id="analyze" name="analyze" <c:if test="${field.analyze}">checked</c:if>></td>
+	              <td style="text-align: center;"><input type="checkbox" id="store" name="store" <c:if test="${field.store}">checked</c:if>></td>
+	              <td style="text-align: center;"><input type="checkbox" id="index" name="index" <c:if test="${field.index}">checked</c:if>></td>
+	              <td style="text-align: center;">
+	              	<select id="type" name="type">
+	              		<option value="STRING" <c:if test='${field.type eq "STRING"}'>selected</c:if>>STRING</option>
+	              		<option value="LONG" <c:if test='${field.type eq "LONG"}'>selected</c:if>>LONG</option>
+	              	</select>
+	              </td>
+	              <td style="text-align: center;"><input type="checkbox" id="must" name="must" <c:if test="${field.must}">checked</c:if>></td>
+	              <td style="text-align: center;"><input type="checkbox" id="termposition" name="termposition" <c:if test="${field.termposition}">checked</c:if>></td>
+	              <td style="text-align: center;"><input type="checkbox" id="termoffset" name="termoffset" <c:if test="${field.termoffset}">checked</c:if>></td>
+	              <td style="text-align: center;"><input type="text" class="input-midium" id="boost" name="boost" value="${field.boost}"></td>
+	              <td style="text-align: center;"><input type="checkbox" id="termvector" name="termvector" <c:if test="${field.termvector}">checked</c:if>></td>
+	              
+	              <c:set var="isDefaultSearchField" value="false" />
+	              <c:forEach var="defaultSearchField" items="${selectedCollection.defaultSearchFields}">
+	              	<c:if test="${not isDefaultSearchField}">
+	              		<c:if test="${defaultSearchField.name eq field.name}">
+	              			<c:set var="isDefaultSearchField" value="true" />
+	              		</c:if>
+	              	</c:if>
+	              </c:forEach>
+	              <td style="text-align: center;"><input type="checkbox" id="defaultSearchField" name="defaultSearchField" <c:if test="${isDefaultSearchField}">checked</c:if>></td>
+	              <c:set var="isSortField" value="false" />
+	              <c:forEach var="sortField" items="${selectedCollection.sortFields}">
+	              	<c:if test="${not isSortField}">
+	              		<c:if test="${sortField.source eq field.name}">
+	              			<c:set var="isSortField" value="true" />
+	              		</c:if>
+	              	</c:if>
+	              </c:forEach>
+	              <td style="text-align: center;"><input type="checkbox" id="sortField" name="sortField" <c:if test="${isSortField}">checked</c:if>></td>
+	            </tr>
+          	</c:forEach>
           </tbody>
         </table>
       </div>

@@ -1,5 +1,7 @@
 package com.tistory.devyongsik.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,6 +40,10 @@ public class CollectionManageMainCotroller {
 		//modelAndView.addObject("crescentCollections", crescentCollections);
 		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
 		
+		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		
+		modelAndView.addObject("crescentCollectionList", crescentCollectionList);
+		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
 		modelAndView.setViewName("/admin/collectionManageMain");
 		
 		
