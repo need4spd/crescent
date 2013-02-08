@@ -125,9 +125,14 @@
 	<version>1.1.1</version>
     </dependency>
     <dependency>
-	<groupId>com.thoughtworks.xstream</groupId>
-	<artifactId>xstream</artifactId>
-	<version>1.4.3</version>
+    	<groupId>com.thoughtworks.xstream</groupId>
+    	<artifactId>xstream</artifactId>
+    	<version>1.4.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hsqldb</groupId>
+      <artifactId>hsqldb</artifactId>
+      <version>2.2.9</version>
     </dependency>        
   </dependencies>
   
