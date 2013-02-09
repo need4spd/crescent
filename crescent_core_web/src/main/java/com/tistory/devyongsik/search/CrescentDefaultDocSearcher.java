@@ -2,7 +2,9 @@ package com.tistory.devyongsik.search;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.Filter;
@@ -10,10 +12,18 @@ import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.SearcherManager;
-import org.apache.lucene.search.TopScoreDocCollector;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
+import com.tistory.devyongsik.domain.CrescentCollection;
+import com.tistory.devyongsik.domain.CrescentCollectionField;
+import com.tistory.devyongsik.domain.CrescentCollections;
+import com.tistory.devyongsik.domain.SearchResult;
+import com.tistory.devyongsik.highlight.CrescentHighlighter;
 import com.tistory.devyongsik.logger.CrescentLogger;
 import com.tistory.devyongsik.logger.LogInfo;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
@@ -21,53 +31,49 @@ import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 
 	private Logger logger = LoggerFactory.getLogger(CrescentDefaultDocSearcher.class);
-	private CrescentSearchRequestWrapper csrw = null;
 	
-	private int totalHitsCount;
-	private String errorMessage = "SUCCESS";
-	private int errorCode;
-	
-	public CrescentDefaultDocSearcher(CrescentSearchRequestWrapper csrw) {
-		this.csrw = csrw;
-	}
-
-	public int getTotalHitsCount() {
-		return totalHitsCount;
-	}
-
 	@Override
-	public List<Document> search() throws IOException {
+	public SearchResult search(CrescentSearchRequestWrapper csrw) throws IOException {
+		
+		SearchResult searchResult = new SearchResult();
+		CrescentHighlighter highlighter = new CrescentHighlighter(csrw);
+		int totalHitsCount = 0;
+		String errorMessage = "SUCCESS";
+		int errorCode = 0;
 		
 		//5page * 50
 		int numOfHits = csrw.getDefaultHitsPage() * csrw.getHitsForPage();
 		IndexSearcher indexSearcher = null;
 		SearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
 		
-		TopScoreDocCollector collector = TopScoreDocCollector.create(numOfHits, true);
+		//TopScoreDocCollector collector = TopScoreDocCollector.create(numOfHits, true);
 		
-		List<Document> resultList = new ArrayList<Document>();
+		List<Document> resultDocumentList = new ArrayList<Document>();
 		
 		try {
 			indexSearcher = searcherManager.acquire();
 			
 			Query query = csrw.getQuery();
 			Filter filter = csrw.getFilter();
+			Sort sort = csrw.getSort();
 			
 			logger.debug("query : {}" , query);
 			logger.debug("filter : {}" , filter);
+			logger.debug("sort : {}" , sort);
 			
 			long startTime = System.currentTimeMillis();
+			TopDocs topDocs = null;
 			
-			if(filter == null) {
-				indexSearcher.search(query, collector);
+			if(sort == null) {
+				topDocs = indexSearcher.search(query, filter, numOfHits);
 			} else {
-				indexSearcher.search(query, filter, collector);
+				topDocs = indexSearcher.search(query, filter, numOfHits, sort);
 			}
 			
 			long endTime = System.currentTimeMillis();
 			
 			//전체 검색 건수
-			totalHitsCount = collector.getTotalHits();
+			totalHitsCount = topDocs.totalHits;
 			
 			LogInfo logInfo = new LogInfo();
 			logInfo.setCollectionName(csrw.getCollectionName());
@@ -86,7 +92,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			
 			logger.debug("Total Hits Count : {} ", totalHitsCount);
 			
-			ScoreDoc[] hits = collector.topDocs().scoreDocs;
+			ScoreDoc[] hits = topDocs.scoreDocs;
 			
 			//총 검색건수와 실제 보여줄 document의 offset (min ~ max)를 비교해서 작은 것을 가져옴
 			int endOffset = Math.min(totalHitsCount, csrw.getStartOffSet() + csrw.getHitsForPage());
@@ -94,9 +100,13 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			if(endOffset > hits.length) {
 				logger.debug("기본 설정된 검색건수보다 더 검색을 원하므로, 전체를 대상으로 검색합니다.");
 				
-				collector = TopScoreDocCollector.create(totalHitsCount , true);
-				indexSearcher.search(query, collector);
-		        hits = collector.topDocs().scoreDocs;
+				if(sort == null) {
+					topDocs = indexSearcher.search(query, filter, totalHitsCount);
+				} else {
+					topDocs = indexSearcher.search(query, filter, totalHitsCount, sort);
+				}
+				
+		        hits = topDocs.scoreDocs;
 			}
 	
 			int startOffset = csrw.getStartOffSet();
@@ -104,7 +114,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 									
 			for(int i = startOffset; i < endOffset; i++) {
 				Document doc = indexSearcher.doc(hits[i].doc);
-				resultList.add(doc);
+				resultDocumentList.add(doc);
 			}
 			
 			logger.debug("start offset : [{}], end offset : [{}], total : [{}], numOfHits :[{}]"
@@ -112,28 +122,95 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			logger.debug("hits count : [{}]", hits.length);
 			logger.debug("startOffset + hitsPerPage : [{}]", csrw.getStartOffSet() + csrw.getHitsForPage());
 			
+			
+			if(resultDocumentList.size() > 0) { 
+				CrescentCollectionHandler collectionHandler 
+				= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+				
+				CrescentCollections collections = collectionHandler.getCrescentCollections();
+				CrescentCollection collection = collections.getCrescentCollection(csrw.getCollectionName());
+				
+				List<CrescentCollectionField> fieldList = collection.getFields();
+				String value = null;
+				
+				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
+				Map<String, Object> result = new HashMap<String, Object>();
+				
+				//int docnum = 0;
+				for(Document doc : resultDocumentList) {
+					Map<String,String> resultMap = new HashMap<String, String>();
+					
+					//resultMap.put("docnum", Integer.toString(docnum++));
+					for(CrescentCollectionField field : fieldList) {
+						if(field.isStore()) {
+							//필드별 결과를 가져온다.
+							value = highlighter.getBestFragment(field, doc.get(field.getName()));
+							resultMap.put(field.getName(), value);
+						}
+					}
+					
+					resultList.add(resultMap);
+				}
+				
+				result.put("total_count", totalHitsCount);
+				result.put("result_list", resultList);
+				result.put("error_code", errorCode);
+				result.put("error_msg", errorMessage);
+				
+				logger.debug("result list {}", resultList);
+				
+				searchResult.setResultList(resultList);
+				searchResult.setTotalHitsCount(totalHitsCount);
+				searchResult.setSearchResult(result);
+				
+			} else {
+				
+				//결과없음
+				Map<String, Object> result = new HashMap<String, Object>();
+				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
+				
+				result.put("total_count", totalHitsCount);
+				result.put("result_list", resultList);
+				result.put("error_code", errorCode);
+				result.put("error_msg", errorMessage);
+				
+				
+				logger.debug("result list {}", resultList);
+				
+				searchResult.setResultList(resultList);
+				searchResult.setTotalHitsCount(0);
+				searchResult.setSearchResult(result);
+			
+			}
+			
+			
 		} catch (Exception e) {
 			
 			logger.error("error in CrescentDefaultDocSearcher : ", e);
 			
-			errorMessage = e.toString();
-			errorCode = -1;
+			Map<String, Object> result = new HashMap<String, Object>();
+			List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
+			
+			result.put("total_count", totalHitsCount);
+			result.put("result_list", resultList);
+			result.put("error_code", errorCode);
+			result.put("error_msg", errorMessage);
+			
+			logger.error("검색 중 에러 발생함. {}", e);
+			
+			searchResult.setErrorCode(errorCode);
+			searchResult.setErrorMsg(errorMessage);
+			searchResult.setSearchResult(result);
+			searchResult.setResultList(resultList);
+			
+			return searchResult;
+			
 			
 		} finally {
 			searcherManager.release(indexSearcher);
 			indexSearcher = null;
 		}
 		
-		return resultList;
-	}
-
-	@Override
-	public String getErrorMessage() {
-		return errorMessage;
-	}
-
-	@Override
-	public int getErrorCode() {
-		return errorCode;
+		return searchResult;
 	}
 }

@@ -1,19 +1,20 @@
 package com.tistory.devyongsik.search;
 
+import javax.annotation.PostConstruct;
+
 import junit.framework.Assert;
 
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.SearcherManager;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class SearcherManagerTest {
+public class SearcherManagerTest extends CrescentTestCaseUtil {
 
-	@BeforeClass
-	public static void init() {
-		CrescentTestCaseUtil.init();
+	@PostConstruct
+	public void init() {
+		super.init();
 	}
 	
 	@Test

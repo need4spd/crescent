@@ -2,17 +2,30 @@ package com.tistory.devyongsik.domain;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
+import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class CrescentCollectionFieldTest {
+
+public class CrescentCollectionFieldTest extends CrescentTestCaseUtil {
+
+	@PostConstruct
+	public void init() {
+		super.init();
+	}
 
 	@Test
 	public void collectionFieldTest() {
 
-		CrescentCollections crescentCollections = CrescentCollectionHandler.getInstance().getCrescentCollections();
+		CrescentCollectionHandler collectionHandler 
+		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
 

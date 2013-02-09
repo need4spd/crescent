@@ -2,6 +2,8 @@ package com.tistory.devyongsik.search;
 
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
+
 import junit.framework.Assert;
 
 import org.apache.lucene.index.Term;
@@ -10,17 +12,17 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.SearcherManager;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TopDocs;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class IndexSearcherTest {
+public class IndexSearcherTest extends CrescentTestCaseUtil {
 
-	@BeforeClass
-	public static void init() {
-		CrescentTestCaseUtil.init();
+	@PostConstruct
+	public void init() {
+		super.init();
 	}
+
 	@Test
 	public void defaultSearch() throws IOException {
 		SearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager("sample");

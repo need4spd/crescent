@@ -6,12 +6,16 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
 
 public class CrescentCollectionTest {
 
 	@Test
 	public void collectionTest() {
-		CrescentCollections crescentCollections = CrescentCollectionHandler.getInstance().getCrescentCollections();
+		CrescentCollectionHandler collectionHandler 
+		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
 

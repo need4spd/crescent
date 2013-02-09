@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.CrescentDefaultSearchField;
@@ -42,7 +43,9 @@ public class CrescentSearchRequestWrapper {
 	
 	public CrescentSearchRequestWrapper(SearchRequest searchRequest) {
 		this.searchRequest = searchRequest;	
-		this.collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
+		CrescentCollectionHandler collectionHandler 
+		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		this.collection = collectionHandler.getCrescentCollections().getCrescentCollection(searchRequest.getCollectionName());
 		this.collectionFieldsMap = collection.getCrescentFieldByName();
 	}
 

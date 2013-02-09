@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.lucene.analysis.kr.utils.StringUtil;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 
 public class SearchRequestValidator {
@@ -12,7 +13,10 @@ public class SearchRequestValidator {
 	public boolean isValid(SearchRequest searchRequest) throws CrescentInvalidRequestException {
 		
 		//collection name
-		CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections()
+		CrescentCollectionHandler collectionHandler 
+		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		
+		CrescentCollection collection = collectionHandler.getCrescentCollections()
 													.getCrescentCollection(searchRequest.getCollectionName());
 		
 		if(collection == null) {

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.handler.Handler;
 import com.tistory.devyongsik.handler.IndexingRequestForm;
@@ -58,7 +59,10 @@ public class UpdateController {
 			reader.close();
 			IndexingRequestForm indexingRequestForm = handler.handledData(text.toString());
 			
-			CrescentCollection collection = CrescentCollectionHandler.getInstance().getCrescentCollections().getCrescentCollection(collectionName);
+			CrescentCollectionHandler collectionHandler 
+			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+			
+			CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
 			CrescentIndexerExecutor executor = new CrescentIndexerExecutor(collection, indexingRequestForm);
 			
 			String message = executor.indexing();

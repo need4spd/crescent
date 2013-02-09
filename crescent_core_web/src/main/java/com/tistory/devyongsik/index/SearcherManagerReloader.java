@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.search.CrescentSearcherManager;
@@ -28,7 +29,9 @@ public class SearcherManagerReloader {
 	
 	public SearcherManagerReloader() {
 		crescentSearcherManager = CrescentSearcherManager.getCrescentSearcherManager();
-		crescentCollections = CrescentCollectionHandler.getInstance().getCrescentCollections();
+		CrescentCollectionHandler collectionHandler 
+			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		crescentCollections = collectionHandler.getCrescentCollections();
 	}
 	
 	public void reloadStart() {

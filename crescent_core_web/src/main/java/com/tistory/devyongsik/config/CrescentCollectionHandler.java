@@ -14,8 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.thoughtworks.xstream.XStream;
 import com.tistory.devyongsik.domain.CrescentCollection;
@@ -23,29 +27,41 @@ import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.domain.CrescentSortField;
 
+@Component("crescentCollectionHandler")
 public class CrescentCollectionHandler {
 	private  Logger logger = LoggerFactory.getLogger(CrescentCollectionHandler.class);
 
-	private COLLECTIONS_XML CONFIG_XML = COLLECTIONS_XML.DEFAULT;
+	@Value("#{systemProperties['runningMode'] == null ? 'real' : systemProperties['runningMode']}")
+	private String mode = null;
+
+	@Value("#{systemProperties['crescentHome'] == null ? 'default' : systemProperties['crescentHome']}")
+	private String crescentHomeLocation = null;
 	
 	private CrescentCollections crescentCollections = null;
 	
-	private static CrescentCollectionHandler instance = new CrescentCollectionHandler();
-
-	private String mode = null;
+	private String collectionsXmlLocation = null;
 	
-	public static CrescentCollectionHandler getInstance() {
-		return instance;
-	}
-
-	private CrescentCollectionHandler() {
-		mode = System.getProperty("runningMode", "real");
+	@SuppressWarnings("unused")
+	@PostConstruct
+	private void init() {
+		
+		logger.info("init crescent collection handler....");
+		logger.info("running mode : {}, crescentHomeLocation : {}", mode, crescentHomeLocation);
+		
+		String xmlFileName = "collections.xml";
 		
 		if("test".equals(mode)) {
-			CONFIG_XML = COLLECTIONS_XML.TEST;
+			xmlFileName = "test-collections.xml";
 		}
 		
-		logger.info("mode : {}, config_xml : {} ", mode, CONFIG_XML);
+		if("default".equals(crescentHomeLocation)) {
+			collectionsXmlLocation = "collection"+"/"+xmlFileName;
+		} else {
+			collectionsXmlLocation = crescentHomeLocation+"/"+xmlFileName;
+		}
+		
+		logger.info("collectionsXmlLocation : {}", collectionsXmlLocation);
+		
 		
 		loadFromXML();
 		makeFieldsMap();
@@ -58,13 +74,15 @@ public class CrescentCollectionHandler {
 		stream.alias( "collections", CrescentCollections.class );
 		stream.addImplicitCollection( CrescentCollections.class, "crescentCollections" );
 		
-		ResourceLoader resourceLoader = new ResourceLoader();
-		InputStream inputStream = resourceLoader.openResource(CONFIG_XML.getXmlDir());
+		logger.info("collectionsXmlLocation : {}", collectionsXmlLocation);
+		
+		ResourceLoader resourceLoader = new ResourceLoader(collectionsXmlLocation);
+		InputStream inputStream = resourceLoader.getInputStream();
 		
 		crescentCollections = (CrescentCollections)stream.fromXML(inputStream);
 		
 		if(crescentCollections == null) {
-			String errorMsg = "Crescent Collections is not loaded from xml : ["+CONFIG_XML+"]";
+			String errorMsg = "Crescent Collections is not loaded from xml : ["+collectionsXmlLocation+"]";
 			logger.error(errorMsg);
 			
 			throw new IllegalStateException(errorMsg);
@@ -95,8 +113,8 @@ public class CrescentCollectionHandler {
 	
 	public void writeToXML() {
 		
-		ResourceLoader resourceLoader = new ResourceLoader();
-		URL collectionXmlUrl = resourceLoader.getURL(CONFIG_XML.getXmlDir());
+		ResourceLoader resourceLoader = new ResourceLoader(collectionsXmlLocation);
+		URL collectionXmlUrl = resourceLoader.getURL();
 		
 		XStream stream = new XStream();
 		stream.processAnnotations(CrescentCollections.class);
@@ -107,6 +125,7 @@ public class CrescentCollectionHandler {
 			
 			File collectionsXmlFile = new File(collectionXmlUrl.toURI());
 			
+			logger.debug("collectionXmlUrl to URI: {}", collectionXmlUrl.toURI());
 			logger.debug("collectionsXmlFile : {}", collectionsXmlFile);
 			
 			FileOutputStream fos = new FileOutputStream(collectionsXmlFile, false);

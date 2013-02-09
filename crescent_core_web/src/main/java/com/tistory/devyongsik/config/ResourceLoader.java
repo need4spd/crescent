@@ -1,5 +1,7 @@
 package com.tistory.devyongsik.config;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -22,40 +24,52 @@ public class ResourceLoader {
 	private Document document = null;
 	private String name;
 	private Properties properties = null;
+	private InputStream inputStream = null;
+	private URL url = null;
 	
 	public ResourceLoader(String name) {
 		
 		logger.info("ResourceLoader init..");
 		
 		this.name = name;
-		this.classLoader = getClassLoader();
+		this.classLoader = Thread.currentThread().getContextClassLoader();
+		initInputStream();
 	}
 	
-	public ResourceLoader() {
+	private void initInputStream() {
 		
-		logger.info("ResourceLoader init.. base constructor");
-		
-		this.classLoader = getClassLoader();
-	}
-	
-	private ClassLoader getClassLoader() {
-		return Thread.currentThread().getContextClassLoader();
-	}
-	
-	protected InputStream openResource(String name) {
-		InputStream is = null;
-		is = this.classLoader.getResourceAsStream(name);
-		
-		if(is == null) {
-			logger.error("{} 를 찾을 수 없습니다.", name);
-			throw new IllegalStateException(name + " 을 classpath에서 찾을 수 없습니다.");
+		try {
+			inputStream = this.classLoader.getResourceAsStream(name);
+			
+			if(inputStream == null) {
+				inputStream = new FileInputStream(new File(name));
+			}
+			
+			if(inputStream == null) {
+				logger.error("inputStream {} 를 지정된 경로에서 찾을 수 없습니다.", name);
+			}
+			
+			url = this.classLoader.getResource(name);
+			
+			if(url == null) {
+				url = new File(name).toURI().toURL();
+			}
+			
+			if(url == null) {
+				logger.error("url {} 를 지정된 경로에서 찾을 수 없습니다.", name);
+			}
+			
+		} catch (Exception e) {
+			logger.error("{}에 대한 resource를 찾지 못 했습니다.", name);
+			throw new IllegalStateException(name+" 에 대한 resource를 찾지 못 했습니다.");
 		}
-		
-		return is;
 	}
 	
-	protected URL getURL(String name) {
-		URL url = this.classLoader.getResource(name);
+	protected InputStream getInputStream() {
+		return inputStream;
+	}
+	
+	protected URL getURL() {
 		
 		return url;
 	}
@@ -83,7 +97,7 @@ public class ResourceLoader {
 	
 	public Document getDocument() {
 		if(document == null) {
-			buildDocument(openResource(name));
+			buildDocument(inputStream);
 		}
 		
 		return document;
@@ -91,7 +105,7 @@ public class ResourceLoader {
 	
 	public Properties getProperties() {
 		if(properties == null) {
-			buildProperties(openResource(name));
+			buildProperties(inputStream);
 		}
 		
 		return properties;

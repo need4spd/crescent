@@ -1,23 +1,23 @@
 package com.tistory.devyongsik.search;
 
 import java.io.IOException;
-import java.util.List;
+
+import javax.annotation.PostConstruct;
 
 import junit.framework.Assert;
 
-import org.apache.lucene.document.Document;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.domain.SearchRequest;
+import com.tistory.devyongsik.domain.SearchResult;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class CrescentDefaultDocSearcherTest {
+public class CrescentDefaultDocSearcherTest extends CrescentTestCaseUtil {
 
-	@BeforeClass
-	public static void init() {
-		CrescentTestCaseUtil.init();
+	@PostConstruct
+	public void init() {
+		super.init();
 	}
 	
 	@Test
@@ -28,9 +28,9 @@ public class CrescentDefaultDocSearcherTest {
 		
 		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
-		CrescentDocSearcher crescentDocSearcher = new CrescentDefaultDocSearcher(csrw);
-		List<Document> resultList = crescentDocSearcher.search();
+		CrescentDocSearcher crescentDocSearcher = new CrescentDefaultDocSearcher();
+		SearchResult searchResult = crescentDocSearcher.search(csrw);
 		
-		Assert.assertTrue(resultList.size() > 0);
+		Assert.assertTrue(searchResult.getResultList().size() > 0);
 	}
 }

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.controller.CollectionManageMainCotroller;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
@@ -27,7 +28,9 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 	@Override
 	public CrescentCollection updateCollectionInfo(HttpServletRequest request) {
 		
-		CrescentCollectionHandler collectionHandler = CrescentCollectionHandler.getInstance();
+		CrescentCollectionHandler collectionHandler 
+			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
 		String selectedCollectionName = request.getParameter("collectionName");
@@ -108,6 +111,9 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		collectionHandler.writeToXML();
 		collectionHandler.reloadCollectionsXML();
 		
+		crescentCollections = collectionHandler.getCrescentCollections();
+		selectedCollection = crescentCollections.getCrescentCollection(selectedCollectionName);
+		
 		return selectedCollection;
 	}
 	
@@ -115,7 +121,9 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 	@Override
 	public CrescentCollection addCollectionInfo(HttpServletRequest request) {
 		
-		CrescentCollectionHandler collectionHandler = CrescentCollectionHandler.getInstance();
+		CrescentCollectionHandler collectionHandler 
+			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+	
 		
 		String selectedCollectionName = request.getParameter("collectionName");
 
@@ -219,7 +227,9 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 	
 	@Override
 	public void deleteCollectionInfo(String collectionName) {
-		CrescentCollectionHandler collectionHandler = CrescentCollectionHandler.getInstance();
+		CrescentCollectionHandler collectionHandler 
+			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+	
 		
 		CrescentCollections collections = collectionHandler.getCrescentCollections();
 		List<CrescentCollection> collectionList = collections.getCrescentCollections();

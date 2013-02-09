@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.CrescentCollections;
@@ -53,8 +54,10 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 			return false;
 		}
 		
-		CrescentCollections collections = CrescentCollectionHandler.getInstance().getCrescentCollections();
-		CrescentCollection collection = collections.getCrescentCollection(collectionName);
+		CrescentCollectionHandler collectionHandler 
+			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+	
+		CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
 		
 		if (collection == null) {
 			logger.debug("doesn't Collection Info => {}", collectionName);
@@ -149,8 +152,9 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 		if (collectionName == null)
 			return false;
 		
-		CrescentCollections collections = CrescentCollectionHandler.getInstance().getCrescentCollections();
-		CrescentCollection collection = collections.getCrescentCollection(collectionName);
+		CrescentCollectionHandler collectionHandler 
+			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
 		
 		if (collection == null) {
 			logger.debug("doesn't Collection Info => {}", collectionName);

@@ -16,7 +16,8 @@ import com.tistory.devyongsik.domain.SearchRequestValidator;
 import com.tistory.devyongsik.domain.SearchResult;
 import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
-import com.tistory.devyongsik.search.SearchModule;
+import com.tistory.devyongsik.search.CrescentDefaultDocSearcher;
+import com.tistory.devyongsik.search.CrescentDocSearcher;
 
 @Service("searchService")
 public class SearchServiceImpl implements SearchService {
@@ -59,13 +60,10 @@ public class SearchServiceImpl implements SearchService {
 			return searchResult;
 		}
 		
-		
-		
 		logger.debug("query : {}" , query);
 		
-		SearchModule searchModule = new SearchModule(csrw);
-		SearchResult searchResult = searchModule.search();
-		
+		CrescentDocSearcher searcher = new CrescentDefaultDocSearcher();
+		SearchResult searchResult = searcher.search(csrw);
 		
 		return searchResult;
 	}

@@ -1,14 +1,10 @@
 package com.tistory.devyongsik.search;
 
 import java.io.IOException;
-import java.util.List;
 
-import org.apache.lucene.document.Document;
+import com.tistory.devyongsik.domain.SearchResult;
+import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 
 public interface CrescentDocSearcher {
-
-	List<Document> search() throws IOException;
-	int getTotalHitsCount();
-	String getErrorMessage();
-	int getErrorCode();
+	SearchResult search(CrescentSearchRequestWrapper csrw) throws IOException;
 }

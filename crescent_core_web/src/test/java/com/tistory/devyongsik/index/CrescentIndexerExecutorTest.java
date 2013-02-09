@@ -3,13 +3,15 @@ package com.tistory.devyongsik.index;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import junit.framework.Assert;
 
 import org.apache.lucene.index.CorruptIndexException;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.handler.Handler;
@@ -18,16 +20,19 @@ import com.tistory.devyongsik.handler.JsonDataHandler;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import com.tistory.devyongsik.utils.FormattedTextBuilder;
 
-public class CrescentIndexerExecutorTest {
-	
-	@BeforeClass
-	public static void init() {
-		CrescentTestCaseUtil.init();
+public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
+
+	@PostConstruct
+	public void init() {
+		super.init();
 	}
 	
 	@Test
 	public void addDocument() throws CorruptIndexException, IOException {
-		CrescentCollections crescentCollections = CrescentCollectionHandler.getInstance().getCrescentCollections();
+		CrescentCollectionHandler collectionHandler 
+		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
 
 		CrescentCollection sampleCollection = collections.get("sample");
@@ -43,7 +48,10 @@ public class CrescentIndexerExecutorTest {
 	
 	@Test
 	public void deleteDocument() throws CorruptIndexException, IOException {
-		CrescentCollections crescentCollections = CrescentCollectionHandler.getInstance().getCrescentCollections();
+		CrescentCollectionHandler collectionHandler 
+		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
 
 		CrescentCollection sampleCollection = collections.get("sample");
@@ -59,7 +67,10 @@ public class CrescentIndexerExecutorTest {
 	
 	@Test
 	public void updateDocument() throws CorruptIndexException, IOException {
-		CrescentCollections crescentCollections = CrescentCollectionHandler.getInstance().getCrescentCollections();
+		CrescentCollectionHandler collectionHandler 
+		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
 
 		CrescentCollection sampleCollection = collections.get("sample");

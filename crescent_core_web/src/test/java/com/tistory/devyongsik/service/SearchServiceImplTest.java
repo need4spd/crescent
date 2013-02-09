@@ -2,20 +2,21 @@ package com.tistory.devyongsik.service;
 
 import java.io.IOException;
 
+import javax.annotation.PostConstruct;
+
 import junit.framework.Assert;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.domain.SearchResult;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class SearchServiceImplTest {
+public class SearchServiceImplTest extends CrescentTestCaseUtil {
 
-	@BeforeClass
-	public static void init() {
-		CrescentTestCaseUtil.init();
+	@PostConstruct
+	public void init() {
+		super.init();
 	}
 	
 	@Test

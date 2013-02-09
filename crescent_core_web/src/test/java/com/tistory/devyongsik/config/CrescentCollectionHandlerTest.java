@@ -2,25 +2,28 @@ package com.tistory.devyongsik.config;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class CrescentCollectionHandlerTest {
+public class CrescentCollectionHandlerTest extends CrescentTestCaseUtil {
 
-	@BeforeClass
-	public static void init() {
-		CrescentTestCaseUtil.init();
+	@PostConstruct
+	public void init() {
+		super.init();
 	}
 	
 	@Test
 	public void loadFromXML() {
-		CrescentCollectionHandler handler = CrescentCollectionHandler.getInstance();
-		CrescentCollections collections = handler.getCrescentCollections();
+		CrescentCollectionHandler collectionHandler 
+			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		
+		CrescentCollections collections = collectionHandler.getCrescentCollections();
 		
 		System.out.println(collections);
 		
@@ -33,17 +36,19 @@ public class CrescentCollectionHandlerTest {
 	
 	@Test
 	public void writeToXML() {
-		CrescentCollectionHandler handler = CrescentCollectionHandler.getInstance();
-		CrescentCollections collections = handler.getCrescentCollections();
+		CrescentCollectionHandler collectionHandler 
+			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		
+		CrescentCollections collections = collectionHandler.getCrescentCollections();
 		
 		System.out.println(collections);
 		
 		Assert.assertNotNull(collections);
 		
-		handler.writeToXML();
-		handler.reloadCollectionsXML();
+		collectionHandler.writeToXML();
+		collectionHandler.reloadCollectionsXML();
 		
-		CrescentCollections collections2 = handler.getCrescentCollections();
+		CrescentCollections collections2 = collectionHandler.getCrescentCollections();
 		
 		System.out.println(collections2);
 	}

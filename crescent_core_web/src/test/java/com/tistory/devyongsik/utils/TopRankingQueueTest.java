@@ -20,7 +20,7 @@ public class TopRankingQueueTest {
 
 	public void testOffer1() {
 		TopRankingQueue topRankingQueue = 
-				new TopRankingQueue(10, new RankingTermComparator());
+				new TopRankingQueue(10, new RankingTermComparator2());
 		
 		for (RankingTerm rankingTerm : terms) {
 			topRankingQueue.add(rankingTerm);
@@ -31,7 +31,7 @@ public class TopRankingQueueTest {
 	@Test
 	public void testPoll() {
 		TopRankingQueue topRankingQueue = 
-				new TopRankingQueue(10, new RankingTermComparator());
+				new TopRankingQueue(10, new RankingTermComparator2());
 		
 		for (RankingTerm rankingTerm : terms) {
 			topRankingQueue.add(rankingTerm);
@@ -42,7 +42,7 @@ public class TopRankingQueueTest {
 	}
 }
 
-class RankingTermComparator implements Comparator<RankingTerm>
+class RankingTermComparator2 implements Comparator<RankingTerm>
 {
     @Override
     public int compare(RankingTerm x, RankingTerm y)

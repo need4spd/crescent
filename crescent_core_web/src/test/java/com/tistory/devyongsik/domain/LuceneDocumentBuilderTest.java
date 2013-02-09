@@ -5,14 +5,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.lucene.document.Document;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.index.LuceneDocumentBuilder;
+import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class LuceneDocumentBuilderTest {
+public class LuceneDocumentBuilderTest extends CrescentTestCaseUtil {
+
+	@PostConstruct
+	public void init() {
+		super.init();
+	}
 
 	@Test
 	public void create() {
@@ -26,7 +35,10 @@ public class LuceneDocumentBuilderTest {
 		
 		docList.add(doc);
 		
-		CrescentCollections crescentCollections = CrescentCollectionHandler.getInstance().getCrescentCollections();
+		CrescentCollectionHandler collectionHandler 
+		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
 

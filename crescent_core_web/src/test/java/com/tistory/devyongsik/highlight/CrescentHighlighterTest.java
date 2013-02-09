@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import junit.framework.Assert;
 
 import org.apache.lucene.analysis.Analyzer;
@@ -15,7 +17,6 @@ import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.search.highlight.SimpleFragmenter;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
@@ -25,11 +26,11 @@ import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class CrescentHighlighterTest {
+public class CrescentHighlighterTest extends CrescentTestCaseUtil {
 
-	@BeforeClass
-	public static void init() {
-		CrescentTestCaseUtil.init();
+	@PostConstruct
+	public void init() {
+		super.init();
 	}
 	
 	@Test

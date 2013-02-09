@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollections;
 
@@ -39,11 +40,11 @@ public class IndexWriterManager {
 	}
 	
 	private void initIndexWriter() throws IOException {
-		CrescentCollections collections = CrescentCollectionHandler.getInstance().getCrescentCollections();
+		CrescentCollectionHandler collectionHandler 
+		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		
 		
-		
-		for(CrescentCollection crescentCollection : collections.getCrescentCollections()) {
+		for(CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
 			
 			logger.info("collection name {}", crescentCollection.getName());
 			
