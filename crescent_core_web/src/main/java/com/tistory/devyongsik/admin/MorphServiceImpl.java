@@ -13,10 +13,12 @@ import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.domain.MorphToken;
 
+@Service("morphService")
 public class MorphServiceImpl implements MorphService {
 
 	private Logger logger = LoggerFactory.getLogger(MorphServiceImpl.class);

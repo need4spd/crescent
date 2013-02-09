@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,11 +27,8 @@ public class MorphAdminMainController {
 	private Logger logger = LoggerFactory.getLogger(MorphAdminMainController.class);
 
 	@Autowired
+	@Qualifier("morphService")
 	private MorphService morphService = null;
-
-	public void setMorphService(MorphService morphService) {
-		this.morphService = morphService;
-	}
 
 	@RequestMapping("/morphMain")
 	public ModelAndView morphMain(HttpServletRequest request, HttpServletResponse response) throws Exception {

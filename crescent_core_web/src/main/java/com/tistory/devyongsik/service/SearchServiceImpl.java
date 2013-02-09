@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.domain.SearchRequestValidator;
@@ -17,6 +18,7 @@ import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.search.SearchModule;
 
+@Service("searchService")
 public class SearchServiceImpl implements SearchService {
 
 	private Logger logger = LoggerFactory.getLogger(SearchServiceImpl.class);

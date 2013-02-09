@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.controller.CollectionManageMainCotroller;
@@ -18,6 +19,7 @@ import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.domain.CrescentDefaultSearchField;
 import com.tistory.devyongsik.domain.CrescentSortField;
 
+@Service("collectionManageService")
 public class CollectionManageServiceImpl implements CollectionManageService {
 
 	private Logger logger = LoggerFactory.getLogger(CollectionManageMainCotroller.class);

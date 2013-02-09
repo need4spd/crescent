@@ -23,6 +23,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.domain.CrescentCollection;
@@ -31,6 +32,7 @@ import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.utils.RankingTerm;
 import com.tistory.devyongsik.utils.TopRankingQueue;
 
+@Service("indexFileManageService")
 public class IndexFileManageServiceImpl implements IndexFileManageService {
 	//TODO 호출할때마다 계산하는게 아니라, 색인시간 체크해서 보여주도록
 	private Logger logger = LoggerFactory.getLogger(IndexFileManageServiceImpl.class);

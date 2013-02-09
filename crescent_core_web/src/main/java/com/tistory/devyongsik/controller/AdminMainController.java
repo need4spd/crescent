@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,11 +24,8 @@ public class AdminMainController {
 	private Logger logger = LoggerFactory.getLogger(AdminMainController.class);
 	
 	@Autowired
+	@Qualifier("dictionaryService")
 	private DictionaryService dictionaryService = null;
-	
-	public void setDictionaryService(DictionaryService dictionaryService) {
-		this.dictionaryService = dictionaryService;
-	}
 	
 	@RequestMapping("/adminMain")
 	public ModelAndView adminMain(HttpServletRequest request, HttpServletResponse response) throws Exception {

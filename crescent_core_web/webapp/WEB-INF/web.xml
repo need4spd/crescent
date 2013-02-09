@@ -23,12 +23,7 @@
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value> classpath:spring/applicationContext*.xml
-		classpath:spring/serviceContext*.xml
-		classpath:spring/mapperContext*.xml
-		classpath:spring/daoContext*.xml
-		classpath:spring/spring-config.xml
-		</param-value>
+		<param-value> classpath:spring/applicationContext*.xml</param-value>
 	</context-param>
 	
 	<filter>

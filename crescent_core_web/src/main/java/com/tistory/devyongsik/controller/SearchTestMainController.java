@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,11 +24,8 @@ public class SearchTestMainController {
 	private Logger logger = LoggerFactory.getLogger(SearchTestMainController.class);
 
 	@Autowired
+	@Qualifier("searchService")
 	private SearchService searchService = null;
-
-	public void setSearchService(SearchService searchService) {
-		this.searchService = searchService;
-	}
 
 	@RequestMapping("/searchTestMain")
 	public ModelAndView searchTestMain(HttpServletRequest request, HttpServletResponse response) throws Exception {

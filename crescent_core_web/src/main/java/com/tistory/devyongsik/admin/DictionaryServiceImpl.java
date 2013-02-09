@@ -14,11 +14,13 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.tistory.devyongsik.analyzer.DictionaryProperties;
 import com.tistory.devyongsik.analyzer.dictionary.DictionaryFactory;
 import com.tistory.devyongsik.analyzer.dictionary.DictionaryType;
 
+@Service("dictionaryService")
 public class DictionaryServiceImpl implements DictionaryService {
 	
 	private Logger logger = LoggerFactory.getLogger(DictionaryServiceImpl.class);
