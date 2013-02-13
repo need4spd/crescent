@@ -2,6 +2,8 @@ package com.tistory.devyongsik.utils;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,16 +35,16 @@ public class MakeJsonFormFileFromDB {
 	
 	public static void main(String[] args) throws SQLException, IOException {
 		
-		if(args.length == 0) {
-			throw new IllegalArgumentException("need name in jdbc_connection_info.xml");
+		if(args.length != 2) {
+			throw new IllegalArgumentException("need name and jdbc_connection_info.xml location info");
 		}
 		
 		MakeJsonFormFileFromDB makeJsonFormFileFromDB = new MakeJsonFormFileFromDB();
-		makeJsonFormFileFromDB.makeFile(args[0]);
+		makeJsonFormFileFromDB.makeFile(args[0], args[1]);
 	}
 
-	private void makeFile(String dbName) throws SQLException, IOException {
-		initConnectionInfoList();
+	private void makeFile(String dbName, String xmlLocation) throws SQLException, IOException {
+		initConnectionInfoList(xmlLocation);
 		
 		ConnectionInfo connectionInfo = connectionInfoList.getConnectionInfo(dbName);
 		
@@ -151,11 +153,12 @@ public class MakeJsonFormFileFromDB {
 		conn.close();
 	}
 	
-	private void initConnectionInfoList() {
+	private void initConnectionInfoList(String xmlLocation) throws FileNotFoundException {
 		XStream xstream = new XStream();
 		xstream.processAnnotations(ConnectionInfoList.class);
 	
-		InputStream is = MakeJsonFormFileFromDB.class.getClassLoader().getResourceAsStream("jdbc_connection_info.xml");
+		//InputStream is = MakeJsonFormFileFromDB.class.getClassLoader().getResourceAsStream("jdbc_connection_info.xml");
+		InputStream is = new FileInputStream(new File(xmlLocation));
 		ConnectionInfoList connectionInfoList = (ConnectionInfoList)xstream.fromXML(is);
 		
 		this.connectionInfoList = connectionInfoList;
