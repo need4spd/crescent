@@ -29,7 +29,6 @@ import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
-import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.utils.RankingTerm;
 import com.tistory.devyongsik.utils.TopRankingQueue;
 

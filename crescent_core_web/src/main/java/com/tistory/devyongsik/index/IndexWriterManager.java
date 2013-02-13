@@ -18,7 +18,6 @@ import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
-import com.tistory.devyongsik.domain.CrescentCollections;
 
 public class IndexWriterManager {
 

@@ -51,6 +51,26 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 
 		List<CrescentCollectionField> crescentCollectionFieldList = selectedCollection.getFields();
 
+		//추가되는 필드명을 모은다.
+		@SuppressWarnings("unchecked")
+		Enumeration<String> enumeration = request.getParameterNames();
+		List<String> addFieldNameList = new ArrayList<String>();
+		while(enumeration.hasMoreElements()) {
+			String paramValue = enumeration.nextElement();
+			if(paramValue.endsWith("fieldName")) {
+				addFieldNameList.add(paramValue.substring(0, paramValue.lastIndexOf("-")));
+			}
+		}
+
+		logger.debug("add field name list : {}", addFieldNameList);
+
+		for(String fieldName :addFieldNameList) {
+			CrescentCollectionField crescentField = new CrescentCollectionField();
+			crescentField.setName(fieldName);
+			
+			crescentCollectionFieldList.add(crescentField);
+		}
+				
 		for(CrescentCollectionField crescentField : crescentCollectionFieldList) {
 
 			crescentField.setAnalyze("on".equals(request.getParameter(crescentField.getName()+"-analyze")) ? true : false);
@@ -107,7 +127,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 				logger.debug("crescentField Name {} = {}", crescentField.getName(), "type : " + request.getParameter(crescentField.getName()+"-type"));
 			}
 		}
-		
+			
 		collectionHandler.writeToXML();
 		collectionHandler.reloadCollectionsXML();
 		
