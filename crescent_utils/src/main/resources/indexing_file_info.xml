@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileInfo>
+  <srcDir>/Users/need4spd/Programming/Java/workspace</srcDir>
+  <outputDir>/Users/need4spd/test</outputDir>
+  <limitFileCountOnOutput>50000</limitFileCountOnOutput>
+  <fileExtInclude>java|xml|properties</fileExtInclude>
+</fileInfo>
