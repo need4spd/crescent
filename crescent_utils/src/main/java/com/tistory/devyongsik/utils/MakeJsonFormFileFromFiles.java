@@ -66,6 +66,8 @@ public class MakeJsonFormFileFromFiles {
 	
 	private void writeFile(File sourceFile, BufferedWriter bw) throws IOException {
 		
+		System.out.println("access ... " + sourceFile.getName());
+		
 		if (sourceFile.canRead()) {
 			if (sourceFile.isDirectory()) {
 				String[] files = sourceFile.list();
