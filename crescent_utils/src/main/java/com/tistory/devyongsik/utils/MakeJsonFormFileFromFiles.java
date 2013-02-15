@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 import javax.xml.bind.annotation.XmlAnyAttribute;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -101,7 +102,7 @@ public class MakeJsonFormFileFromFiles {
 					
 					madeFileCount = 0;
 					
-					Gson gson = new Gson();
+					Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 					
 					Map<String, Object> indexingForm = new HashMap<String, Object>();
 					indexingForm.put("command", "add");
@@ -135,13 +136,13 @@ public class MakeJsonFormFileFromFiles {
 				
 				String t = "";
 				while((t = br.readLine()) != null) {
-					t = t.trim().replaceAll("\\", "\\\\");
-					t = t.replaceAll("{", "\\{");
-					t = t.replaceAll("}", "\\}");
-					t = t.replaceAll("[", "\\[");
-					t = t.replaceAll("]", "\\]");
-					t = t.replaceAll("\"", "\\\"");
-					t = t.replaceAll("'", "\\'");
+//					t = t.trim().replaceAll("\\\\", "\\\\\\");
+//					t = t.trim().replaceAll("\\{", "\\\\{");
+//					t = t.replaceAll("\\}", "\\\\}");
+//					t = t.replaceAll("\\[", "\\\\[");
+//					t = t.replaceAll("\\]", "\\\\]");
+//					t = t.replaceAll("\"", "\\\"");
+//					t = t.replaceAll("'", "\\'");
 					
 					contents.append(t);
 				}
