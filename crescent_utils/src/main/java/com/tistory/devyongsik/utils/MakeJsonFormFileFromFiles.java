@@ -66,7 +66,7 @@ public class MakeJsonFormFileFromFiles {
 	
 	private void writeFile(File sourceFile, BufferedWriter bw) throws IOException {
 		
-		System.out.println("access ... " + sourceFile.getName());
+		System.out.println("access ... " + sourceFile.getPath() + "/" + sourceFile.getName());
 		
 		if (sourceFile.canRead()) {
 			if (sourceFile.isDirectory()) {
@@ -78,6 +78,8 @@ public class MakeJsonFormFileFromFiles {
 					}
 				}
 			} else { //directory가 아니라 실제 파일이면..
+				
+				System.out.println("is file...." + sourceFile.getPath() + "/" + sourceFile.getName());
 				
 				//match 확인
 				Pattern pattern = Pattern.compile(".+\\.("+fileInfo.fileExtInclude+")$", Pattern.CASE_INSENSITIVE);
