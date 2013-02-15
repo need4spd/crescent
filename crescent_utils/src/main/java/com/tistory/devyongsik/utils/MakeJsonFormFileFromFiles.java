@@ -103,8 +103,13 @@ public class MakeJsonFormFileFromFiles {
 					
 					Gson gson = new Gson();
 					
+					Map<String, Object> indexingForm = new HashMap<String, Object>();
+					indexingForm.put("command", "add");
+					indexingForm.put("indexingType", "bulk");
+					indexingForm.put("documentList", targetFileList);
+					
 					//write file
-					String jsonForm = gson.toJson(targetFileList);
+					String jsonForm = gson.toJson(indexingForm);
 					bw.write(jsonForm);
 					
 					targetFileList.clear();
@@ -130,7 +135,15 @@ public class MakeJsonFormFileFromFiles {
 				
 				String t = "";
 				while((t = br.readLine()) != null) {
-					contents.append(t.trim());
+					t = t.trim().replaceAll("\\", "\\\\");
+					t = t.replaceAll("{", "\\{");
+					t = t.replaceAll("}", "\\}");
+					t = t.replaceAll("[", "\\[");
+					t = t.replaceAll("]", "\\]");
+					t = t.replaceAll("\"", "\\\"");
+					t = t.replaceAll("'", "\\'");
+					
+					contents.append(t);
 				}
 				
 				Map<String, String> oneFile = new HashMap<String, String>();
