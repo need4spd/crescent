@@ -28,7 +28,7 @@ public class SearchController {
 	private SearchService searchService;
 	
 	@RequestMapping("/search")
-	public void updateDocument(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public void searchDocument(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		RequestBuilder<SearchRequest> requestBuilder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = requestBuilder.mappingRequestParam(request, SearchRequest.class);

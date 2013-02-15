@@ -36,7 +36,7 @@
 			<div class="control-group">
 				<label class="control-label" for="col_name">검색대상 Collection</label>
 				<div class="controls">
-					<input type="text" id="col_name" onkeypress="enterKey(event);" placeholder="Default Sample">
+					<input type="text" id="col_name" name="col_name" onkeypress="enterKey(event);" placeholder="Default Sample">
 				</div>
 			</div>
 			<div id="alert-area"></div>

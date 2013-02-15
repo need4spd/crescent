@@ -40,7 +40,6 @@ public class SearchTestMainController {
 	@RequestMapping("/searchTest")
 	public ModelAndView searchTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		System.out.println("!!!! : " + request.getParameter("keyword"));
 		RequestBuilder<SearchRequest> requestBuilder = new RequestBuilder<SearchRequest>();
 		SearchRequest searchRequest = requestBuilder.mappingRequestParam(request, SearchRequest.class);
 		
