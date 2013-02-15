@@ -126,7 +126,7 @@ public class MakeJsonFormFileFromFiles {
 					
 					bw = null;
 					bw = newBw;
-					newBw = null;
+					//newBw = null;
 					
 					System.out.println("change writer...");
 				}
