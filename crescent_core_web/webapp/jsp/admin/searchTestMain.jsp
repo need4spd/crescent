@@ -36,48 +36,55 @@
 			<div class="control-group">
 				<label class="control-label" for="col_name">검색대상 Collection</label>
 				<div class="controls">
-					<input type="text" id="col_name" name="col_name" onkeypress="enterKey(event);" placeholder="Default Sample">
+					<input type="text" id="col_name" name="col_name" value="${USER_REQUEST.collectionName}" onkeypress="enterKey(event);" placeholder="Default Sample">
 				</div>
 			</div>
 			<div id="alert-area"></div>
 			<div class="control-group">
 				<label class="control-label" for="keyword">커스텀쿼리</label>
 				<div class="controls">
-					<input type="text" id="cq" name="cq" onkeypress="enterKey(event);" placeholder="커스텀쿼리-최우선조건">
+					<input type="text" id="cq" name="cq" value="${USER_REQUEST.customQuery}" onkeypress="enterKey(event);" placeholder="커스텀쿼리-최우선조건">
 				</div>
 			</div>
 			<div id="alert-area"></div>
 			<div class="control-group">
 				<label class="control-label" for="keyword">검색어</label>
 				<div class="controls">
-					<input type="text" id="keyword" name="keyword" onkeypress="enterKey(event);" placeholder="keyword">
+					<input type="text" id="keyword" name="keyword" value="${USER_REQUEST.keyword}"  onkeypress="enterKey(event);" placeholder="keyword">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="search_field">검색대상필드</label>
 				<div class="controls">
-					<input type="text" id="search_field" name="search_field" onkeypress="enterKey(event);" 
+					<input type="text" id="search_field" name="search_field" value="${USER_REQUEST.searchField}" onkeypress="enterKey(event);" 
 						placeholder="검색대상필드 - 없으면 Default">
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="page_size">Filter</label>
+				<div class="controls">
+					<input type="text" id="filter" name="filter" value="${USER_REQUEST.filter}"  onkeypress="enterKey(event);" 
+						placeholder="필터조건">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="sort">정렬조건</label>
 				<div class="controls">
-					<input type="text" id="sort" name="sort" onkeypress="enterKey(event);" 
+					<input type="text" id="sort" name="sort" value="${USER_REQUEST.sort}"  onkeypress="enterKey(event);" 
 													placeholder="정렬조건 - 없으면 Doc Score">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="page_num">Page Number</label>
 				<div class="controls">
-					<input type="text" id="page_num" onkeypress="enterKey(event);" 
+					<input type="text" id="page_num" value="${USER_REQUEST.pageNum}"  onkeypress="enterKey(event);" 
 						name="page_num" placeholder="Page Number - Default 1">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="page_size">Page Size</label>
 				<div class="controls">
-					<input type="text" id="page_size" name="page_size" onkeypress="enterKey(event);" 
+					<input type="text" id="page_size" name="page_size" value="${USER_REQUEST.pageSize}"  onkeypress="enterKey(event);" 
 						placeholder="Page Size - Default 20">
 				</div>
 			</div>
