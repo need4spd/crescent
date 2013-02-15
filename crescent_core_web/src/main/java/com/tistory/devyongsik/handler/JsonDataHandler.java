@@ -18,7 +18,7 @@ public class JsonDataHandler implements Handler {
 		
 		Gson gson = new Gson();
 		
-		logger.debug("jonsFormStr : {}", jonsFormStr);
+		//logger.debug("jonsFormStr : {}", jonsFormStr);
 		
 		try {
 			

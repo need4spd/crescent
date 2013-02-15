@@ -37,7 +37,7 @@ public class IndexingRequestForm {
 	
 	@Override
 	public String toString() {
-		return "IndexingRequestForm [command=" + command + ", documentList="
-				+ documentList + ", query=" + query + "]";
+		return "IndexingRequestForm [command=" + command + ", documentList size ="
+				+ documentList.size() + ", query=" + query + "]";
 	}
 }

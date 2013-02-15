@@ -32,9 +32,17 @@ public class CrescentIndexer {
 			logger.info("collectionName : {}", collectionName);			
 			logger.info("add indexing start................");
 			
+			int indexingDocumentCount = 0;
 			for(Document doc : documentList) {
+				indexingDocumentCount++;
+				if((indexingDocumentCount%50000) == 0) {
+					logger.info("{} indexed...", indexingDocumentCount);
+				}
+				
 				indexWriter.addDocument(doc);
 			}
+			
+			logger.info("total indexed document count {}", indexingDocumentCount);
 					
 			logger.info("end");
 			
