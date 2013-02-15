@@ -2,6 +2,6 @@
 <fileInfo>
   <srcDir>/Users/need4spd/Programming/Java/workspace</srcDir>
   <outputDir>/Users/need4spd/test</outputDir>
-  <limitFileCountOnOutput>50000</limitFileCountOnOutput>
+  <limitFileCountOnOutput>3</limitFileCountOnOutput>
   <fileExtInclude>java|xml|properties</fileExtInclude>
 </fileInfo>

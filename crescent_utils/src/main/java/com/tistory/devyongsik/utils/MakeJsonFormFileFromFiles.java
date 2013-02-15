@@ -31,14 +31,15 @@ public class MakeJsonFormFileFromFiles {
 	private FileInfo fileInfo = null;
 	private List<Map<String, String>> targetFileList = new ArrayList<Map<String, String>>();
 	private int madeFileCount = 0;
+	private BufferedWriter bw = null;
 	
 	public static void main(String[] args) throws IOException {
-		if(args.length != 1) {
-			throw new IllegalArgumentException("need indexing_file_info.xml location info");
-		}
+//		if(args.length != 1) {
+//			throw new IllegalArgumentException("need indexing_file_info.xml location info");
+//		}
 
 		MakeJsonFormFileFromFiles makeJsonFormFileFromFiles = new MakeJsonFormFileFromFiles();
-		makeJsonFormFileFromFiles.makeFile(args[0]);
+		makeJsonFormFileFromFiles.makeFile("/Users/need4spd/Programming/Java/workspace/crescent/crescent_utils/src/main/resources/indexing_file_info.xml");
 	}
 
 	private void makeFile(String xmlFileLocation) throws IOException {
@@ -47,10 +48,10 @@ public class MakeJsonFormFileFromFiles {
 		
 		File sourceFile = new File(fileInfo.getSrcDir());
 		
-		File outputFile = new File(fileInfo.getOutputDir() + "/" + new SimpleDateFormat("yyyymmddHHMMss").format(new Date()) + ".txt");
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+		File outputFile = new File(fileInfo.getOutputDir() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".txt");
+		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
 		
-		writeFile(sourceFile, bw);
+		writeFile(sourceFile);
 		
 		//50000개가 안되거나... 남아있는것들 
 		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
@@ -71,7 +72,7 @@ public class MakeJsonFormFileFromFiles {
 		System.out.println("write end...");
 	}
 	
-	private void writeFile(File sourceFile, BufferedWriter bw) throws IOException {
+	private void writeFile(File sourceFile) throws IOException {
 		
 		System.out.println("access ... " + sourceFile.getPath() + "/" + sourceFile.getName());
 		
@@ -81,7 +82,7 @@ public class MakeJsonFormFileFromFiles {
 				// an IO error could occur
 				if (files != null) {
 					for (int i = 0; i < files.length; i++) {
-						writeFile(new File(sourceFile, files[i]), bw);
+						writeFile(new File(sourceFile, files[i]));
 					}
 				}
 			} else { //directory가 아니라 실제 파일이면..
@@ -124,6 +125,8 @@ public class MakeJsonFormFileFromFiles {
 					//exchange BufferedWriter
 					BufferedWriter newBw = exchangeWriter(bw);
 					
+					newBw.write("test");
+					
 					bw = null;
 					bw = newBw;
 					//newBw = null;
@@ -133,7 +136,7 @@ public class MakeJsonFormFileFromFiles {
 				
 				String fileName = sourceFile.getName();
 				String filePath = sourceFile.getPath();
-				String modidate = new SimpleDateFormat("yyyymmddHHMMss").format(new Date(sourceFile.lastModified()));
+				String modidate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(sourceFile.lastModified()));
 				StringBuffer contents = new StringBuffer();
 				
 				InputStream is = new FileInputStream(sourceFile);
@@ -170,7 +173,7 @@ public class MakeJsonFormFileFromFiles {
 
 	private BufferedWriter exchangeWriter(BufferedWriter oldWriter) throws IOException {
 		oldWriter.close();
-		File outputFile = new File(fileInfo.getOutputDir() + "/" + new SimpleDateFormat("yyyymmddHHMMss").format(new Date()) + ".txt");
+		File outputFile = new File(fileInfo.getOutputDir() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".txt");
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
 		
 		return bw;
