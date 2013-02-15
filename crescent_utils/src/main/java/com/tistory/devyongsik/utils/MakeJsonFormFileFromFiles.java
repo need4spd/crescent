@@ -125,8 +125,6 @@ public class MakeJsonFormFileFromFiles {
 					//exchange BufferedWriter
 					BufferedWriter newBw = exchangeWriter(bw);
 					
-					newBw.write("test");
-					
 					bw = null;
 					bw = newBw;
 					//newBw = null;
