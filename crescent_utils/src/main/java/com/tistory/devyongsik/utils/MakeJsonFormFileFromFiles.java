@@ -34,12 +34,12 @@ public class MakeJsonFormFileFromFiles {
 	private BufferedWriter bw = null;
 	
 	public static void main(String[] args) throws IOException {
-//		if(args.length != 1) {
-//			throw new IllegalArgumentException("need indexing_file_info.xml location info");
-//		}
+		if(args.length != 1) {
+			throw new IllegalArgumentException("need indexing_file_info.xml location info");
+		}
 
 		MakeJsonFormFileFromFiles makeJsonFormFileFromFiles = new MakeJsonFormFileFromFiles();
-		makeJsonFormFileFromFiles.makeFile("/Users/need4spd/Programming/Java/workspace/crescent/crescent_utils/src/main/resources/indexing_file_info.xml");
+		makeJsonFormFileFromFiles.makeFile(args[0]);
 	}
 
 	private void makeFile(String xmlFileLocation) throws IOException {
