@@ -104,6 +104,11 @@ public class MakeJsonFormFileFromDB {
 				
 				System.out.println("file write start ... [" + targetFile.getName() + "]");
 				
+				Map<String, Object> indexingForm = new HashMap<String, Object>();
+				indexingForm.put("command", "add");
+				indexingForm.put("indexingType", "bulk");
+				indexingForm.put("documentList", resultSetMapList);
+				
 				String jsonForm = gson.toJson(resultSetMapList);
 				
 				bw.write(jsonForm);
