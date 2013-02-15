@@ -86,7 +86,7 @@ public class MakeJsonFormFileFromFiles {
 				Matcher matcher = pattern.matcher(sourceFile.getName());
 				
 				if(!matcher.matches()) {
-					//System.out.println("not matched... " + sourceFile.getName());
+					System.out.println("not matched... " + sourceFile.getName());
 					return;
 				}
 				
