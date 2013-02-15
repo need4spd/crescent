@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
@@ -60,7 +61,7 @@ public class IndexWriterManager {
 			}
 			
 			IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, new KoreanAnalyzer(true));
-			//conf.setOpenMode(OpenMode.CREATE);
+			conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
 			//conf.setIndexDeletionPolicy(new LastCommitDeletePolicy());
 			
 			IndexWriter indexWriter = new IndexWriter(dir, conf);
