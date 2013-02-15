@@ -53,10 +53,16 @@ public class MakeJsonFormFileFromFiles {
 		writeFile(sourceFile, bw);
 		
 		//50000개가 안되거나... 남아있는것들 
-		Gson gson = new Gson();
+		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+		
+		Map<String, Object> indexingForm = new HashMap<String, Object>();
+		indexingForm.put("command", "add");
+		indexingForm.put("indexingType", "bulk");
+		indexingForm.put("documentList", targetFileList);
 		
 		//write file
-		String jsonForm = gson.toJson(targetFileList);
+		String jsonForm = gson.toJson(indexingForm);
+		
 		bw.write(jsonForm);
 		
 		targetFileList.clear();
