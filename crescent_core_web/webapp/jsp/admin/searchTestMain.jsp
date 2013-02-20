@@ -98,7 +98,7 @@
 		<div class="container">
 			<c:if test="${fn:length(resultList) gt 0}">
 				<table class="table table-hover">
-					<caption>검색 결과</caption>
+					<caption>검색 결과 총 ${searchResult.totalHitsCount }건 </caption>
 					<thead>
 						<tr>
 							<c:set var="firstRowMap" value="${resultList[0]}" />
