@@ -118,8 +118,6 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			
 			
 			if(totalHitsCount > 0) { 
-				String value = null;
-				
 				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
 				Map<String, Object> result = new HashMap<String, Object>();
 				
@@ -133,6 +131,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 				
 				//int docnum = 0;
 				for(int i = startOffset; i < endOffset; i++) {
+					String value = null;
 					
 					logger.debug("make highlight...{}", hits[i].doc);
 					
