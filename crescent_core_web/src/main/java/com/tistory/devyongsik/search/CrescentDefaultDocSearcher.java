@@ -17,13 +17,9 @@ import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.config.SpringApplicationContext;
-import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
-import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.domain.SearchResult;
-import com.tistory.devyongsik.highlight.CrescentHighlighter;
+import com.tistory.devyongsik.highlight.CrescentFastVectorHighlighter;
 import com.tistory.devyongsik.logger.CrescentLogger;
 import com.tistory.devyongsik.logger.LogInfo;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
@@ -36,7 +32,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 	public SearchResult search(CrescentSearchRequestWrapper csrw) throws IOException {
 		
 		SearchResult searchResult = new SearchResult();
-		CrescentHighlighter highlighter = new CrescentHighlighter(csrw);
+		//CrescentHighlighter highlighter = new CrescentHighlighter();
 		int totalHitsCount = 0;
 		String errorMessage = "SUCCESS";
 		int errorCode = 0;
@@ -48,7 +44,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		
 		//TopScoreDocCollector collector = TopScoreDocCollector.create(numOfHits, true);
 		
-		List<Document> resultDocumentList = new ArrayList<Document>();
+		//List<Document> resultDocumentList = new ArrayList<Document>();
 		
 		try {
 			indexSearcher = searcherManager.acquire();
@@ -112,10 +108,10 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			int startOffset = csrw.getStartOffSet();
 			endOffset = Math.min(hits.length, startOffset + csrw.getHitsForPage());
 									
-			for(int i = startOffset; i < endOffset; i++) {
-				Document doc = indexSearcher.doc(hits[i].doc);
-				resultDocumentList.add(doc);
-			}
+			//for(int i = startOffset; i < endOffset; i++) {
+			//	Document doc = indexSearcher.doc(hits[i].doc);
+			//	resultDocumentList.add(doc);
+			//}
 			
 			logger.debug("start offset : [{}], end offset : [{}], total : [{}], numOfHits :[{}]"
 							,new Object[]{csrw.getStartOffSet(), endOffset, totalHitsCount, numOfHits});
@@ -123,28 +119,33 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			logger.debug("startOffset + hitsPerPage : [{}]", csrw.getStartOffSet() + csrw.getHitsForPage());
 			
 			
-			if(resultDocumentList.size() > 0) { 
-				CrescentCollectionHandler collectionHandler 
-				= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-				
-				CrescentCollections collections = collectionHandler.getCrescentCollections();
-				CrescentCollection collection = collections.getCrescentCollection(csrw.getCollectionName());
-				
-				List<CrescentCollectionField> fieldList = collection.getFields();
+			if(totalHitsCount > 0) { 
 				String value = null;
 				
 				List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
 				Map<String, Object> result = new HashMap<String, Object>();
 				
+				logger.debug("make highlight... start");
+				
+				CrescentFastVectorHighlighter highlighter = new CrescentFastVectorHighlighter();
+				
 				//int docnum = 0;
-				for(Document doc : resultDocumentList) {
+				for(int i = startOffset; i < endOffset; i++) {
+					
+					logger.debug("make highlight...{}", hits[i].doc);
+					
 					Map<String,String> resultMap = new HashMap<String, String>();
 					
-					//resultMap.put("docnum", Integer.toString(docnum++));
-					for(CrescentCollectionField field : fieldList) {
+					for(CrescentCollectionField field : csrw.getTargetSearchFields()) {
 						if(field.isStore()) {
 							//필드별 결과를 가져온다.
-							value = highlighter.getBestFragment(field, doc.get(field.getName()));
+							value = highlighter.getBestFragment(indexSearcher.getIndexReader(), hits[i].doc, csrw.getQuery(), field.getName());
+						
+							if(value == null || value.length() == 0) {
+								Document doc = indexSearcher.doc(hits[i].doc);
+								value = doc.get(field.getName());
+							}
+							
 							resultMap.put(field.getName(), value);
 						}
 					}

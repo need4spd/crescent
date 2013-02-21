@@ -9,7 +9,7 @@
     <fields>
       <field name="board_id" store="true" index="true" type="LONG" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
       <field name="title" store="true" index="true" type="STRING" analyze="true" termposition="false" termoffset="false" boost="2.0" must="false" termvector="false"/>
-      <field name="dscr" store="true" index="true" type="STRING" analyze="true" termposition="false" termoffset="false" boost="0.0" must="true" termvector="true"/>
+      <field name="dscr" store="true" index="true" type="STRING" analyze="true" termposition="true" termoffset="true" boost="0.0" must="true" termvector="true"/>
       <field name="creuser" store="true" index="true" type="STRING" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
     </fields>
     <defaultSearchFields>
