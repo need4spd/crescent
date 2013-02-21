@@ -131,17 +131,17 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 				
 				//int docnum = 0;
 				for(int i = startOffset; i < endOffset; i++) {
-					String value = null;
-					
 					logger.debug("make highlight...{}", hits[i].doc);
 					
 					Map<String,String> resultMap = new HashMap<String, String>();
 					
 					for(CrescentCollectionField field : collection.getFields()) {
+						String value = null;
 						
 						logger.debug("field... name : {}, isStore :{}, isNumeric :{}", new Object[]{field.getName(), field.isStore(), field.isNumeric()});
 						
 						if(field.isStore() && !field.isNumeric()) {
+							
 							//필드별 결과를 가져온다.
 							value = highlighter.getBestFragment(indexSearcher.getIndexReader(), hits[i].doc, csrw.getQuery(), field.getName());
 						
