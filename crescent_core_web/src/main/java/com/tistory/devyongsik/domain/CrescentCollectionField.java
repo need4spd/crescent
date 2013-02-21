@@ -102,6 +102,14 @@ public class CrescentCollectionField implements Cloneable {
 		return must ? Occur.MUST : Occur.SHOULD;
 	}
 
+	public boolean isNumeric() {
+		if("string".equals(type.toLowerCase())) return false;
+		if("integer".equals(type.toLowerCase())) return true;
+		if("long".equals(type.toLowerCase())) return true;
+		
+		return false;
+	}
+	
 	public int getSortFieldType() {
 		if("string".equals(type.toLowerCase())) return SortField.STRING;
 		if("integer".equals(type.toLowerCase())) return SortField.INT;

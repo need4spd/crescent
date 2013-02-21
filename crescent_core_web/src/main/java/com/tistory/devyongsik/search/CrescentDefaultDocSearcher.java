@@ -17,6 +17,9 @@ import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.config.SpringApplicationContext;
+import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.SearchResult;
 import com.tistory.devyongsik.highlight.CrescentFastVectorHighlighter;
@@ -32,7 +35,6 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 	public SearchResult search(CrescentSearchRequestWrapper csrw) throws IOException {
 		
 		SearchResult searchResult = new SearchResult();
-		//CrescentHighlighter highlighter = new CrescentHighlighter();
 		int totalHitsCount = 0;
 		String errorMessage = "SUCCESS";
 		int errorCode = 0;
@@ -41,10 +43,6 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		int numOfHits = csrw.getDefaultHitsPage() * csrw.getHitsForPage();
 		IndexSearcher indexSearcher = null;
 		SearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
-		
-		//TopScoreDocCollector collector = TopScoreDocCollector.create(numOfHits, true);
-		
-		//List<Document> resultDocumentList = new ArrayList<Document>();
 		
 		try {
 			indexSearcher = searcherManager.acquire();
@@ -129,6 +127,10 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 				
 				CrescentFastVectorHighlighter highlighter = new CrescentFastVectorHighlighter();
 				
+				CrescentCollectionHandler collectionHandler 
+				= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+				CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(csrw.getCollectionName());
+				
 				//int docnum = 0;
 				for(int i = startOffset; i < endOffset; i++) {
 					
@@ -136,18 +138,18 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 					
 					Map<String,String> resultMap = new HashMap<String, String>();
 					
-					for(CrescentCollectionField field : csrw.getTargetSearchFields()) {
-						if(field.isStore()) {
+					for(CrescentCollectionField field : collection.getFields()) {
+						if(field.isStore() && !field.isNumeric()) {
 							//필드별 결과를 가져온다.
 							value = highlighter.getBestFragment(indexSearcher.getIndexReader(), hits[i].doc, csrw.getQuery(), field.getName());
-						
-							if(value == null || value.length() == 0) {
-								Document doc = indexSearcher.doc(hits[i].doc);
-								value = doc.get(field.getName());
-							}
-							
-							resultMap.put(field.getName(), value);
 						}
+						
+						if(value == null || value.length() == 0) {
+							Document doc = indexSearcher.doc(hits[i].doc);
+							value = doc.get(field.getName());
+						}
+						
+						resultMap.put(field.getName(), value);
 					}
 					
 					resultList.add(resultMap);
