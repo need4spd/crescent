@@ -1,15 +1,8 @@
-<%@page language="java" contentType="text/html; charset=utf-8"
-	pageEncoding="utf-8"%>
+<%@page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core"  %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
-
-<%@ page import="java.util.*"%>
-<%
-        List<String> dictionary = (List<String>)request.getAttribute("dictionary");
-        String dicType = (String)request.getAttribute("dicType");
-        String startOffset = (String)request.getAttribute("startOffset");
-        Integer dictionarySize = (Integer)request.getAttribute("dictionarySize");
-
-%>
 <html lang="en">
 <%@ include file="../common/header.jsp"%>
 <script>
@@ -109,15 +102,15 @@
 	<div>
 		<div>
 			<ul class="nav nav-tabs">
-				<li <%="noun".equals(dicType) ? "class=\"active\"" : "" %>><a href="dictionaryManage.devys?dicType=noun">명사사전</a></li>
-				<li <%="stop".equals(dicType) ? "class=\"active\"" : "" %>><a href="dictionaryManage.devys?dicType=stop">불용어사전</a></li>
-				<li <%="syn".equals(dicType) ? "class=\"active\"" : "" %>><a href="dictionaryManage.devys?dicType=syn">동의어사전</a></li>
-				<li <%="compound".equals(dicType) ? "class=\"active\"" : "" %>><a href="dictionaryManage.devys?dicType=compound">복합명사사전</a></li>
+				<li <c:if test='${dicType eq "noun"}'>class="active"</c:if>><a href="dictionaryManage.devys?dicType=noun">명사사전</a></li>
+				<li <c:if test='${dicType eq "stop"}'>class="active"</c:if>><a href="dictionaryManage.devys?dicType=stop">불용어사전</a></li>
+				<li <c:if test='${dicType eq "syn"}'>class="active"</c:if>><a href="dictionaryManage.devys?dicType=syn">동의어사전</a></li>
+				<li <c:if test='${dicType eq "compuond"}'>class="active"</c:if>><a href="dictionaryManage.devys?dicType=compound">복합명사사전</a></li>
 			</ul>
 		</div>
 		<form class="form-horizontal" id="dictionaryForm" method="post" action="dictionaryManage.devys">
-			<input type="hidden" id="dicType" name="dicType" value="<%=dicType %>" /> 
-			<input type="hidden" id="startOffset" name="startOffset" value="<%=startOffset%>" /> 
+			<input type="hidden" id="dicType" name="dicType" value="${dicType}" /> 
+			<input type="hidden" id="startOffset" name="startOffset" value="${startOffset}" /> 
 			<input type="hidden" id="pagingAction" name="pagingAction" value="" /> 
 			<input 	type="hidden" id="wordsToRemove" name="wordsToRemove" value="" />
 			<div class="container">
@@ -129,20 +122,19 @@
 						</tr>
 					</thead>
 					<tbody>
-						<% for(String word : dictionary) { %>
-						<tr>
-							<td><input type="checkbox" id="<%=word%>"
-								name="wordToRemove[]" value="<%=word %>" /></td>
-							<td style="text-align:center;"><%=word %></td>
-						</tr>
-						<% } %>
+						<c:forEach var="word" items="${dictionary}">
+							<tr>
+			            		<td><input type="checkbox" id="${word}" name="wordToRemove[]" value="${word}" /></td>
+								<td style="text-align:center;">${word}</td>
+			            	</tr>
+			            </c:forEach>
 					</tbody>
 				</table>
 			</div>
 			<div class="form-inline">
 				<p class="text-info">
 					단어개수
-					<%=dictionarySize%>개
+					${dictionarySize}개
 				</p>
 				<a href="javascript:removeWord();" class="btn  btn-small btn-danger">선택단어삭제</a>
 				<a href="adminMain.devys" class="btn  btn-small btn-success">관리자
@@ -180,12 +172,12 @@
 			</div>
 
 			<div id="morphResult"></div>
-			<% if(dictionarySize > 20) { %>
-			<ul class="pager">
-				<li><a href="javascript:prev();">Previous</a></li>
-				<li><a href="javascript:next();">Next</a></li>
-			</ul>
-			<% } %>
+			<c:if test="${dictionarySize gt 20}">
+				<ul class="pager">
+					<li><a href="javascript:prev();">Previous</a></li>
+					<li><a href="javascript:next();">Next</a></li>
+				</ul>
+			</c:if>
 		</form>
 	</div>
 </body>
