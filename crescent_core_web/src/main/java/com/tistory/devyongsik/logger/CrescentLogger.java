@@ -24,6 +24,7 @@ public class CrescentLogger {
 			   .append("keyword:"+logInfo.getKeyword()).append(" @$ ")
 			   .append("query:"+logInfo.getQuery().toString()).append(" @$ ")
 			   .append("sort:"+logInfo.getSort()).append(" @$ ")
+			   .append("filter:"+logInfo.getFilter()).append(" @$ ")
 			   .append("pageNum:"+logInfo.getPageNum()).append(" @$ ")
 			   .append("pcid:"+StringUtils.defaultIfEmpty(logInfo.getPcid(), "00000000")).append(" @$ ")
 			   .append("userid:"+StringUtils.defaultIfEmpty(logInfo.getUserId(), "guest")).append(" @$ ")

@@ -80,6 +80,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 			logInfo.setTotalCount(totalHitsCount);
 			logInfo.setUserId(csrw.getUserId());
 			logInfo.setUserIp(csrw.getUserIp());
+			logInfo.setFilter(csrw.getFilter());
 			
 			CrescentLogger.logging(logInfo);
 			

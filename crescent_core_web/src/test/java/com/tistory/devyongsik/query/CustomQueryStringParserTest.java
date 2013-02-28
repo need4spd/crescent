@@ -3,22 +3,30 @@ package com.tistory.devyongsik.query;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.annotation.PostConstruct;
+
 import junit.framework.Assert;
 
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.junit.Test;
 
-import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
+import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class CustomQueryStringParserTest {
+public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
+
+	@PostConstruct
+	public void init() {
+		super.init();
+	}
 
 	@Test
 	public void rangeQuery() throws ParseException, CrescentInvalidRequestException {
@@ -29,10 +37,7 @@ public class CustomQueryStringParserTest {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getIndexedFields()
-				,searchRequest.getCustomQuery()
-				,new KoreanAnalyzer(false));
+		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
@@ -48,10 +53,7 @@ public class CustomQueryStringParserTest {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getIndexedFields()
-				,searchRequest.getCustomQuery()
-				,new KoreanAnalyzer(false));
+		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
@@ -66,10 +68,7 @@ public class CustomQueryStringParserTest {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getIndexedFields()
-				,searchRequest.getCustomQuery()
-				,new KoreanAnalyzer(false));
+		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
@@ -85,10 +84,7 @@ public class CustomQueryStringParserTest {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getIndexedFields()
-				,searchRequest.getCustomQuery()
-				,new KoreanAnalyzer(false));
+		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
@@ -104,10 +100,7 @@ public class CustomQueryStringParserTest {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getIndexedFields()
-				,searchRequest.getCustomQuery()
-				,new KoreanAnalyzer(false));
+		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
@@ -123,10 +116,7 @@ public class CustomQueryStringParserTest {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getIndexedFields()
-				,searchRequest.getCustomQuery()
-				,new KoreanAnalyzer(false));
+		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
@@ -142,10 +132,7 @@ public class CustomQueryStringParserTest {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getIndexedFields()
-				,searchRequest.getCustomQuery()
-				,new KoreanAnalyzer(false));
+		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
@@ -161,10 +148,7 @@ public class CustomQueryStringParserTest {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getIndexedFields()
-				,searchRequest.getCustomQuery()
-				,new KoreanAnalyzer(false));
+		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
@@ -180,14 +164,27 @@ public class CustomQueryStringParserTest {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		CustomQueryStringParser parser = new CustomQueryStringParser();
-		Query query = parser.getQuery(csrw.getIndexedFields()
-				,searchRequest.getCustomQuery()
-				,new KoreanAnalyzer(false));
+		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
 		Assert.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0 board_id:[50 TO 50000]", query.toString());
+	}
+	
+	@Test
+	public void filterQuery() throws ParseException, CrescentInvalidRequestException {
+		SearchRequest searchRequest = new SearchRequest();
+		searchRequest.setCollectionName("sample");
+		searchRequest.setFilter("title:\"python\"");
+		
+		CrescentSearchRequestWrapper csrw 
+			= new CrescentSearchRequestWrapper(searchRequest);
+		
+		Filter filter = csrw.getFilter();
+		
+		System.out.println(filter);
+		
+		Assert.assertEquals("QueryWrapperFilter(title:python^2.0)", filter.toString());
 	}
 	
 	@Test

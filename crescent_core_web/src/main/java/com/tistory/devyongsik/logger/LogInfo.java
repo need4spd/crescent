@@ -1,5 +1,6 @@
 package com.tistory.devyongsik.logger;
 
+import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 
@@ -14,7 +15,15 @@ public class LogInfo {
 	private String pcid;
 	private int pageNum;
 	private Sort sort;
+	private Filter filter;
 	
+	
+	public Filter getFilter() {
+		return filter;
+	}
+	public void setFilter(Filter filter) {
+		this.filter = filter;
+	}
 	public Query getQuery() {
 		return query;
 	}

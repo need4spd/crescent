@@ -2,6 +2,8 @@ package com.tistory.devyongsik.query;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import junit.framework.Assert;
 
 import org.apache.lucene.search.Filter;
@@ -13,8 +15,15 @@ import org.junit.Test;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
+import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class CrescentSearchRequestWrapperTest {
+public class CrescentSearchRequestWrapperTest extends CrescentTestCaseUtil {
+
+	@PostConstruct
+	public void init() {
+		super.init();
+	}
+	
 	private static SearchRequest searchRequest;
 
 	@Before

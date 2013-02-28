@@ -63,7 +63,7 @@
 			<div class="control-group">
 				<label class="control-label" for="page_size">Filter</label>
 				<div class="controls">
-					<input type="text" id="filter" name="filter" value="${USER_REQUEST.filter}"  onkeypress="enterKey(event);" 
+					<input type="text" id="ft" name="ft" value="${USER_REQUEST.ft}"  onkeypress="enterKey(event);" 
 						placeholder="필터조건">
 				</div>
 			</div>

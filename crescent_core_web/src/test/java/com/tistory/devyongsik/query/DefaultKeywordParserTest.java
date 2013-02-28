@@ -1,17 +1,25 @@
 package com.tistory.devyongsik.query;
 
+import javax.annotation.PostConstruct;
+
 import junit.framework.Assert;
 
 import org.apache.lucene.search.Query;
 import org.junit.Test;
 
-import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.domain.SearchRequest;
+import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
+import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
-public class DefaultKeywordParserTest {
+public class DefaultKeywordParserTest extends CrescentTestCaseUtil {
+
+	@PostConstruct
+	public void init() {
+		super.init();
+	}
 
 	@Test
-	public void keywordParse() {
+	public void keywordParse() throws CrescentInvalidRequestException {
 		SearchRequest searchRequest = new SearchRequest();
 		searchRequest.setCollectionName("sample");
 		searchRequest.setKeyword("나이키청바지");
@@ -19,10 +27,7 @@ public class DefaultKeywordParserTest {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		DefaultKeywordParser parser = new DefaultKeywordParser();
-		Query query = parser.parse(csrw.getTargetSearchFields()
-				,csrw.getKeyword()
-				,new KoreanAnalyzer(false));
+		Query query = csrw.getQuery();
 		
 		System.out.println(query);
 		
