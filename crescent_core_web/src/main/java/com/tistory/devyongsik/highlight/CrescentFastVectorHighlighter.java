@@ -17,7 +17,7 @@ public class CrescentFastVectorHighlighter {
 		try {
 			
 			String fragment = highlighter.getBestFragment(highlighter.getFieldQuery(query),
-					indexReader, docId, fieldName, 30);
+					indexReader, docId, fieldName, 200);
 			
 			return fragment;
 			

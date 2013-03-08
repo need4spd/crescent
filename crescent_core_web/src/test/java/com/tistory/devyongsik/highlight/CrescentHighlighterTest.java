@@ -178,5 +178,7 @@ public class CrescentHighlighterTest extends CrescentTestCaseUtil {
         		reader, topDocs.scoreDocs[0].doc, "content", 30);
        
         System.out.println(fragment);
+        
+        searcher.close();
     }
 }

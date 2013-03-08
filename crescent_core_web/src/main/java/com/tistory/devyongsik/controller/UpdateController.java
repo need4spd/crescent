@@ -60,7 +60,7 @@ public class UpdateController {
 			IndexingRequestForm indexingRequestForm = handler.handledData(text.toString());
 			
 			CrescentCollectionHandler collectionHandler 
-			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+				= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 			
 			CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
 			CrescentIndexerExecutor executor = new CrescentIndexerExecutor(collection, indexingRequestForm);
