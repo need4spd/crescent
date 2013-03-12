@@ -8,21 +8,30 @@ import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.handler.IndexingRequestForm;
 
+@Component("crescentIndexerExecutor")
 public class CrescentIndexerExecutor {
 	private Logger logger = LoggerFactory.getLogger(CrescentIndexerExecutor.class);
-	private CrescentCollection collection = null;
-	private IndexingRequestForm indexingRequestForm = null;
+	//private CrescentCollection collection = null;
+	//private IndexingRequestForm indexingRequestForm = null;
 	
-	public CrescentIndexerExecutor(CrescentCollection collection, IndexingRequestForm indexingRequestForm) {
-		this.collection = collection;
-		this.indexingRequestForm = indexingRequestForm;
-	}
+	//public CrescentIndexerExecutor(CrescentCollection collection, IndexingRequestForm indexingRequestForm) {
+		//this.collection = collection;
+		//this.indexingRequestForm = indexingRequestForm;
+	//}
 
-	public String indexing() {
+	@Autowired
+	@Qualifier("crescentIndexer")
+	private CrescentIndexer crescentIndexer;
+	
+	public String indexing(CrescentCollection collection, IndexingRequestForm indexingRequestForm) {
+		
 		logger.info("indexingRequestForm : {}", indexingRequestForm);
 		
 		IndexingType indexingType = IndexingType.valueOf(indexingRequestForm.getIndexingType().toUpperCase());
@@ -34,11 +43,11 @@ public class CrescentIndexerExecutor {
 		
 		String resultMessage = "Nothing To Execute...";
 		
-		CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getName());
+		//CrescentIndexer crescentIndexer = new CrescentIndexer(collection.getName());
 		
 		if(IndexingCommand.ADD == indexingCommand) {
 			List<Document> documentList = LuceneDocumentBuilder.buildDocumentList(indexingRequestForm.getDocumentList(), collection.getCrescentFieldByName());
-			crescentIndexer.addDocument(documentList);
+			crescentIndexer.addDocument(documentList, collection.getName());
 		
 			resultMessage = documentList.size() + "건의 색인이 완료되었습니다.";
 			
@@ -69,7 +78,7 @@ public class CrescentIndexerExecutor {
 			
 			Term updateTerm = new Term(field, value);
 			
-			crescentIndexer.updateDocument(updateTerm, updateDoc);
+			crescentIndexer.updateDocument(updateTerm, updateDoc, collection.getName());
 			
 			resultMessage = updateTerm.toString() + "에 대한 update가 완료되었습니다.";
 			
@@ -88,13 +97,13 @@ public class CrescentIndexerExecutor {
 			Term deleteTerm = new Term(field, value);
 			Query deleteTermQuery = new TermQuery(deleteTerm);
 			
-			crescentIndexer.deleteDocument(deleteTermQuery);
+			crescentIndexer.deleteDocument(deleteTermQuery, collection.getName());
 			
 			resultMessage = deleteTerm.toString() + "에 대한 delete가 완료되었습니다.";
 		}
 		
 		if(IndexingType.BULK == indexingType) {
-			crescentIndexer.commit();
+			crescentIndexer.commit(collection.getName());
 		}
 		
 		return resultMessage;

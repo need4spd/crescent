@@ -25,7 +25,6 @@ public class SearchServiceImplTest extends CrescentTestCaseUtil {
 		searchRequest.setCollectionName("sample");
 		searchRequest.setKeyword("1");
 		
-		SearchService searchService = new SearchServiceImpl();
 		SearchResult searchResult = searchService.search(searchRequest);
 		
 		Assert.assertTrue(searchResult.getTotalHitsCount() > 0);	

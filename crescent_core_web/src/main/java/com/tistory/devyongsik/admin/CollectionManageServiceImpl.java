@@ -9,10 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.controller.CollectionManageMainCotroller;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
@@ -25,11 +26,15 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 
 	private Logger logger = LoggerFactory.getLogger(CollectionManageMainCotroller.class);
 
+	@Autowired
+	@Qualifier("crescentCollectionHandler")
+	private CrescentCollectionHandler collectionHandler;
+	
 	@Override
 	public CrescentCollection updateCollectionInfo(HttpServletRequest request) {
 		
-		CrescentCollectionHandler collectionHandler 
-			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		//CrescentCollectionHandler collectionHandler 
+		//	= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
@@ -141,8 +146,8 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 	@Override
 	public CrescentCollection addCollectionInfo(HttpServletRequest request) {
 		
-		CrescentCollectionHandler collectionHandler 
-			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+//		CrescentCollectionHandler collectionHandler 
+//			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 	
 		
 		String selectedCollectionName = request.getParameter("collectionName");
@@ -192,7 +197,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			newCollectionField.setTermposition("on".equals(request.getParameter(fieldName+"-termposition")) ? true : false);
 			newCollectionField.setTermvector("on".equals(request.getParameter(fieldName+"-termvector")) ? true : false);
 
-			System.out.println("DDDDDDDDDDDDDD : " + request.getParameter(fieldName+"-boost"));
+			//System.out.println("DDDDDDDDDDDDDD : " + request.getParameter(fieldName+"-boost"));
 			
 			newCollectionField.setBoost(Float.parseFloat(StringUtils.defaultIfEmpty(request.getParameter(fieldName+"-boost"), "0")));
 			newCollectionField.setType(StringUtils.defaultString(request.getParameter(fieldName+"-type"), "STRING"));
@@ -247,8 +252,8 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 	
 	@Override
 	public void deleteCollectionInfo(String collectionName) {
-		CrescentCollectionHandler collectionHandler 
-			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+//		CrescentCollectionHandler collectionHandler 
+//			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 	
 		
 		CrescentCollections collections = collectionHandler.getCrescentCollections();

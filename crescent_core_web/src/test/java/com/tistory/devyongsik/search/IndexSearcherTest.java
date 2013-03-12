@@ -25,7 +25,7 @@ public class IndexSearcherTest extends CrescentTestCaseUtil {
 
 	@Test
 	public void defaultSearch() throws IOException {
-		SearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager("sample");
+		SearcherManager searcherManager = crescentSearcherManager.getSearcherManager("sample");
 		IndexSearcher indexSearcher = searcherManager.acquire();
 		
 		Term t = new Term("title", "2");

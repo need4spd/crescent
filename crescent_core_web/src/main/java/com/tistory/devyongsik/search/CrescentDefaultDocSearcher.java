@@ -16,6 +16,9 @@ import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.TopDocs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.config.SpringApplicationContext;
@@ -27,9 +30,14 @@ import com.tistory.devyongsik.logger.CrescentLogger;
 import com.tistory.devyongsik.logger.LogInfo;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 
+@Component("crescentDefaultDocSearcher")
 public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 
 	private Logger logger = LoggerFactory.getLogger(CrescentDefaultDocSearcher.class);
+	
+	@Autowired
+	@Qualifier("crescentSearcherManager")
+	private CrescentSearcherManager crescentSearcherManager;
 	
 	@Override
 	public SearchResult search(CrescentSearchRequestWrapper csrw) throws IOException {
@@ -42,7 +50,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 		//5page * 50
 		int numOfHits = csrw.getDefaultHitsPage() * csrw.getHitsForPage();
 		IndexSearcher indexSearcher = null;
-		SearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager(csrw.getCollectionName());
+		SearcherManager searcherManager = crescentSearcherManager.getSearcherManager(csrw.getCollectionName());
 		
 		try {
 			indexSearcher = searcherManager.acquire();

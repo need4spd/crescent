@@ -39,7 +39,6 @@ import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.SearchRequest;
 import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
-import com.tistory.devyongsik.search.CrescentSearcherManager;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
 
@@ -122,7 +121,6 @@ public class CrescentHighlighterTest extends CrescentTestCaseUtil {
 		//IndexWriter indexWriter = indexWriterManager.getIndexWriter("sample");
 		//IndexReader indexReader = IndexReader.open(indexWriter, true);
 		
-		CrescentSearcherManager crescentSearcherManager = CrescentSearcherManager.getCrescentSearcherManager();
 		SearcherManager searcherManager = crescentSearcherManager.getSearcherManager("sample");
 		IndexSearcher indexSearcher = searcherManager.acquire();
 		

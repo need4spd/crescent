@@ -13,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.tistory.devyongsik.admin.CollectionManageService;
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollections;
 
@@ -24,11 +23,15 @@ public class CollectionManageMainCotroller {
 	@Qualifier("collectionManageService")
 	private CollectionManageService collectionManageService;
 	
+	@Autowired
+	@Qualifier("crescentCollectionHandler")
+	private CrescentCollectionHandler collectionHandler;
+	
 	@RequestMapping("/collectionManageMain")
 	public ModelAndView collectionManageMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		CrescentCollectionHandler collectionHandler 
-			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+//		CrescentCollectionHandler collectionHandler 
+//			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
 		String selectedCollectionName = request.getParameter("collectionName");
@@ -53,8 +56,8 @@ public class CollectionManageMainCotroller {
 	@RequestMapping("/collectionUpdate")
 	public ModelAndView collectionUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		CrescentCollectionHandler collectionHandler 
-			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+//		CrescentCollectionHandler collectionHandler 
+//			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
 		CrescentCollection selectedCollection = collectionManageService.updateCollectionInfo(request);
@@ -88,8 +91,8 @@ public class CollectionManageMainCotroller {
 		
 		CrescentCollection selectedCollection = collectionManageService.addCollectionInfo(request);
 		
-		CrescentCollectionHandler collectionHandler 
-		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+//		CrescentCollectionHandler collectionHandler 
+//		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 	
@@ -114,8 +117,8 @@ public class CollectionManageMainCotroller {
 		
 		ModelAndView modelAndView = new ModelAndView();
 		
-		CrescentCollectionHandler collectionHandler 
-			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+//		CrescentCollectionHandler collectionHandler 
+//			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		String selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();

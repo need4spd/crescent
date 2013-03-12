@@ -19,15 +19,14 @@ public class SearcherManagerTest extends CrescentTestCaseUtil {
 	
 	@Test
 	public void initSearcherManager() {
-		CrescentSearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager();
 		
-		Assert.assertNotNull(searcherManager);
+		Assert.assertNotNull(crescentSearcherManager);
 	}
 	
 	@Test
 	public void getSearcher() {
 		IndexSearcher indexSearcher = null;
-		SearcherManager searcherManager = CrescentSearcherManager.getCrescentSearcherManager().getSearcherManager("sample");
+		SearcherManager searcherManager = crescentSearcherManager.getSearcherManager("sample");
 		
 		indexSearcher = searcherManager.acquire();
 		

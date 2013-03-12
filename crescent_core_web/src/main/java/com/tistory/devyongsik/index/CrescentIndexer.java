@@ -10,23 +10,34 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 
 /**
  * author : need4spd, need4spd@naver.com, 2012. 2. 26.
  */
+@Component("crescentIndexer")
 public class CrescentIndexer {
 	private Logger logger = LoggerFactory.getLogger(CrescentIndexer.class);
-	private String collectionName = null;
-	private IndexWriter indexWriter = null;
+	//private String collectionName = null;
+	//private IndexWriter indexWriter = null;
 	
-	public CrescentIndexer(String collectionName) {
-		this.collectionName = collectionName;
-		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
-		indexWriter = indexWriterManager.getIndexWriter(collectionName);
-	}
+	@Autowired
+	@Qualifier("indexWriterManager")
+	private IndexWriterManager indexWriterManager;
 	
-	public void addDocument(List<Document> documentList) {
+//	public CrescentIndexer(String collectionName) {
+//		this.collectionName = collectionName;
+//		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
+//		indexWriter = indexWriterManager.getIndexWriter(collectionName);
+//	}
+	
+	public void addDocument(List<Document> documentList, String collectionName) {
+		
+		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
+		
 		try {
 			
 			logger.info("collectionName : {}", collectionName);			
@@ -54,7 +65,10 @@ public class CrescentIndexer {
 		}
 	}
 	
-	public void updateDocument(Term term, Document document) {
+	public void updateDocument(Term term, Document document, String collectionName) {
+		
+		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
+		
 		try {
 			
 			logger.info("collectionName : {}", collectionName);			
@@ -72,7 +86,10 @@ public class CrescentIndexer {
 		}
 	}
 	
-	public void deleteDocument(Query query) {
+	public void deleteDocument(Query query, String collectionName) {
+		
+		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
+		
 		try {
 			
 			logger.info("collectionName : {}", collectionName);			
@@ -90,7 +107,10 @@ public class CrescentIndexer {
 		}
 	}
 	
-	public void commit() {
+	public void commit(String collectionName) {
+		
+		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
+		
 		try {
 			
 			logger.info("Commit {}", collectionName);

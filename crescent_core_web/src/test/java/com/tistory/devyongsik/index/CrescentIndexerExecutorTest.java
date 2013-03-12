@@ -10,8 +10,6 @@ import junit.framework.Assert;
 import org.apache.lucene.index.CorruptIndexException;
 import org.junit.Test;
 
-import com.tistory.devyongsik.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.handler.Handler;
@@ -29,8 +27,6 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
 	
 	@Test
 	public void addDocument() throws CorruptIndexException, IOException {
-		CrescentCollectionHandler collectionHandler 
-		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
@@ -40,16 +36,13 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
 		Handler handler = new JsonDataHandler();
 		IndexingRequestForm indexingRequestForm = handler.handledData(FormattedTextBuilder.getAddDocBulkJsonForm());
 		
-		CrescentIndexerExecutor executor = new CrescentIndexerExecutor(sampleCollection, indexingRequestForm);
-		String returnMessage = executor.indexing();
+		String returnMessage = executor.indexing(sampleCollection, indexingRequestForm);
 		
 		Assert.assertEquals("1건의 색인이 완료되었습니다.", returnMessage);
 	}
 	
 	@Test
 	public void deleteDocument() throws CorruptIndexException, IOException {
-		CrescentCollectionHandler collectionHandler 
-		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
@@ -59,16 +52,13 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
 		Handler handler = new JsonDataHandler();
 		IndexingRequestForm indexingRequestForm = handler.handledData(FormattedTextBuilder.getDeleteDocBulkJsonForm());
 		
-		CrescentIndexerExecutor executor = new CrescentIndexerExecutor(sampleCollection, indexingRequestForm);
-		String returnMessage = executor.indexing();
+		String returnMessage = executor.indexing(sampleCollection, indexingRequestForm);
 		
 		Assert.assertEquals("creuser:test에 대한 delete가 완료되었습니다.", returnMessage);
 	}
 	
 	@Test
 	public void updateDocument() throws CorruptIndexException, IOException {
-		CrescentCollectionHandler collectionHandler 
-		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
@@ -78,8 +68,7 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
 		Handler handler = new JsonDataHandler();
 		IndexingRequestForm indexingRequestForm = handler.handledData(FormattedTextBuilder.getUpdateDocBulkJsonForm());
 		
-		CrescentIndexerExecutor executor = new CrescentIndexerExecutor(sampleCollection, indexingRequestForm);
-		String returnMessage = executor.indexing();
+		String returnMessage = executor.indexing(sampleCollection, indexingRequestForm);
 		
 		Assert.assertEquals("creuser:test에 대한 update가 완료되었습니다.", returnMessage);
 	}

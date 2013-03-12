@@ -11,31 +11,43 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.search.SearcherManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.SmartLifecycle;
+import org.springframework.stereotype.Component;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
-import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.search.CrescentSearcherManager;
 
-public class SearcherManagerReloader {
+@Component
+public class SearcherManagerReloader implements SmartLifecycle {
 
 	private Logger logger = LoggerFactory.getLogger(SearcherManagerReloader.class);
 	
-	private CrescentSearcherManager crescentSearcherManager = null;
-	private CrescentCollections crescentCollections = null;
+	@Autowired
+	@Qualifier("crescentSearcherManager")
+	private CrescentSearcherManager crescentSearcherManager;
+	
+	@Autowired
+	@Qualifier("crescentCollectionHandler")
+	private CrescentCollectionHandler crescentCollectionHandler;
+	
+	@Autowired
+	@Qualifier("indexWriterManager")
+	private IndexWriterManager indexWriterManager;
 	
 	private List<ScheduledThreadPoolExecutor> execList = new ArrayList<ScheduledThreadPoolExecutor>();
 	
-	public SearcherManagerReloader() {
-		crescentSearcherManager = CrescentSearcherManager.getCrescentSearcherManager();
-		CrescentCollectionHandler collectionHandler 
-			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-		crescentCollections = collectionHandler.getCrescentCollections();
-	}
+	private boolean isRunning = false;
 	
-	public void reloadStart() {
-		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+	private void reloadStart() {
+		
+		List<CrescentCollection> crescentCollectionList = crescentCollectionHandler.getCrescentCollections().getCrescentCollections();
+
+		logger.info("reloader start.....[{}]", crescentCollectionList);
+		
+
 		for(CrescentCollection collection : crescentCollectionList) {
 			
 			ScheduledThreadPoolExecutor exec = new ScheduledThreadPoolExecutor(1);
@@ -45,17 +57,16 @@ public class SearcherManagerReloader {
 		}
 	}
 	
-	public void shutdown() {
+	private void shutdown() {
 		for(ScheduledThreadPoolExecutor exec : execList) {
 			List<Runnable> rList = exec.shutdownNow();
 			
 			logger.info("Reloader Shutdown.. {}", rList.toString());
 		}
 		
-		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		List<CrescentCollection> crescentCollectionList = crescentCollectionHandler.getCrescentCollections().getCrescentCollections();
 		
 		for(CrescentCollection collection : crescentCollectionList) {
-			IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
 			IndexWriter indexWriter = indexWriterManager.getIndexWriter(collection.getName());
 			
 			try {
@@ -95,5 +106,41 @@ public class SearcherManagerReloader {
 			
 			logger.info("Searcher Manager Reloaded..{}, {}", collectionName, refreshed);
 		}	
+	}
+
+	@Override
+	public void start() {
+		reloadStart();
+
+		isRunning = true;
+	}
+
+	@Override
+	public void stop() {
+		shutdown();
+		
+		isRunning = false;
+	}
+
+	@Override
+	public boolean isRunning() {
+		
+		return isRunning;
+	}
+
+	@Override
+	public int getPhase() {
+		return 0;
+	}
+
+	@Override
+	public boolean isAutoStartup() {
+		return true;
+	}
+
+	@Override
+	public void stop(Runnable callback) {
+		stop();
+		callback.run();
 	}
 }

@@ -41,7 +41,6 @@ public class CrescentCollectionHandler {
 	
 	private String collectionsXmlLocation = null;
 	
-	@SuppressWarnings("unused")
 	@PostConstruct
 	private void init() {
 		

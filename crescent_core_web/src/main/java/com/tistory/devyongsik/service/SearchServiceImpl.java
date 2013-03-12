@@ -9,6 +9,8 @@ import java.util.Map;
 import org.apache.lucene.search.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.tistory.devyongsik.domain.SearchRequest;
@@ -16,13 +18,16 @@ import com.tistory.devyongsik.domain.SearchRequestValidator;
 import com.tistory.devyongsik.domain.SearchResult;
 import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
-import com.tistory.devyongsik.search.CrescentDefaultDocSearcher;
 import com.tistory.devyongsik.search.CrescentDocSearcher;
 
 @Service("searchService")
 public class SearchServiceImpl implements SearchService {
 
 	private Logger logger = LoggerFactory.getLogger(SearchServiceImpl.class);
+	
+	@Autowired
+	@Qualifier("crescentDefaultDocSearcher")
+	private CrescentDocSearcher crescentDocSearcher;
 	
 	@Override
 	public SearchResult search(SearchRequest searchRequest) throws IOException {
@@ -62,8 +67,7 @@ public class SearchServiceImpl implements SearchService {
 		
 		logger.debug("query : {}" , query);
 		
-		CrescentDocSearcher searcher = new CrescentDefaultDocSearcher();
-		SearchResult searchResult = searcher.search(csrw);
+		SearchResult searchResult = crescentDocSearcher.search(csrw);
 		
 		return searchResult;
 	}

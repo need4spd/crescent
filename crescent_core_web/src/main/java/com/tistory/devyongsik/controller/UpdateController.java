@@ -9,11 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.handler.Handler;
 import com.tistory.devyongsik.handler.IndexingRequestForm;
@@ -28,6 +29,14 @@ import com.tistory.devyongsik.index.CrescentIndexerExecutor;
 public class UpdateController {
 	
 	private Logger logger = LoggerFactory.getLogger(UpdateController.class);
+	
+	@Autowired
+	@Qualifier("crescentCollectionHandler")
+	private CrescentCollectionHandler collectionHandler;
+	
+	@Autowired
+	@Qualifier("crescentIndexerExecutor")
+	private CrescentIndexerExecutor crescentIndexerExecutor;
 	
 	@RequestMapping("/update")
 	public void updateDocument(HttpServletRequest request, HttpServletResponse response) {
@@ -59,13 +68,13 @@ public class UpdateController {
 			reader.close();
 			IndexingRequestForm indexingRequestForm = handler.handledData(text.toString());
 			
-			CrescentCollectionHandler collectionHandler 
-				= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+//			CrescentCollectionHandler collectionHandler 
+//				= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 			
 			CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
-			CrescentIndexerExecutor executor = new CrescentIndexerExecutor(collection, indexingRequestForm);
+			//CrescentIndexerExecutor executor = new CrescentIndexerExecutor(collection, indexingRequestForm);
 			
-			String message = executor.indexing();
+			String message = crescentIndexerExecutor.indexing(collection, indexingRequestForm);
 			
 			Writer writer = null;
 			

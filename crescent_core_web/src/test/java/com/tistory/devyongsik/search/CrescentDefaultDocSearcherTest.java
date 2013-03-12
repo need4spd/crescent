@@ -28,7 +28,6 @@ public class CrescentDefaultDocSearcherTest extends CrescentTestCaseUtil {
 		
 		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
 		
-		CrescentDocSearcher crescentDocSearcher = new CrescentDefaultDocSearcher();
 		SearchResult searchResult = crescentDocSearcher.search(csrw);
 		
 		Assert.assertTrue(searchResult.getResultList().size() > 0);
