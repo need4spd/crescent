@@ -21,18 +21,10 @@ import org.springframework.stereotype.Component;
 @Component("crescentIndexer")
 public class CrescentIndexer {
 	private Logger logger = LoggerFactory.getLogger(CrescentIndexer.class);
-	//private String collectionName = null;
-	//private IndexWriter indexWriter = null;
 	
 	@Autowired
 	@Qualifier("indexWriterManager")
 	private IndexWriterManager indexWriterManager;
-	
-//	public CrescentIndexer(String collectionName) {
-//		this.collectionName = collectionName;
-//		IndexWriterManager indexWriterManager = IndexWriterManager.getIndexWriterManager();
-//		indexWriter = indexWriterManager.getIndexWriter(collectionName);
-//	}
 	
 	public void addDocument(List<Document> documentList, String collectionName) {
 		
@@ -65,6 +57,27 @@ public class CrescentIndexer {
 		}
 	}
 	
+	public void updateDocuments(Term term, List<Document> documents, String collectionName) {
+		
+		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
+		
+		try {
+			
+			logger.info("collectionName : {}", collectionName);			
+			logger.info("update indexing start................{}, size : {}", term, documents.size());
+			
+			indexWriter.updateDocuments(term, documents);
+					
+			logger.info("end");
+			
+		} catch (IOException e) {
+			
+			logger.error("error : ", e);
+			throw new RuntimeException("색인 중 에러가 발생하였습니다. ["+e.getMessage()+"]");
+			
+		}
+	}
+	
 	public void updateDocument(Term term, Document document, String collectionName) {
 		
 		IndexWriter indexWriter = indexWriterManager.getIndexWriter(collectionName);
@@ -72,7 +85,7 @@ public class CrescentIndexer {
 		try {
 			
 			logger.info("collectionName : {}", collectionName);			
-			logger.info("update indexing start................{}, {}", term, document);
+			logger.info("update indexing start................{}, size : {}", term, document);
 			
 			indexWriter.updateDocument(term, document);
 					

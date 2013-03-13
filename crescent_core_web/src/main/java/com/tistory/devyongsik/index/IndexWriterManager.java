@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
@@ -25,29 +24,14 @@ import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.domain.CrescentCollection;
 
 @Component("indexWriterManager")
-@DependsOn("crescentCollectionHandler")
 public class IndexWriterManager {
 
-	//private static IndexWriterManager indexWriterManager = new IndexWriterManager();
 	private Map<String, IndexWriter> indexWritersByCollectionName = new ConcurrentHashMap<String, IndexWriter>();
 	private Logger logger = LoggerFactory.getLogger(IndexWriterManager.class);
 	
 	@Autowired
 	@Qualifier("crescentCollectionHandler")
 	private CrescentCollectionHandler collectionHandler;
-	
-//	private IndexWriterManager() {
-//		try {
-//			initIndexWriter();
-//		} catch (IOException e) {
-//			logger.error("IndexWriter 생성 실패", e);
-//			throw new IllegalStateException("IndexWriter 생성 실패");
-//		}
-//	}
-	
-//	public static IndexWriterManager getIndexWriterManager() {
-//		return indexWriterManager;
-//	}
 	
 	@SuppressWarnings("resource")
 	@PostConstruct

@@ -12,9 +12,12 @@ import org.junit.Test;
 
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollections;
+import com.tistory.devyongsik.domain.SearchRequest;
+import com.tistory.devyongsik.domain.SearchResult;
 import com.tistory.devyongsik.handler.Handler;
 import com.tistory.devyongsik.handler.IndexingRequestForm;
 import com.tistory.devyongsik.handler.JsonDataHandler;
+import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 import com.tistory.devyongsik.utils.FormattedTextBuilder;
 
@@ -71,5 +74,115 @@ public class CrescentIndexerExecutorTest extends CrescentTestCaseUtil {
 		String returnMessage = executor.indexing(sampleCollection, indexingRequestForm);
 		
 		Assert.assertEquals("creuser:test에 대한 update가 완료되었습니다.", returnMessage);
+	}
+	
+	@Test
+	public void updateNewDocument() throws CorruptIndexException, IOException {
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+
+		CrescentCollection sampleCollection = collections.get("sample");
+
+		Handler handler = new JsonDataHandler();
+		IndexingRequestForm indexingRequestForm = handler.handledData(FormattedTextBuilder.getUpdateNewDocBulkJsonForm());
+		
+		String returnMessage = executor.indexing(sampleCollection, indexingRequestForm);
+		
+		Assert.assertEquals("creuser:testnew에 대한 update가 완료되었습니다.", returnMessage);
+		
+		SearchRequest searchRequest = new SearchRequest();
+		searchRequest.setKeyword("testnew");
+		searchRequest.setSearchField("creuser");
+		searchRequest.setCollectionName("sample");
+		
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
+		
+		SearchResult searchResult = crescentDocSearcher.search(csrw);
+		
+		Assert.assertTrue(searchResult.getResultList().size() == 1);
+	}
+	
+	@Test
+	public void updateNewDocuments() throws CorruptIndexException, IOException {
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+
+		CrescentCollection sampleCollection = collections.get("sample");
+
+		Handler handler = new JsonDataHandler();
+		IndexingRequestForm indexingRequestForm = handler.handledData(FormattedTextBuilder.getUpdateNewDocListBulkJsonForm());
+		
+		String returnMessage = executor.indexing(sampleCollection, indexingRequestForm);
+		
+		Assert.assertEquals("creuser:testnew에 대한 update가 완료되었습니다.", returnMessage);
+		
+		SearchRequest searchRequest = new SearchRequest();
+		searchRequest.setKeyword("testnew");
+		searchRequest.setSearchField("creuser");
+		searchRequest.setCollectionName("sample");
+		
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
+		
+		SearchResult searchResult = crescentDocSearcher.search(csrw);
+		
+		Assert.assertTrue(searchResult.getResultList().size() == 2);
+	}
+	
+	@Test
+	public void updateByFieldValueDocument() throws CorruptIndexException, IOException {
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+
+		CrescentCollection sampleCollection = collections.get("sample");
+
+		Handler handler = new JsonDataHandler();
+		IndexingRequestForm indexingRequestForm = handler.handledData(FormattedTextBuilder.getUpdateByFieldValueDocBulkJsonForm());
+		
+		String returnMessage = executor.indexing(sampleCollection, indexingRequestForm);
+		
+		Assert.assertEquals("creuser:*에 대한 update가 완료되었습니다.", returnMessage);
+		
+		SearchRequest searchRequest = new SearchRequest();
+		searchRequest.setKeyword("test");
+		searchRequest.setSearchField("creuser");
+		searchRequest.setCollectionName("sample");
+		
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
+		
+		SearchResult searchResult = crescentDocSearcher.search(csrw);
+		
+		Assert.assertTrue(searchResult.getResultList().size() == 1);
+		Assert.assertEquals("제목 입니다0 업데이트...", searchResult.getResultList().get(0).get("title"));
+	}
+	
+	@Test
+	public void updateByFieldValueNewDocumentList() throws CorruptIndexException, IOException {
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		Map<String, CrescentCollection> collections = crescentCollections.getCrescentCollectionsMap();
+
+		CrescentCollection sampleCollection = collections.get("sample");
+
+		Handler handler = new JsonDataHandler();
+		IndexingRequestForm indexingRequestForm = handler.handledData(FormattedTextBuilder.getUpdateByFieldValueNewDocListBulkJsonForm());
+		
+		String returnMessage = executor.indexing(sampleCollection, indexingRequestForm);
+		
+		Assert.assertEquals("creuser:*에 대한 update가 완료되었습니다.", returnMessage);
+		
+		SearchRequest searchRequest = new SearchRequest();
+		searchRequest.setKeyword("testnew");
+		searchRequest.setSearchField("creuser");
+		searchRequest.setCollectionName("sample");
+		
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
+		
+		SearchResult searchResult = crescentDocSearcher.search(csrw);
+		
+		Assert.assertTrue(searchResult.getResultList().size() == 1);
+		Assert.assertEquals("제목 입니다1 업데이트...", searchResult.getResultList().get(0).get("title"));
 	}
 }

@@ -54,17 +54,13 @@ public class CrescentIndexerExecutor {
 		} else if (IndexingCommand.UPDATE == indexingCommand) {
 			
 			List<Document> documentList = LuceneDocumentBuilder.buildDocumentList(indexingRequestForm.getDocumentList(), collection.getCrescentFieldByName());
-			if(documentList.size() > 1) {
-				logger.error("Update에는 업데이트 할 document가 한개 이상일 수 없습니다.");
-				throw new IllegalStateException("Update에는 업데이트 할 document가 한개 이상일 수 없습니다.");
-			}
 			
 			if(documentList.size() == 0) {
-				logger.error("Update에는 업데이트 할 document가 없습니다.");
-				throw new IllegalStateException("Update에는 업데이트 할 document가 없습니다.");
+				logger.error("업데이트 할 document가 없습니다.");
+				throw new IllegalStateException("업데이트 할 document가 없습니다.");
 			}
 			
-			Document updateDoc = documentList.get(0);
+			//Document updateDoc = documentList.get(0);
 			
 			String[] splitQuery = query.split(":");
 			if(splitQuery.length != 2) {
@@ -78,9 +74,37 @@ public class CrescentIndexerExecutor {
 			
 			Term updateTerm = new Term(field, value);
 			
-			crescentIndexer.updateDocument(updateTerm, updateDoc, collection.getName());
+			crescentIndexer.updateDocuments(updateTerm, documentList, collection.getName());
 			
 			resultMessage = updateTerm.toString() + "에 대한 update가 완료되었습니다.";
+			
+		} else if (IndexingCommand.UPDATE_BY_FIELD_VALUE == indexingCommand) {
+			
+			List<Document> documentList = LuceneDocumentBuilder.buildDocumentList(indexingRequestForm.getDocumentList(), collection.getCrescentFieldByName());
+			
+			if(documentList.size() == 0) {
+				logger.error("업데이트 할 document가 없습니다.");
+				throw new IllegalStateException("업데이트 할 document가 없습니다.");
+			}
+			
+			String field = query.split(":")[0];
+			String value = query.split(":")[1];
+			
+			logger.info("field : {}, value : {}", field, value);
+			
+			for(Document document : documentList) {
+				value = document.get(field);
+				
+				if(value == null || value.length() == 0) {
+					logger.error("Update 대상 문서를 찾을 field지이 잘못되었거나 field : [{}], value가 없습니다. value : [{}]", field, value);
+					throw new IllegalStateException("pdate 대상 문서를 찾을 field지이 잘못되었거나 field : ["+field+"], value가 없습니다. value : ["+value+"]");
+				}
+				
+				Term updateTerm = new Term(field, value);
+				crescentIndexer.updateDocument(updateTerm, document, collection.getName());
+			}
+			
+			resultMessage = query + "에 대한 update가 완료되었습니다.";
 			
 		} else if (IndexingCommand.DELETE == indexingCommand) {
 			
