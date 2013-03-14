@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface IndexFileManageService {
 	public Map<String, Object> getResult();
-	public boolean reload(String collectionName, String topRankingField);
+	public boolean reload(String collectionName, String topRankingField) throws Exception;
 	public boolean reload(String collectionName, int docNum);
 	public boolean reload(String collectionName, String field, String query);
 	

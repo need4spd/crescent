@@ -24,6 +24,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.config.SpringApplicationContext;
@@ -31,6 +32,9 @@ import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.utils.RankingTerm;
 import com.tistory.devyongsik.utils.TopRankingQueue;
+import com.tistory.devyongsik.utils.decoder.Decoder;
+import com.tistory.devyongsik.utils.decoder.LongDecoder;
+import com.tistory.devyongsik.utils.decoder.MockDecoder;
 
 @Service("indexFileManageService")
 public class IndexFileManageServiceImpl implements IndexFileManageService {
@@ -41,14 +45,14 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 	Map<String, Object> result = new HashMap<String, Object>();
 	
 	public enum View { Overview, Document };
-	private final static int DEFAULT_TOPRANKING_TERM = 8;
+	private final static int DEFAULT_TOPRANKING_TERM = 20;
 	
 	String[] resultField1 = {"collectionName", "indexName", "numOfField", "numOfDoc", "numOfTerm",
 						"hasDel", "isOptimize", "indexVersion", "lastModify", "termCount", "topRanking"};
 	
 	
 	@Override
-	public boolean reload(String collectionName, String topRankingField) {
+	public boolean reload(String collectionName, String topRankingField) throws Exception {
 		if (collectionName == null) {
 			return false;
 		}
@@ -58,19 +62,31 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 	
 		CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
 		
+		Decoder decoder = null;
+		
 		if (collection == null) {
 			logger.debug("doesn't Collection Info => {}", collectionName);
 			init(View.Overview);
 			return false;
 		}
 		
-		if (topRankingField == null) {
+		if (!StringUtils.hasText(topRankingField)) {
 			if (collection.getDefaultSearchFields().get(0) != null) {
 				topRankingField = collection.getDefaultSearchFields().get(0).getName();
 			} else {
 				logger.debug("doesn't defaultSearchField => {}", collectionName);
 				init(View.Overview);
 				return false;
+			}
+		}
+		
+		for (CrescentCollectionField field :collection.getFields()) {
+			if (field.getName().equals(topRankingField)) {
+				if (StringUtils.capitalize(field.getType()).equals("Long")) {
+					decoder = new LongDecoder();
+				} else {
+					decoder = new MockDecoder();
+				}
 			}
 		}
 		
@@ -109,11 +125,12 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 				}
 				
 				TermDocs termDocs = reader.termDocs(currTerm);
-				
-				while (termDocs.next()) {
-					if (currTerm.field().equals(topRankingField)) {
-						RankingTerm e = new RankingTerm(currTerm.text(), currTerm.field(), termDocs.freq());
+
+				if (currTerm.field().equals(topRankingField)) {
+					while (termDocs.next()) {
+						RankingTerm e = new RankingTerm(decoder.decodeTerm(currTerm.text()), currTerm.field(), terms.docFreq());
 						topRankingQueue.add(e);
+						termDocs.skipTo(terms.docFreq());
 					}
 				}
 				termFreq++;
@@ -141,6 +158,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 		result.put("numOfField", collection.getFields().size());
 		result.put("termCount", fieldTermCount);
 		result.put("topRanking", topRankingTerms);
+		result.put("topRankingCount", DEFAULT_TOPRANKING_TERM);
 		result.put("fieldName", fieldName);
 		
 		return true;
