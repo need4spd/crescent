@@ -46,6 +46,8 @@ public class IndexFileManageController {
 		result.put("lastModify", temp.get("lastModify"));
 		result.put("termCount", temp.get("termCount"));
 		result.put("topRanking", temp.get("topRanking"));
+		result.put("topRankingCount", temp.get("topRankingCount"));
+		result.put("topRankingFields", temp.get("fieldName"));
 		
 		modelAndView.addObject("RESULT", result);
 		return modelAndView;

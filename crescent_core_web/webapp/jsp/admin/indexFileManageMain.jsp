@@ -13,7 +13,8 @@
 <c:set var="last_modify" value="${RESULT.lastModify }" />
 <c:set var="term_count" value="${RESULT.termCount }" />
 <c:set var="top_ranking" value="${RESULT.topRanking }" />
-<c:set var="field_name" value="${RESULT.fieldName }" />
+<c:set var="top_ranking_count" value="${RESULT.topRankingCount }" />
+<c:set var="top_ranking_fields" value="${RESULT.topRankingFields }" />
 
 
 <!DOCTYPE html>
@@ -57,6 +58,13 @@
 		$('#lastModified').attr('disabled','disabled');
 		$('#hasDelIsOpt').attr('disabled','disabled');
 		
+		$("#fieldList").click(function(event){
+			var targetText = event.target.text;
+			
+			$("input[name=topRankingField]").val(targetText);
+			indexFileManage();
+			
+		});
 	});
 </script>
 <body>
@@ -157,9 +165,13 @@
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 								Field 선택 <span class="caret"></span>
 							</a>
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu" id="fieldList" >
 								<!-- dropdown menu links -->
+								<c:forEach items="${top_ranking_fields }" var="top_ranking_field">
+									<li><a href="#">${top_ranking_field }</a></li>
+								</c:forEach>	
 							</ul>
+							<input type="hidden" name="topRankingField" value="" />
 						</div>
 						<table class="table table-striped">
 							<caption>Top ranking terms</caption>
@@ -172,12 +184,12 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${top_ranking }" var="product" varStatus="status">
+								<c:forEach begin="1" end="${top_ranking_count }" step="1" var="i">
 								<tr>
-									<td>${status.count }</td>
-									<td>${product.count }</td>
-									<td>${product.field }</td>
-									<td>${product.text }</td>
+									<td>${i }</td>
+									<td>${top_ranking[top_ranking_count-i].count }</td>
+									<td>${top_ranking[top_ranking_count-i].field }</td>
+									<td>${top_ranking[top_ranking_count-i].text }</td>
 									
 								</tr>
 								</c:forEach>
