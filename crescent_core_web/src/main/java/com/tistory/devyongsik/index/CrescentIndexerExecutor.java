@@ -18,14 +18,7 @@ import com.tistory.devyongsik.handler.IndexingRequestForm;
 @Component("crescentIndexerExecutor")
 public class CrescentIndexerExecutor {
 	private Logger logger = LoggerFactory.getLogger(CrescentIndexerExecutor.class);
-	//private CrescentCollection collection = null;
-	//private IndexingRequestForm indexingRequestForm = null;
 	
-	//public CrescentIndexerExecutor(CrescentCollection collection, IndexingRequestForm indexingRequestForm) {
-		//this.collection = collection;
-		//this.indexingRequestForm = indexingRequestForm;
-	//}
-
 	@Autowired
 	@Qualifier("crescentIndexer")
 	private CrescentIndexer crescentIndexer;
