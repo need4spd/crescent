@@ -85,7 +85,7 @@ public class CrescentIndexer {
 		try {
 			
 			logger.info("collectionName : {}", collectionName);			
-			logger.info("update indexing start................{}, size : {}", term, document);
+			logger.info("update indexing start................{}", term);
 			
 			indexWriter.updateDocument(term, document);
 					
