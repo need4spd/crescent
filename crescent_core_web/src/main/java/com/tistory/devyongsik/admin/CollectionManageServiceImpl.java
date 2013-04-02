@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.controller.CollectionManageMainCotroller;
+import com.tistory.devyongsik.domain.CrescentAnalyzerHolder;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.CrescentCollections;
@@ -33,17 +34,37 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 	@Override
 	public CrescentCollection updateCollectionInfo(HttpServletRequest request) {
 		
-		//CrescentCollectionHandler collectionHandler 
-		//	= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
 		String selectedCollectionName = request.getParameter("collectionName");
 
 		logger.debug("selectedCollectionName : " + selectedCollectionName);
 
+		String indexingModeAnalyzer = request.getParameter("indexingModeAnalyzer");
+		String searchModeAnalyzer = request.getParameter("searchModeAnalyzer");
+		
+		String indexingModeAnalyzerType = request.getParameter("indexingModeAnalyzerType");
+		String searchModelAnalyzerType = request.getParameter("searchModeAnalyzerType");
+		
+		String indexingModeAnalyzerConstArgs = request.getParameter("indexingModeAnalyzerConstArgs");
+		String searchModeAnalyzerConstArgs = request.getParameter("searchModeAnalyzerConstArgs");
+		
 		CrescentCollection selectedCollection = crescentCollections.getCrescentCollection(selectedCollectionName);
-		selectedCollection.setAnalyzer(request.getParameter("analyzer"));
+		
+		List<CrescentAnalyzerHolder> analyzerHolderList = new ArrayList<CrescentAnalyzerHolder>();
+		CrescentAnalyzerHolder indexingModeAnalyzerHolder = new CrescentAnalyzerHolder();
+		indexingModeAnalyzerHolder.setClassName(indexingModeAnalyzer);
+		indexingModeAnalyzerHolder.setConstructorArgs(indexingModeAnalyzerConstArgs);
+		indexingModeAnalyzerHolder.setType(indexingModeAnalyzerType);
+		analyzerHolderList.add(indexingModeAnalyzerHolder);
+		
+		CrescentAnalyzerHolder searchModeAnalyzerHolder = new CrescentAnalyzerHolder();
+		searchModeAnalyzerHolder.setClassName(searchModeAnalyzer);
+		searchModeAnalyzerHolder.setConstructorArgs(searchModelAnalyzerType);
+		searchModeAnalyzerHolder.setType(searchModeAnalyzerConstArgs);
+		analyzerHolderList.add(searchModeAnalyzerHolder);
+		
+		selectedCollection.setAnalyzers(analyzerHolderList);
 		
 		selectedCollection.setSearcherReloadScheduleMin(StringUtils.defaultIfEmpty(request.getParameter("searcherReloadScheduleMin"), "10"));
 
@@ -52,6 +73,12 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			logger.debug("collection Name : {} ", request.getParameter("collectionName"));
 			logger.debug("indexing Directory : {} ", request.getParameter("indexingDirectory"));
 			logger.debug("searcher reload schedule min : {} ", request.getParameter("searcherReloadScheduleMin"));
+			logger.debug("indexingModeAnalyzer : {} ", request.getParameter("indexingModeAnalyzer"));
+			logger.debug("searchModeAnalyzer : {} ", request.getParameter("searchModeAnalyzer"));
+			logger.debug("indexingModeAnalyzerType : {} ", request.getParameter("indexingModeAnalyzerType"));
+			logger.debug("searchModelAnalyzerType : {} ", request.getParameter("searchModelAnalyzerType"));
+			logger.debug("indexingModeAnalyzerConstArgs : {} ", request.getParameter("indexingModeAnalyzerConstArgs"));
+			logger.debug("searchModeAnalyzerConstArgs : {} ", request.getParameter("searchModeAnalyzerConstArgs"));
 		}
 
 		List<CrescentCollectionField> crescentCollectionFieldList = selectedCollection.getFields();
@@ -156,16 +183,43 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		
 		CrescentCollection newCollection = new CrescentCollection();
 		newCollection.setName(selectedCollectionName);
-		newCollection.setAnalyzer(request.getParameter("analyzer"));
 		newCollection.setIndexingDirectory(request.getParameter("indexingDirectory"));
 		
 		newCollection.setSearcherReloadScheduleMin(StringUtils.defaultIfEmpty(request.getParameter("searcherReloadScheduleMin"), "10"));
 
+		String indexingModeAnalyzer = request.getParameter("indexingModeAnalyzer");
+		String searchModeAnalyzer = request.getParameter("searchModeAnalyzer");
+		
+		String indexingModeAnalyzerType = request.getParameter("indexingModeAnalyzerType");
+		String searchModelAnalyzerType = request.getParameter("searchModeAnalyzerType");
+		
+		String indexingModeAnalyzerConstArgs = request.getParameter("indexingModeAnalyzerConstArgs");
+		String searchModeAnalyzerConstArgs = request.getParameter("searchModeAnalyzerConstArgs");
+		
+		List<CrescentAnalyzerHolder> analyzerHolderList = new ArrayList<CrescentAnalyzerHolder>();
+		CrescentAnalyzerHolder indexingModeAnalyzerHolder = new CrescentAnalyzerHolder();
+		indexingModeAnalyzerHolder.setClassName(indexingModeAnalyzer);
+		indexingModeAnalyzerHolder.setConstructorArgs(indexingModeAnalyzerConstArgs);
+		indexingModeAnalyzerHolder.setType(indexingModeAnalyzerType);
+		analyzerHolderList.add(indexingModeAnalyzerHolder);
+		
+		CrescentAnalyzerHolder searchModeAnalyzerHolder = new CrescentAnalyzerHolder();
+		searchModeAnalyzerHolder.setClassName(searchModeAnalyzer);
+		searchModeAnalyzerHolder.setConstructorArgs(searchModelAnalyzerType);
+		searchModeAnalyzerHolder.setType(searchModeAnalyzerConstArgs);
+		analyzerHolderList.add(searchModeAnalyzerHolder);
+		
 		if(logger.isDebugEnabled()) {
 			logger.debug("analyzer : {} ", request.getParameter("analyzer"));
 			logger.debug("collection Name : {} ", request.getParameter("collectionName"));
 			logger.debug("indexing Directory : {} ", request.getParameter("indexingDirectory"));
 			logger.debug("searcher reload schedule min : {} ", request.getParameter("searcherReloadScheduleMin"));
+			logger.debug("indexingModeAnalyzer : {} ", request.getParameter("indexingModeAnalyzer"));
+			logger.debug("searchModeAnalyzer : {} ", request.getParameter("searchModeAnalyzer"));
+			logger.debug("indexingModeAnalyzerType : {} ", request.getParameter("indexingModeAnalyzerType"));
+			logger.debug("searchModelAnalyzerType : {} ", request.getParameter("searchModelAnalyzerType"));
+			logger.debug("indexingModeAnalyzerConstArgs : {} ", request.getParameter("indexingModeAnalyzerConstArgs"));
+			logger.debug("searchModeAnalyzerConstArgs : {} ", request.getParameter("searchModeAnalyzerConstArgs"));
 		}
 
 		//필드들을 걸러낸다.
@@ -242,6 +296,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		newCollection.setSortFields(sortFieldList);
 		newCollection.setDefaultSearchFields(defaultSearchFieldList);
 		newCollection.setFields(newCollectionFieldList);
+		newCollection.setAnalyzers(analyzerHolderList);
 		
 		collectionHandler.getCrescentCollections().getCrescentCollections().add(newCollection);
 		collectionHandler.writeToXML();
@@ -252,10 +307,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 	
 	@Override
 	public void deleteCollectionInfo(String collectionName) {
-//		CrescentCollectionHandler collectionHandler 
-//			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-	
-		
+
 		CrescentCollections collections = collectionHandler.getCrescentCollections();
 		List<CrescentCollection> collectionList = collections.getCrescentCollections();
 		

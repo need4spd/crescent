@@ -13,9 +13,12 @@ import org.apache.lucene.analysis.tokenattributes.OffsetAttribute;
 import org.apache.lucene.analysis.tokenattributes.TypeAttribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.MorphToken;
 
 @Service("morphService")
@@ -23,11 +26,23 @@ public class MorphServiceImpl implements MorphService {
 
 	private Logger logger = LoggerFactory.getLogger(MorphServiceImpl.class);
 	
+	@Autowired
+	@Qualifier("crescentCollectionHandler")
+	private CrescentCollectionHandler collectionHandler;
+	
 	@Override
-	public List<MorphToken> getTokens(String keyword, boolean isIndexingMode) throws IOException {
+	public List<MorphToken> getTokens(String keyword, boolean isIndexingMode, String collectionName) throws IOException {
 		StringReader reader = new StringReader(keyword);
 		
-		Analyzer analyzer = new KoreanAnalyzer(isIndexingMode);
+		CrescentCollection crescentCollection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
+		Analyzer analyzer = null;
+		
+		if(isIndexingMode) {
+			analyzer = crescentCollection.getIndexingModeAnalyzer();
+		} else {
+			analyzer = crescentCollection.getSearchModeAnalyzer();
+		}
+		
 		TokenStream stream = analyzer.reusableTokenStream("dummy", reader);
 		
 		CharTermAttribute charTermAtt = stream.getAttribute(CharTermAttribute.class);

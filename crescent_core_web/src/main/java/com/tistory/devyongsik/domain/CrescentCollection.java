@@ -3,13 +3,14 @@ package com.tistory.devyongsik.domain;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.lucene.analysis.Analyzer;
+
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 @XStreamAlias("collection")
 public class CrescentCollection {
-	private String analyzer;
 	
 	@XStreamAsAttribute
 	private String name;
@@ -24,12 +25,37 @@ public class CrescentCollection {
 	private List<CrescentCollectionField> fields;
 	private List<CrescentDefaultSearchField> defaultSearchFields;
 	private List<CrescentSortField> sortFields;
-
-	public String getAnalyzer() {
-		return analyzer;
+	
+	private List<CrescentAnalyzerHolder> analyzers;
+	
+	@XStreamOmitField
+	private Analyzer indexingModeAnalyzer;
+	
+	@XStreamOmitField
+	private Analyzer searchModeAnalyzer;
+	
+	public Analyzer getIndexingModeAnalyzer() {
+		return indexingModeAnalyzer;
 	}
-	public void setAnalyzer(String analyzer) {
-		this.analyzer = analyzer;
+	
+	public Analyzer getSearchModeAnalyzer() {
+		return searchModeAnalyzer;
+	}
+	
+	public void setIndexingModeAnalyzer(Analyzer analyzer) {
+		this.indexingModeAnalyzer = analyzer;
+	}
+	
+	public void setSearchModeAnalyzer(Analyzer analyzer) {
+		this.searchModeAnalyzer = analyzer;
+	}
+	
+	
+	public List<CrescentAnalyzerHolder> getAnalyzers() {
+		return analyzers;
+	}
+	public void setAnalyzers(List<CrescentAnalyzerHolder> analyzers) {
+		this.analyzers = analyzers;
 	}
 	public String getName() {
 		return name;
@@ -77,13 +103,15 @@ public class CrescentCollection {
 	public void setSearcherReloadScheduleMin(String searcherReloadScheduleMin) {
 		this.searcherReloadScheduleMin = searcherReloadScheduleMin;
 	}
+	
 	@Override
 	public String toString() {
-		return "CrescentCollection [analyzer=" + analyzer + ", name=" + name
-				+ ", indexingDirectory=" + indexingDirectory
-				+ ", searcherReloadScheduleMin=" + searcherReloadScheduleMin
-				+ ", crescentFieldByName=" + crescentFieldByName + ", fields="
-				+ fields + ", defaultSearchFields=" + defaultSearchFields
-				+ ", sortFields=" + sortFields + "]";
+		return "CrescentCollection [name=" + name + ", indexingDirectory="
+				+ indexingDirectory + ", searcherReloadScheduleMin="
+				+ searcherReloadScheduleMin + ", crescentFieldByName="
+				+ crescentFieldByName + ", fields=" + fields
+				+ ", defaultSearchFields=" + defaultSearchFields
+				+ ", sortFields=" + sortFields + ", analyzers=" + analyzers
+				+ "]";
 	}
 }

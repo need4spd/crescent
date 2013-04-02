@@ -2,7 +2,14 @@
 <!-- for production -->
 <collections>
   <collection name="sample">
-    <analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
+    <analyzers>
+      <!-- 
+      <analyzer type="indexing" className="org.apache.lucene.analysis.WhitespaceAnalyzer" constructor-args="org.apache.lucene.util.Version.LUCENE_36" />
+      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+     -->     
+      <analyzer type="indexing" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="true" />
+      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+    </analyzers>
     <indexingDirectory>crescent_index/sample</indexingDirectory>
     <searcherReloadScheduleMin>1</searcherReloadScheduleMin>
     <!-- indexingDirectory>/data1/lucene_index/sample</indexingDirectory -->
@@ -22,7 +29,14 @@
     </sortFields>
   </collection>
   <collection name="sample_wiki">
-    <analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
+    <analyzers>
+      <!-- 
+      <analyzer type="indexing" className="org.apache.lucene.analysis.WhitespaceAnalyzer" constructor-args="org.apache.lucene.util.Version.LUCENE_36" />
+      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+     -->     
+      <analyzer type="indexing" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="true" />
+      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+    </analyzers>
     <indexingDirectory>crescent_index/sample_wiki</indexingDirectory>
     <searcherReloadScheduleMin>1</searcherReloadScheduleMin>
     <!-- indexingDirectory>/data1/lucene_index/sample_wiki</indexingDirectory -->

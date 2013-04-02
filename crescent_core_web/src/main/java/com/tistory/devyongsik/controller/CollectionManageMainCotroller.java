@@ -30,8 +30,6 @@ public class CollectionManageMainCotroller {
 	@RequestMapping("/collectionManageMain")
 	public ModelAndView collectionManageMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-//		CrescentCollectionHandler collectionHandler 
-//			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
 		String selectedCollectionName = request.getParameter("collectionName");
@@ -55,9 +53,7 @@ public class CollectionManageMainCotroller {
 	
 	@RequestMapping("/collectionUpdate")
 	public ModelAndView collectionUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-//		CrescentCollectionHandler collectionHandler 
-//			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
 		CrescentCollection selectedCollection = collectionManageService.updateCollectionInfo(request);

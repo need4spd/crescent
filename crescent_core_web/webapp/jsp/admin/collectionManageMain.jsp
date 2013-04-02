@@ -113,12 +113,44 @@
             </select>
           </div>
         </div>
-      <div class="control-group">
-        <label class="control-label">Analyzer</label>
-        <div class="controls">
-          <input type="text" id="analyzer" name="analyzer" class="input-xxlarge" value="${selectedCollection.analyzer}"> 
-        </div>
-      </div>
+      	<c:forEach var="crescentAnalyzerHolder" items="${selectedCollection.analyzers}">
+      	<div class="control-group">
+	        <label class="control-label">
+	        	<c:if test='${crescentAnalyzerHolder.type eq "indexing"}'>IndexingMode Analyzer</c:if>
+	        	<c:if test='${crescentAnalyzerHolder.type eq "search"}'>SearchMode Analyzer</c:if>
+	        </label>
+	        <div class="controls">
+	          <c:if test='${crescentAnalyzerHolder.type eq "indexing"}'>
+	          	<input type="text" id="indexingModeAnalyzer" name="indexingModeAnalyzer" class="input-xxlarge" value="${crescentAnalyzerHolder.className}"> 
+	          </c:if>
+	          <c:if test='${crescentAnalyzerHolder.type eq "search"}'>
+	          	<input type="text" id="searchModeAnalyzer" name="searchModeAnalyzer" class="input-xxlarge" value="${crescentAnalyzerHolder.className}"> 
+	          </c:if>
+	        </div>
+	        <label class="control-label">
+	        	Type
+	        </label>
+	        <div class="controls">
+	          <c:if test='${crescentAnalyzerHolder.type eq "indexing"}'>
+	          	<input type="text" id="indexingModeAnalyzerType" name="indexingModeAnalyzerType" class="input-small" value="${crescentAnalyzerHolder.type}"> 
+	          </c:if>
+	          <c:if test='${crescentAnalyzerHolder.type eq "search"}'>
+	          	<input type="text" id="searchModeAnalyzerType" name="searchModeAnalyzerType" class="input-small" value="${crescentAnalyzerHolder.type}"> 
+	          </c:if>
+	        </div>
+	        <label class="control-label">
+	        	Constructor Args
+	        </label>
+	        <div class="controls">
+	          <c:if test='${crescentAnalyzerHolder.type eq "indexing"}'>
+	          	<input type="text" id="indexingModeAnalyzerConstArgs" name="indexingModeAnalyzerConstArgs" class="input-xxlarge" value="${crescentAnalyzerHolder.constructorArgs}"> 
+	          </c:if>
+	          <c:if test='${crescentAnalyzerHolder.type eq "search"}'>
+	          	<input type="text" id="searchModeAnalyzerConstArgs" name="searchModeAnalyzerConstArgs" class="input-xxlarge" value="${crescentAnalyzerHolder.constructorArgs}"> 
+	          </c:if>
+	        </div>
+	  </div>
+      </c:forEach>
       <div id="alert-area-analyzer"></div>
       <div class="control-group">
         <label class="control-label">Indexing Directory</label>

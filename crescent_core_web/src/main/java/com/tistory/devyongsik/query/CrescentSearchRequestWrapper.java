@@ -13,7 +13,6 @@ import org.apache.lucene.search.SortField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.config.SpringApplicationContext;
 import com.tistory.devyongsik.domain.CrescentCollection;
@@ -158,7 +157,7 @@ public class CrescentSearchRequestWrapper {
 			
 			try {
 				
-				resultQuery = queryParser.getQuery(getIndexedFields(), customQueryString, new KoreanAnalyzer(false));
+				resultQuery = queryParser.getQuery(getIndexedFields(), customQueryString, collection.getSearchModeAnalyzer());
 			
 			} catch (Exception e) {
 				logger.error("Error In getQuery ", e);
@@ -174,7 +173,7 @@ public class CrescentSearchRequestWrapper {
 			}
 			
 			DefaultKeywordParser queryParser = new DefaultKeywordParser();
-			resultQuery = queryParser.parse(getTargetSearchFields(), getKeyword(), new KoreanAnalyzer(false));
+			resultQuery = queryParser.parse(getTargetSearchFields(), getKeyword(), collection.getSearchModeAnalyzer());
 		
 		}
 		
@@ -189,7 +188,7 @@ public class CrescentSearchRequestWrapper {
 			
 			try {
 				
-				Query query = queryParser.getQuery(getIndexedFields(), filterQueryString, new KoreanAnalyzer(false));
+				Query query = queryParser.getQuery(getIndexedFields(), filterQueryString, collection.getSearchModeAnalyzer());
 			
 				Filter filter = new QueryWrapperFilter(query);
 				

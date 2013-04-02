@@ -6,5 +6,5 @@ import java.util.List;
 import com.tistory.devyongsik.domain.MorphToken;
 
 public interface MorphService {
-	List<MorphToken> getTokens(String keyword, boolean isIndexingMode) throws IOException;
+	List<MorphToken> getTokens(String keyword, boolean isIndexingMode, String collectionName) throws IOException;
 }

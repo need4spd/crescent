@@ -2,9 +2,16 @@
 <!-- for local -->
 <collections>
   <collection name="sample">
-    <analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
+    <analyzers>
+  		<!-- 
+	    <analyzer type="indexing" className="org.apache.lucene.analysis.WhitespaceAnalyzer" constructor-args="org.apache.lucene.util.Version.LUCENE_36" />
+	    <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+		 -->		 
+		<analyzer type="indexing" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="true" />
+	    <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+	</analyzers>
     <indexingDirectory>crescent_index/sample</indexingDirectory>
-    <searcherReloadScheduleMin>1</searcherReloadScheduleMin>
+    <searcherReloadScheduleMin>50</searcherReloadScheduleMin>
     <!-- indexingDirectory>/data1/lucene_index/sample</indexingDirectory -->
     <fields>
       <field name="board_id" store="true" index="true" type="Long" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>
@@ -22,9 +29,16 @@
     </sortFields>
   </collection>
   <collection name="sample_wiki">
-    <analyzer>com.tistory.devyongsik.analyzer.KoreanAnalyzer</analyzer>
+    <analyzers>
+  		<!-- 
+	    <analyzer type="indexing" className="org.apache.lucene.analysis.WhitespaceAnalyzer" constructor-args="org.apache.lucene.util.Version.LUCENE_36" />
+	    <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+		 -->		 
+		<analyzer type="indexing" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="true" />
+	    <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+	</analyzers>
     <indexingDirectory>crescent_index/sample_wiki</indexingDirectory>
-    <searcherReloadScheduleMin>1</searcherReloadScheduleMin>
+    <searcherReloadScheduleMin>50</searcherReloadScheduleMin>
     <!-- indexingDirectory>/data1/lucene_index/sample_wiki</indexingDirectory -->
     <fields>
       <field name="wiki_idx" store="true" index="true" type="long" analyze="false" termposition="false" termoffset="false" boost="0.0" must="false" termvector="false"/>

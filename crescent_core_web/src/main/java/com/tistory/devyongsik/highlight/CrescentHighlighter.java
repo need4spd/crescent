@@ -14,18 +14,16 @@ import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
 
+@Deprecated
 public class CrescentHighlighter {
 	private Logger logger = LoggerFactory.getLogger(CrescentHighlighter.class);
 
-	//TODO Analyzer 동적으로 생성하도록..
-	private Analyzer analyzer = new KoreanAnalyzer(false);
 	private SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<b>","</b>");
 
-	public String getBestFragment(CrescentCollectionField field, String value, Query query) throws CrescentInvalidRequestException {
+	public String getBestFragment(CrescentCollectionField field, String value, Query query, Analyzer analyzer) throws CrescentInvalidRequestException {
 		String fragment = "";
 
 		logger.debug("fieldName : {}", field.getName());

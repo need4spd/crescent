@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.config.CrescentCollectionHandler;
 import com.tistory.devyongsik.domain.CrescentCollection;
 
@@ -54,7 +53,7 @@ public class IndexWriterManager {
 					dir = FSDirectory.open(new File(indexDir));
 				}
 				
-				IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, new KoreanAnalyzer(true));
+				IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, crescentCollection.getIndexingModeAnalyzer());
 				conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
 				//conf.setIndexDeletionPolicy(new LastCommitDeletePolicy());
 				

@@ -2,7 +2,6 @@ package com.tistory.devyongsik.highlight;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -35,10 +34,7 @@ import org.apache.lucene.util.Version;
 import org.junit.Test;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
-import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.SearchRequest;
-import com.tistory.devyongsik.exception.CrescentInvalidRequestException;
-import com.tistory.devyongsik.query.CrescentSearchRequestWrapper;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
 
@@ -47,32 +43,6 @@ public class CrescentHighlighterTest extends CrescentTestCaseUtil {
 	@PostConstruct
 	public void init() {
 		super.init();
-	}
-	
-	@Test
-	public void highlightTest() throws CrescentInvalidRequestException {
-		SearchRequest searchRequest = new SearchRequest();
-		searchRequest.setKeyword("입니다");
-		searchRequest.setCollectionName("sample");
-		searchRequest.setSearchField("title,dscr");
-		
-		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
-		List<CrescentCollectionField> targetSearchFields = csrw.getTargetSearchFields();
-		
-		System.out.println("####### : " + targetSearchFields);
-		
-		CrescentHighlighter highlighter = new CrescentHighlighter();
-		String r = highlighter.getBestFragment(csrw.getTargetSearchFields().get(0), "제목 입니다.텍스트 입니다.제목 입니다.", csrw.getQuery());
-		String r2 = highlighter.getBestFragment(csrw.getTargetSearchFields().get(1), "텍스트 입니다. 제목.", csrw.getQuery());
-		
-		System.out.println(r);
-		
-		System.out.println("-------");
-		
-		System.out.println(r2);
-		
-		Assert.assertEquals("제목 <b>입니다</b>.텍스트 <b>입니다</b>.제목 <b>입니다</b>.", r);
-		Assert.assertEquals("텍스트 <b>입니다</b>. 제목.", r2);
 	}
 	
 	@Test

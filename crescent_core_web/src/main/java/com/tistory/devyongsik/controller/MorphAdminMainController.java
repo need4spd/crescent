@@ -42,11 +42,12 @@ public class MorphAdminMainController {
 	public ModelAndView morphTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		String keyword = request.getParameter("keyword");
+		String collectionName = request.getParameter("collectionName");
 		
-		logger.debug("keyword : {}", keyword);
+		logger.debug("keyword : {}, collectionName : {}", keyword, collectionName);
 		
-		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true);
-		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false);
+		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, collectionName);
+		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, collectionName);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/admin/morphMain");
@@ -61,11 +62,12 @@ public class MorphAdminMainController {
 	public void morphTestAjax(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		String keyword = request.getParameter("keyword");
+		String collectionName = request.getParameter("collectionName");
 		
-		logger.debug("keyword : {}", keyword);
+		logger.debug("keyword : {}, collectionName : {}", keyword, collectionName);
 		
-		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true);
-		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false);
+		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, collectionName);
+		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, collectionName);
 		
 		List<MorphResult> morphIndexingTestResult = new ArrayList<MorphResult>();
 		List<MorphResult> morphQueryTestResult = new ArrayList<MorphResult>();

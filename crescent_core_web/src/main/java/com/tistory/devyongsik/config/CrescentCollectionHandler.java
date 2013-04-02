@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -16,12 +18,14 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.lucene.analysis.Analyzer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.thoughtworks.xstream.XStream;
+import com.tistory.devyongsik.domain.CrescentAnalyzerHolder;
 import com.tistory.devyongsik.domain.CrescentCollection;
 import com.tistory.devyongsik.domain.CrescentCollectionField;
 import com.tistory.devyongsik.domain.CrescentCollections;
@@ -68,6 +72,8 @@ public class CrescentCollectionHandler {
 	}
 	
 	private void loadFromXML() {
+		
+		
 		XStream stream = new XStream();
 		stream.processAnnotations(CrescentCollections.class);
 		stream.alias( "collections", CrescentCollections.class );
@@ -103,6 +109,79 @@ public class CrescentCollectionHandler {
 			inputStream.close();
 		} catch (Exception e) {
 			logger.error("stream close error ; ", e);
+		}
+		
+		//Analyzer 생성
+		for (CrescentCollection collection : list) {
+			List<CrescentAnalyzerHolder> analyzerHolders = collection.getAnalyzers();
+			
+			for(CrescentAnalyzerHolder analyzerHolder : analyzerHolders) {
+				String type = analyzerHolder.getType();
+				String className = analyzerHolder.getClassName();
+				String constructorArgs = analyzerHolder.getConstructorArgs();
+				
+				Analyzer analyzer = null;
+				
+				try {
+					@SuppressWarnings("unchecked")
+					Class<Analyzer> analyzerClass = (Class<Analyzer>) Class.forName(className);	
+					
+					if(constructorArgs == null || constructorArgs.trim().length() == 0) {
+						
+						analyzer = analyzerClass.newInstance();
+						
+					} else if ("true".equals(constructorArgs.toLowerCase()) || "false".equals(constructorArgs.toLowerCase())) {
+					
+						boolean booleanStr = Boolean.valueOf(constructorArgs);
+						Class<?>[] intArgsClass = new Class<?>[] {boolean.class};
+						Object[] intArgs = new Object[] {booleanStr};
+						
+						Constructor<Analyzer> intArgsConstructor = analyzerClass.getConstructor(intArgsClass);
+						analyzer = (Analyzer) intArgsConstructor.newInstance(intArgs);
+					
+					} else {
+						
+						Class<?> initArgClass = Class.forName(constructorArgs);
+						
+						Class<?>[] intArgsClass = new Class<?>[] {initArgClass.getClass()};
+						Object[] intArgs = new Object[] {initArgClass.newInstance()};
+						
+						Constructor<Analyzer> intArgsConstructor = analyzerClass.getConstructor(intArgsClass);
+						analyzer = (Analyzer) intArgsConstructor.newInstance(intArgs);
+					}
+					
+					if("indexing".equals(type)) {
+
+						collection.setIndexingModeAnalyzer(analyzer);
+					
+					} else if("search".equals(type)) {
+					
+						collection.setSearchModeAnalyzer(analyzer);
+						
+					} else {
+						throw new IllegalStateException("정의되지 않은 Analyzer type 입니다. ["+type+"]");
+					}
+				
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -211,4 +290,5 @@ public class CrescentCollectionHandler {
 		makeFieldsMap();
 		makeAddtionalFields();
 	}
+	
 }
