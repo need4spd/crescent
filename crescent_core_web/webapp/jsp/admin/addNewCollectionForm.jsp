@@ -81,9 +81,39 @@
           </div>
         </div>
       <div class="control-group">
-        <label class="control-label">Analyzer</label>
+        <label class="control-label">IndexingMode Analyzer</label>
         <div class="controls">
-          <input type="text" id="analyzer" name="analyzer" class="input-xxlarge" value=""> 
+          <input type="text" id="indexingModeAnalyzer" name="indexingModeAnalyzer" class="input-xxlarge" value=""> 
+        </div>
+        <label class="control-label">
+	        	Type
+	    </label>
+        <div class="controls">
+          <input type="text" id="indexingModeAnalyzerType" name="indexingModeAnalyzerType" class="input-small" value="indexing" disabled> 
+        </div>
+        <label class="control-label">
+	        	Constructor Args
+	    </label>
+        <div class="controls">
+          <input type="text" id="indexingModeAnalyzerConstArgs" name="indexingModeAnalyzerConstArgs" class="input-xxlarge" value=""> 
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">SearchMode Analyzer</label>
+        <div class="controls">
+          <input type="text" id="searchModeAnalyzer" name="searchModeAnalyzer" class="input-xxlarge" value=""> 
+        </div>
+        <label class="control-label">
+	        	Type
+	    </label>
+        <div class="controls">
+          <input type="text" id="searchModeAnalyzerType" name="searchModeAnalyzerType" class="input-small" value="search" disabled> 
+        </div>
+        <label class="control-label">
+	        	Constructor Args
+	    </label>
+        <div class="controls">
+          <input type="text" id="searchModeAnalyzerConstArgs" name="searchModeAnalyzerConstArgs" class="input-xxlarge" value=""> 
         </div>
       </div>
       <div id="alert-area-analyzer"></div>

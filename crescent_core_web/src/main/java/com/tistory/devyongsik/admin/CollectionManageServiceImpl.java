@@ -44,7 +44,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		String searchModeAnalyzer = request.getParameter("searchModeAnalyzer");
 		
 		String indexingModeAnalyzerType = request.getParameter("indexingModeAnalyzerType");
-		String searchModelAnalyzerType = request.getParameter("searchModeAnalyzerType");
+		String searchModeAnalyzerType = request.getParameter("searchModeAnalyzerType");
 		
 		String indexingModeAnalyzerConstArgs = request.getParameter("indexingModeAnalyzerConstArgs");
 		String searchModeAnalyzerConstArgs = request.getParameter("searchModeAnalyzerConstArgs");
@@ -60,8 +60,8 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		
 		CrescentAnalyzerHolder searchModeAnalyzerHolder = new CrescentAnalyzerHolder();
 		searchModeAnalyzerHolder.setClassName(searchModeAnalyzer);
-		searchModeAnalyzerHolder.setConstructorArgs(searchModelAnalyzerType);
-		searchModeAnalyzerHolder.setType(searchModeAnalyzerConstArgs);
+		searchModeAnalyzerHolder.setConstructorArgs(searchModeAnalyzerConstArgs);
+		searchModeAnalyzerHolder.setType(searchModeAnalyzerType);
 		analyzerHolderList.add(searchModeAnalyzerHolder);
 		
 		selectedCollection.setAnalyzers(analyzerHolderList);
@@ -76,7 +76,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			logger.debug("indexingModeAnalyzer : {} ", request.getParameter("indexingModeAnalyzer"));
 			logger.debug("searchModeAnalyzer : {} ", request.getParameter("searchModeAnalyzer"));
 			logger.debug("indexingModeAnalyzerType : {} ", request.getParameter("indexingModeAnalyzerType"));
-			logger.debug("searchModelAnalyzerType : {} ", request.getParameter("searchModelAnalyzerType"));
+			logger.debug("searchModeAnalyzerType : {} ", request.getParameter("searchModeAnalyzerType"));
 			logger.debug("indexingModeAnalyzerConstArgs : {} ", request.getParameter("indexingModeAnalyzerConstArgs"));
 			logger.debug("searchModeAnalyzerConstArgs : {} ", request.getParameter("searchModeAnalyzerConstArgs"));
 		}
@@ -205,8 +205,8 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 		
 		CrescentAnalyzerHolder searchModeAnalyzerHolder = new CrescentAnalyzerHolder();
 		searchModeAnalyzerHolder.setClassName(searchModeAnalyzer);
-		searchModeAnalyzerHolder.setConstructorArgs(searchModelAnalyzerType);
-		searchModeAnalyzerHolder.setType(searchModeAnalyzerConstArgs);
+		searchModeAnalyzerHolder.setConstructorArgs(searchModeAnalyzerConstArgs);
+		searchModeAnalyzerHolder.setType(searchModelAnalyzerType);
 		analyzerHolderList.add(searchModeAnalyzerHolder);
 		
 		if(logger.isDebugEnabled()) {

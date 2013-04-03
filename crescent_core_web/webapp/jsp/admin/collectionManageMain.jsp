@@ -132,10 +132,10 @@
 	        </label>
 	        <div class="controls">
 	          <c:if test='${crescentAnalyzerHolder.type eq "indexing"}'>
-	          	<input type="text" id="indexingModeAnalyzerType" name="indexingModeAnalyzerType" class="input-small" value="${crescentAnalyzerHolder.type}"> 
+	          	<input type="text" id="indexingModeAnalyzerType" name="indexingModeAnalyzerType" class="input-small" value="${crescentAnalyzerHolder.type}" disabled> 
 	          </c:if>
 	          <c:if test='${crescentAnalyzerHolder.type eq "search"}'>
-	          	<input type="text" id="searchModeAnalyzerType" name="searchModeAnalyzerType" class="input-small" value="${crescentAnalyzerHolder.type}"> 
+	          	<input type="text" id="searchModeAnalyzerType" name="searchModeAnalyzerType" class="input-small" value="${crescentAnalyzerHolder.type}" disabled> 
 	          </c:if>
 	        </div>
 	        <label class="control-label">
