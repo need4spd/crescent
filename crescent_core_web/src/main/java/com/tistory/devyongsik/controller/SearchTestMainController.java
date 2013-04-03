@@ -51,7 +51,8 @@ public class SearchTestMainController {
 		userRequest.put("sort",searchRequest.getSort());
 		userRequest.put("pageNum",searchRequest.getPageNum());
 		userRequest.put("pageSize",searchRequest.getPageSize());
-		userRequest.put("filter", searchRequest.getFilter());
+		userRequest.put("ft", searchRequest.getFilter());
+		userRequest.put("rq", searchRequest.getRegexQuery());
 
 		SearchResult searchResult = searchService.search(searchRequest);
 		ModelAndView modelAndView = new ModelAndView();

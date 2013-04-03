@@ -20,12 +20,23 @@ public class SearchRequest {
 	@RequestParamName(name="search_field", defaultValue="")
 	private String searchField;
 
+	@RequestParamName(name="rq", defaultValue="")
+	private String regexQuery;
+	
 	private String userIp;
 	
 	private String userId;
 	
 	private String pcId;
-	
+
+	public String getRegexQuery() {
+		return regexQuery;
+	}
+
+	public void setRegexQuery(String regexQuery) {
+		this.regexQuery = regexQuery;
+	}
+
 	@RequestParamName(name="cq", defaultValue="")
 	private String customQuery;
 	
@@ -125,7 +136,8 @@ public class SearchRequest {
 		return "SearchRequest [collectionName=" + collectionName + ", keyword="
 				+ keyword + ", pageNum=" + pageNum + ", pageSize=" + pageSize
 				+ ", sort=" + sort + ", searchField=" + searchField
-				+ ", userIp=" + userIp + ", userId=" + userId + ", pcId="
-				+ pcId + ", customQuery=" + customQuery + "]";
+				+ ", regexQuery=" + regexQuery + ", userIp=" + userIp
+				+ ", userId=" + userId + ", pcId=" + pcId + ", customQuery="
+				+ customQuery + ", filter=" + filter + "]";
 	}
 }

@@ -19,6 +19,7 @@ import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
+import org.apache.lucene.search.regex.RegexQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,19 +32,22 @@ public class CustomQueryStringParser {
 	private static Pattern pattern = Pattern.compile("(.*?)(:)(\".*?\")");
 	private Query resultQuery = null;
 	
-	protected Query getQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer) throws CrescentInvalidRequestException {
+	protected Query getQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer, String regexQueryString) throws CrescentInvalidRequestException {
 		if(resultQuery != null) {
 			return this.resultQuery;
 		} else {
-			return getQueryFromCustomQuery(indexedFields, customQueryString, analyzer);
+			return getQueryFromCustomQuery(indexedFields, customQueryString, analyzer, regexQueryString);
 		}
 	}
 	
-	private Query getQueryFromCustomQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer) 
+	private Query getQueryFromCustomQuery(List<CrescentCollectionField> indexedFields, String customQueryString, Analyzer analyzer, String regexQueryString) 
 			throws CrescentInvalidRequestException {
 		
-		//패턴분석
-		Matcher m = pattern.matcher(customQueryString);
+		List<QueryAnalysisResult> queryAnalysisResultList = getQueryAnalysisResults(customQueryString);
+		
+		BooleanQuery resultQuery = new BooleanQuery();
+		
+		CrescentCollectionField searchTargetField = null;
 		
 		String fieldName = "";
 		Occur occur = Occur.SHOULD;
@@ -51,28 +55,20 @@ public class CustomQueryStringParser {
 		float boost = 0F;
 		
 		boolean isRangeQuery = false;
-		BooleanQuery resultQuery = new BooleanQuery();
 		
-		CrescentCollectionField searchTargetField = null;
+		boolean any = true;
+		boolean isLongField = false;
+		boolean isAnalyzed = false;
 		
-		while(m.find()) {
-			if(m.groupCount() != 3) {
-				throw new CrescentInvalidRequestException("쿼리 문법 오류. [" + customQueryString + "]");
-			}
-			
-			fieldName = m.group(1).trim();
-			if(fieldName.startsWith("-")) {
-				occur = Occur.MUST_NOT;
-				fieldName = fieldName.substring(1);
-			} else if (fieldName.startsWith("+")) {
-				occur = Occur.MUST;
-				fieldName = fieldName.substring(1);
-			}
+		for(QueryAnalysisResult queryAnalysisResult : queryAnalysisResultList) {
+		
+			fieldName = queryAnalysisResult.getFieldName();
+			occur = queryAnalysisResult.getOccur();
+			userRequestQuery = queryAnalysisResult.getUserQuery();
+			boost = queryAnalysisResult.getBoost();
+			isRangeQuery = queryAnalysisResult.isRangeQuery();
 			
 			//field가 검색 대상에 있는지 확인..
-			boolean any = true;
-			boolean isLongField = false;
-			boolean isAnalyzed = false;
 			for(CrescentCollectionField crescentField : indexedFields) {
 				if(fieldName.equals(crescentField.getName())) {
 					any = false;
@@ -91,28 +87,9 @@ public class CustomQueryStringParser {
 				throw new CrescentInvalidRequestException("검색 할 수 없는 필드입니다. [" + fieldName + "]");
 			}
 			
-			
-			userRequestQuery = m.group(3).trim().replaceAll("\"", "");
-			if((userRequestQuery.startsWith("[") && userRequestQuery.endsWith("]")) 
-					|| (userRequestQuery.startsWith("{") && userRequestQuery.endsWith("}"))) {
-				
-				isRangeQuery = true;
-			
-			}
-			
-			//boost 정보 추출
-			int indexOfBoostSign = userRequestQuery.indexOf("^");
-			if(indexOfBoostSign >= 0) {
-				boost = Float.parseFloat(userRequestQuery.substring(indexOfBoostSign+1));
-				userRequestQuery = userRequestQuery.substring(0, indexOfBoostSign);
-			}
-			
-			logger.info("user Request Query : {} ", userRequestQuery);
-			logger.info("boost : {} ", boost);
-			
 			//range쿼리인 경우에는 RangeQuery 생성
 			if(isRangeQuery) {
-	
+
 				//QueryParser qp = new QueryParser(Version.LUCENE_36, fieldName, analyzer);
 				String minValue = "";
 				String maxValue = "";
@@ -191,8 +168,8 @@ public class CustomQueryStringParser {
 						
 						resultQuery.add(query, occur);
 						
-						logger.debug("query : {} ", query.toString());
-						logger.debug("result query : {} ", resultQuery.toString());
+						logger.info("query : {} ", query.toString());
+						logger.info("result query : {} ", resultQuery.toString());
 						
 					} else {
 						
@@ -211,13 +188,28 @@ public class CustomQueryStringParser {
 							
 							resultQuery.add(query, occur);
 							
-							logger.debug("query : {} ", query.toString());
-							logger.debug("result query : {} ", resultQuery.toString());
+							logger.info("query : {} ", query.toString());
+							logger.info("result query : {} ", resultQuery.toString());
 						}
 					}
 				}
 			}
 		}
+		
+		if(regexQueryString != null && regexQueryString.length() > 0) {
+			List<QueryAnalysisResult> regexQueryAnalysisResultList = getQueryAnalysisResults(regexQueryString);
+			
+			for(QueryAnalysisResult queryAnalysisResult : regexQueryAnalysisResultList) {
+				Term term = new Term(queryAnalysisResult.getFieldName(), queryAnalysisResult.getUserQuery());
+				Query regexQuery = new RegexQuery(term);
+				
+				logger.info("Regex Query : {}", regexQuery);
+				
+				resultQuery.add(regexQuery, queryAnalysisResult.getOccur());
+			}
+		}
+		
+		logger.info("result query : {} ", resultQuery.toString());
 		
 		this.resultQuery = resultQuery;
 		
@@ -249,5 +241,103 @@ public class CustomQueryStringParser {
 			
 
 		return rst;
+	}
+	
+	private List<QueryAnalysisResult> getQueryAnalysisResults(String analysisTargetString) throws CrescentInvalidRequestException {
+		List<QueryAnalysisResult> queryAnalysisResultList = new ArrayList<QueryAnalysisResult>();
+		
+		String fieldName = "";
+		Occur occur = Occur.SHOULD;
+		String userRequestQuery = "";
+		float boost = 0F;
+		
+		boolean isRangeQuery = false;
+		
+		Matcher m = pattern.matcher(analysisTargetString);
+		
+		while(m.find()) {
+			if(m.groupCount() != 3) {
+				throw new CrescentInvalidRequestException("쿼리 문법 오류. [" + analysisTargetString + "]");
+			}
+			
+			QueryAnalysisResult anaysisResult = new QueryAnalysisResult();
+			
+			fieldName = m.group(1).trim();
+			if(fieldName.startsWith("-")) {
+				occur = Occur.MUST_NOT;
+				fieldName = fieldName.substring(1);
+			} else if (fieldName.startsWith("+")) {
+				occur = Occur.MUST;
+				fieldName = fieldName.substring(1);
+			}
+			
+			userRequestQuery = m.group(3).trim().replaceAll("\"", "");
+			if((userRequestQuery.startsWith("[") && userRequestQuery.endsWith("]")) 
+					|| (userRequestQuery.startsWith("{") && userRequestQuery.endsWith("}"))) {
+				
+				isRangeQuery = true;
+			
+			}
+			
+			//boost 정보 추출
+			int indexOfBoostSign = userRequestQuery.indexOf("^");
+			if(indexOfBoostSign >= 0) {
+				boost = Float.parseFloat(userRequestQuery.substring(indexOfBoostSign+1));
+				userRequestQuery = userRequestQuery.substring(0, indexOfBoostSign);
+			}
+			
+			logger.info("user Request Query : {} ", userRequestQuery);
+			logger.info("boost : {} ", boost);
+			
+			anaysisResult.setFieldName(fieldName);
+			anaysisResult.setBoost(boost);
+			anaysisResult.setOccur(occur);
+			anaysisResult.setRangeQuery(isRangeQuery);
+			anaysisResult.setUserQuery(userRequestQuery);
+
+			queryAnalysisResultList.add(anaysisResult);
+		}
+		
+		return queryAnalysisResultList;
+	}
+	
+	private class QueryAnalysisResult {
+		
+		private String fieldName;
+		private String userQuery;
+		private Occur occur = Occur.SHOULD;
+		private float boost = 0F;
+		private boolean isRangeQuery = false;
+		
+		public String getFieldName() {
+			return fieldName;
+		}
+		public void setFieldName(String fieldName) {
+			this.fieldName = fieldName;
+		}
+		public String getUserQuery() {
+			return userQuery;
+		}
+		public void setUserQuery(String userQuery) {
+			this.userQuery = userQuery;
+		}
+		public Occur getOccur() {
+			return occur;
+		}
+		public void setOccur(Occur occur) {
+			this.occur = occur;
+		}
+		public float getBoost() {
+			return boost;
+		}
+		public void setBoost(float boost) {
+			this.boost = boost;
+		}
+		public boolean isRangeQuery() {
+			return isRangeQuery;
+		}
+		public void setRangeQuery(boolean isRangeQuery) {
+			this.isRangeQuery = isRangeQuery;
+		}
 	}
 }

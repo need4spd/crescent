@@ -68,6 +68,13 @@
 				</div>
 			</div>
 			<div class="control-group">
+				<label class="control-label" for="page_size">Regex Query</label>
+				<div class="controls">
+					<input type="text" id="rq" name="rq" value="${USER_REQUEST.rq}"  onkeypress="enterKey(event);" 
+						placeholder="필터조건">
+				</div>
+			</div>
+			<div class="control-group">
 				<label class="control-label" for="sort">정렬조건</label>
 				<div class="controls">
 					<input type="text" id="sort" name="sort" value="${USER_REQUEST.sort}"  onkeypress="enterKey(event);" 

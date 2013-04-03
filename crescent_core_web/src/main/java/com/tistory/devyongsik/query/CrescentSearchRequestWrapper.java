@@ -151,13 +151,14 @@ public class CrescentSearchRequestWrapper {
 		Query resultQuery = null;
 		
 		String customQueryString = searchRequest.getCustomQuery();
+		String regexQueryString = searchRequest.getRegexQuery();
 		
-		if(customQueryString != null && customQueryString.length() > 0) {
+		if((customQueryString != null && customQueryString.length() > 0) || (regexQueryString != null && regexQueryString.length() > 0)) {
 			CustomQueryStringParser queryParser = new CustomQueryStringParser();
 			
 			try {
 				
-				resultQuery = queryParser.getQuery(getIndexedFields(), customQueryString, collection.getSearchModeAnalyzer());
+				resultQuery = queryParser.getQuery(getIndexedFields(), customQueryString, collection.getSearchModeAnalyzer(), regexQueryString);
 			
 			} catch (Exception e) {
 				logger.error("Error In getQuery ", e);
@@ -188,7 +189,7 @@ public class CrescentSearchRequestWrapper {
 			
 			try {
 				
-				Query query = queryParser.getQuery(getIndexedFields(), filterQueryString, collection.getSearchModeAnalyzer());
+				Query query = queryParser.getQuery(getIndexedFields(), filterQueryString, collection.getSearchModeAnalyzer(), searchRequest.getRegexQuery());
 			
 				Filter filter = new QueryWrapperFilter(query);
 				

@@ -22,7 +22,7 @@ public class CrescentFastVectorHighlighter {
 			return fragment;
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("highlighter error : ", e);
 			
 			return "";
 		}
