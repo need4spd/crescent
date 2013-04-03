@@ -5,10 +5,10 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 
-	<!-- context-param>
+	<context-param>
 		<param-name>webAppRootKey</param-name>
-		<param-value>moon.root</param-value>
-	</context-param -->
+		<param-value>crescent.root</param-value>
+	</context-param>
 
 	<!--  servlet>
 	    <servlet-name>InitializeServlet</servlet-name>
