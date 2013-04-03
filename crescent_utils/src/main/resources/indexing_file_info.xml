@@ -4,4 +4,6 @@
   <outputDir>/Users/need4spd/test</outputDir>
   <limitFileCountOnOutput>3</limitFileCountOnOutput>
   <fileExtInclude>java|xml|properties</fileExtInclude>
+  <inputEncoding>euc-kr</inputEncoding>
+  <outputEncoding>euc-kr</outputEncoding>
 </fileInfo>

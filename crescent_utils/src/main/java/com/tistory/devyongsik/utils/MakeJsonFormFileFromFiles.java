@@ -49,7 +49,7 @@ public class MakeJsonFormFileFromFiles {
 		File sourceFile = new File(fileInfo.getSrcDir());
 		
 		File outputFile = new File(fileInfo.getOutputDir() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".txt");
-		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), fileInfo.getOutputEncoding()));
 		
 		writeFile(sourceFile);
 		
@@ -138,7 +138,7 @@ public class MakeJsonFormFileFromFiles {
 				StringBuffer contents = new StringBuffer();
 				
 				InputStream is = new FileInputStream(sourceFile);
-				InputStreamReader isr = new InputStreamReader(is);
+				InputStreamReader isr = new InputStreamReader(is, fileInfo.getInputEncoding());
 				BufferedReader br = new BufferedReader(isr);
 				
 				String t = "";
@@ -172,7 +172,7 @@ public class MakeJsonFormFileFromFiles {
 	private BufferedWriter exchangeWriter(BufferedWriter oldWriter) throws IOException {
 		oldWriter.close();
 		File outputFile = new File(fileInfo.getOutputDir() + "/" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".txt");
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile)));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFile), fileInfo.getOutputEncoding()));
 		
 		return bw;
 		
@@ -205,6 +205,31 @@ public class MakeJsonFormFileFromFiles {
 		@XmlAnyAttribute
 		private String fileExtInclude;
 		
+		@XmlAnyAttribute
+		private String inputEncoding;
+		
+		@XmlAnyAttribute
+		private String outputEncoding;
+		
+		
+		
+		
+		public String getInputEncoding() {
+			return inputEncoding;
+		}
+
+		public void setInputEncoding(String inputEncoding) {
+			this.inputEncoding = inputEncoding;
+		}
+
+		public String getOutputEncoding() {
+			return outputEncoding;
+		}
+
+		public void setOutputEncoding(String outputEncoding) {
+			this.outputEncoding = outputEncoding;
+		}
+
 		public String getSrcDir() {
 			return srcDir;
 		}
