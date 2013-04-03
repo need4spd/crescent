@@ -135,6 +135,8 @@ public class MakeJsonFormFileFromFiles {
 				String fileName = sourceFile.getName();
 				String filePath = sourceFile.getPath();
 				String modidate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(sourceFile.lastModified()));
+				String fileExtName = sourceFile.getName().substring(sourceFile.getName().lastIndexOf(".")+1);
+				
 				StringBuffer contents = new StringBuffer();
 				
 				InputStream is = new FileInputStream(sourceFile);
@@ -159,6 +161,7 @@ public class MakeJsonFormFileFromFiles {
 				oneFile.put("filePath", filePath);
 				oneFile.put("modiDate", modidate);
 				oneFile.put("contents", contents.toString());
+				oneFile.put("fileExtName", fileExtName);
 				
 				targetFileList.add(oneFile);
 				
