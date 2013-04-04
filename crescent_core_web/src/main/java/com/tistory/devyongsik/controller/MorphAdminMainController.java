@@ -19,6 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.tistory.devyongsik.admin.MorphService;
+import com.tistory.devyongsik.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.domain.CrescentCollection;
+import com.tistory.devyongsik.domain.CrescentCollections;
 import com.tistory.devyongsik.domain.MorphResult;
 import com.tistory.devyongsik.domain.MorphToken;
 
@@ -29,10 +32,30 @@ public class MorphAdminMainController {
 	@Autowired
 	@Qualifier("morphService")
 	private MorphService morphService = null;
+	
+	@Autowired
+	@Qualifier("crescentCollectionHandler")
+	private CrescentCollectionHandler collectionHandler;
 
 	@RequestMapping("/morphMain")
 	public ModelAndView morphMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		
+		String selectedCollectionName = request.getParameter("col_name");
+		if(selectedCollectionName == null) {
+			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
+		}
+		
 		ModelAndView modelAndView = new ModelAndView();
+		//modelAndView.addObject("crescentCollections", crescentCollections);
+		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
+		
+		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		
+		modelAndView.addObject("crescentCollectionList", crescentCollectionList);
+		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
+		
 		modelAndView.setViewName("/admin/morphMain");
 
 		return modelAndView;
@@ -42,14 +65,29 @@ public class MorphAdminMainController {
 	public ModelAndView morphTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		String keyword = request.getParameter("keyword");
-		String collectionName = request.getParameter("collectionName");
 		
-		logger.debug("keyword : {}, collectionName : {}", keyword, collectionName);
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
-		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, collectionName);
-		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, collectionName);
+		String selectedCollectionName = request.getParameter("col_name");
+		if(selectedCollectionName == null) {
+			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
+		}
 		
 		ModelAndView modelAndView = new ModelAndView();
+		//modelAndView.addObject("crescentCollections", crescentCollections);
+		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
+		
+		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
+		
+		modelAndView.addObject("crescentCollectionList", crescentCollectionList);
+		modelAndView.addObject("selectedCollection", crescentCollections.getCrescentCollection(selectedCollectionName));
+		
+		
+		logger.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
+		
+		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, selectedCollectionName);
+		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, selectedCollectionName);
+		
 		modelAndView.setViewName("/admin/morphMain");
 
 		modelAndView.addObject("indexingModeList", resultTokenListIndexingMode);
