@@ -100,7 +100,9 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			CrescentCollectionField crescentField = new CrescentCollectionField();
 			crescentField.setName(fieldName);
 			
-			crescentCollectionFieldList.add(crescentField);
+			if(!crescentCollectionFieldList.contains(crescentField)) {
+				crescentCollectionFieldList.add(crescentField);
+			}
 		}
 				
 		for(CrescentCollectionField crescentField : crescentCollectionFieldList) {

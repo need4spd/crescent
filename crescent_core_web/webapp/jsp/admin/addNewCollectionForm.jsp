@@ -66,6 +66,10 @@
 		});
 		
 		if(isValid) {
+			$('[disabled]').each(function(i) {
+				$(this).attr("disabled", false);
+			});
+			
 			$('#collectionManageForm').attr('action', 'collectionAdd.devys').submit();
 		}
 	}	

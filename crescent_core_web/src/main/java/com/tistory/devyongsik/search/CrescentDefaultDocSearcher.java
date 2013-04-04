@@ -147,7 +147,7 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 						if(field.isStore() && !field.isNumeric()) {
 							
 							//필드별 결과를 가져온다.
-							value = highlighter.getBestFragment(indexSearcher.getIndexReader(), hits[i].doc, csrw.getQuery(), field.getName());
+							value = highlighter.getBestFragment(indexSearcher.getIndexReader(), hits[i].doc, query, field.getName());
 								
 						}
 						
