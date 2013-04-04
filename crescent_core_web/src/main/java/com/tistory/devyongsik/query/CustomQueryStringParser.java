@@ -112,18 +112,18 @@ public class CustomQueryStringParser {
 					isIncludeMax = true;
 				}
 				
-				logger.info("minInclude : {}, maxInclude : {}", isIncludeMin, isIncludeMax);
+				logger.debug("minInclude : {}, maxInclude : {}", isIncludeMin, isIncludeMax);
 				
 				minValue = splitQuery[0].trim().substring(1);
 				maxValue = splitQuery[1].trim().substring(0, splitQuery[1].trim().length() - 1);
 				
-				logger.info("minValue : {}, maxValue : {}", minValue, maxValue);
+				logger.debug("minValue : {}, maxValue : {}", minValue, maxValue);
 				
 				boolean isNumeric = false;
 				isNumeric = StringUtils.isNumeric(minValue) && StringUtils.isNumeric(maxValue);
 				
-				logger.info("isLongField : {}", isLongField);
-				logger.info("is numeric : {}", isNumeric);
+				logger.debug("isLongField : {}", isLongField);
+				logger.debug("is numeric : {}", isNumeric);
 				
 				Query query = null;
 				
@@ -147,7 +147,7 @@ public class CustomQueryStringParser {
 				String[] keywords = userRequestQuery.split( " " );
 				
 				if(logger.isDebugEnabled()) {
-					logger.info("split keyword : {}", Arrays.toString(keywords));
+					logger.debug("split keyword : {}", Arrays.toString(keywords));
 				}
 				
 				for(int i = 0; i < keywords.length; i++) {
@@ -168,8 +168,8 @@ public class CustomQueryStringParser {
 						
 						resultQuery.add(query, occur);
 						
-						logger.info("query : {} ", query.toString());
-						logger.info("result query : {} ", resultQuery.toString());
+						logger.debug("query : {} ", query.toString());
+						logger.debug("result query : {} ", resultQuery.toString());
 						
 					} else {
 						
@@ -188,8 +188,8 @@ public class CustomQueryStringParser {
 							
 							resultQuery.add(query, occur);
 							
-							logger.info("query : {} ", query.toString());
-							logger.info("result query : {} ", resultQuery.toString());
+							logger.debug("query : {} ", query.toString());
+							logger.debug("result query : {} ", resultQuery.toString());
 						}
 					}
 				}

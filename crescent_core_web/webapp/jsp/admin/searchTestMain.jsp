@@ -23,22 +23,30 @@
 		return true;
 	};
 		function search() {
-			if ($('#keyword').val() == '' && $('#cq').val() == '') {
-				newAlert('검색어나 커스텀쿼리 중 하나는 꼭 입력해주세요.', 'alert-area');
+			//if ($('#keyword').val() == '' && $('#cq').val() == '') {
+				//newAlert('검색어나 커스텀쿼리 중 하나는 꼭 입력해주세요.', 'alert-area');
 				//$('#keyword_alert').show();
-				return;
-			}
+				//return;
+			//}
 			$('#searchForm').attr('action', 'searchTest.devys').submit();
 		}
+		
+		$(window).load(function () {
+			$("#col_name > option[value = '${USER_REQUEST.collectionName}']").attr("selected", "ture");
+		});
 	</script>
 	<div class="container">
 		<form class="form-horizontal" id="searchForm" name="searchForm" action="searchTest.devys" method="post">
 			<div class="control-group">
-				<label class="control-label" for="col_name">검색대상 Collection</label>
-				<div class="controls">
-					<input type="text" id="col_name" name="col_name" value="${USER_REQUEST.collectionName}" onkeypress="enterKey(event);" placeholder="Default Sample">
-				</div>
-			</div>
+	          <label class="control-label">Collection Name</label>
+	          <div class="controls">
+	            <select id="col_name" name="col_name">
+	            <c:forEach var="collection" items="${crescentCollectionList}">
+	            	<option value="${collection.name}">${collection.name}</option>
+	            </c:forEach>
+	            </select>
+	          </div>
+	        </div>
 			<div id="alert-area"></div>
 			<div class="control-group">
 				<label class="control-label" for="keyword">커스텀쿼리</label>
