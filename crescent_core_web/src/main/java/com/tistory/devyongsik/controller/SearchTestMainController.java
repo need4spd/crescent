@@ -68,6 +68,7 @@ public class SearchTestMainController {
 		
 		Map<String, Object> userRequest = new HashMap<String, Object>();
 		userRequest.put("collectionName",searchRequest.getCollectionName());
+		
 		userRequest.put("customQuery",searchRequest.getCustomQuery());
 		userRequest.put("keyword",searchRequest.getKeyword());
 		userRequest.put("searchField",searchRequest.getSearchField());

@@ -51,7 +51,7 @@
 			<div class="control-group">
 				<label class="control-label" for="keyword">커스텀쿼리</label>
 				<div class="controls">
-					<input type="text" id="cq" name="cq" value="${USER_REQUEST.customQuery}" onkeypress="enterKey(event);" placeholder="커스텀쿼리-최우선조건">
+					<input type="text" id="cq" name="cq" value='${USER_REQUEST.customQuery}' onkeypress="enterKey(event);" placeholder="커스텀쿼리-최우선조건">
 				</div>
 			</div>
 			<div id="alert-area"></div>
@@ -71,14 +71,14 @@
 			<div class="control-group">
 				<label class="control-label" for="page_size">Filter</label>
 				<div class="controls">
-					<input type="text" id="ft" name="ft" value="${USER_REQUEST.ft}"  onkeypress="enterKey(event);" 
+					<input type="text" id="ft" name="ft" value='${USER_REQUEST.ft}'  onkeypress="enterKey(event);" 
 						placeholder="필터조건">
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label" for="page_size">Regex Query</label>
 				<div class="controls">
-					<input type="text" id="rq" name="rq" value="${USER_REQUEST.rq}"  onkeypress="enterKey(event);" 
+					<input type="text" id="rq" name="rq" value='${USER_REQUEST.rq}' onkeypress="enterKey(event);" 
 						placeholder="필터조건">
 				</div>
 			</div>
