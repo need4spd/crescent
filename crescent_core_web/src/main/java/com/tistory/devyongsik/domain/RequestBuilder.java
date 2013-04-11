@@ -1,6 +1,7 @@
 package com.tistory.devyongsik.domain;
 
 import java.lang.reflect.Field;
+import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,6 +36,8 @@ public class RequestBuilder<T> {
 				if(paramValue == null) {
 					paramValue = requestParamName.defaultValue();
 				}
+				
+				paramValue = URLDecoder.decode(paramValue, "utf-8");
 			}
 			
 			logger.debug("field name : {}, paramName : {}, defaultValue : {}", new String[]{field.getName(), paramName, paramValue});
