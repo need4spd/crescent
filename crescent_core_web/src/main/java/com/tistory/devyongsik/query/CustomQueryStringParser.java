@@ -286,8 +286,8 @@ public class CustomQueryStringParser {
 				userRequestQuery = userRequestQuery.substring(0, indexOfBoostSign);
 			}
 			
-			logger.info("user Request Query : {} ", userRequestQuery);
-			logger.info("boost : {} ", boost);
+			logger.debug("user Request Query : {} ", userRequestQuery);
+			logger.debug("boost : {} ", boost);
 			
 			anaysisResult.setFieldName(fieldName);
 			anaysisResult.setBoost(boost);
