@@ -114,6 +114,7 @@ public class CollectionManageServiceImpl implements CollectionManageService {
 			crescentField.setTermoffset("on".equals(request.getParameter(crescentField.getName()+"-termoffset")) ? true : false);
 			crescentField.setTermposition("on".equals(request.getParameter(crescentField.getName()+"-termposition")) ? true : false);
 			crescentField.setTermvector("on".equals(request.getParameter(crescentField.getName()+"-termvector")) ? true : false);
+			crescentField.setRemoveHtmlTag("on".equals(request.getParameter(crescentField.getName()+"-removeHtmlTag")) ? true : false);
 
 			crescentField.setBoost(Float.parseFloat(StringUtils.defaultString(request.getParameter(crescentField.getName()+"-boost"), "0")));
 			crescentField.setType(StringUtils.defaultString(request.getParameter(crescentField.getName()+"-type"), "STRING"));

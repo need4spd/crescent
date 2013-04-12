@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -151,7 +152,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 		}
 		if (topRankingQueue.size() != 0) {
 			topRankingTerms = topRankingQueue.toArray();
-			Arrays.sort(topRankingTerms);
+			Arrays.sort(topRankingTerms, Collections.reverseOrder());
 		}
 		result.put("collectionName", collectionName);
 		result.put("indexName", collection.getIndexingDirectory());
