@@ -38,6 +38,9 @@ public class CrescentCollectionField implements Cloneable {
 	@XStreamAsAttribute
 	private boolean termvector;
 	
+	@XStreamAsAttribute
+	private boolean removeHtmlTag;
+	
 	public String getName() {
 		return name;
 	}
@@ -98,6 +101,12 @@ public class CrescentCollectionField implements Cloneable {
 	public void setTermvector(boolean termvector) {
 		this.termvector = termvector;
 	}
+	public boolean isRemoveHtmlTag() {
+		return removeHtmlTag;
+	}
+	public void setRemoveHtmlTag(boolean removeHtmlTag) {
+		this.removeHtmlTag = removeHtmlTag;
+	}
 	public Occur getOccur() {
 		return must ? Occur.MUST : Occur.SHOULD;
 	}
@@ -122,7 +131,8 @@ public class CrescentCollectionField implements Cloneable {
 				+ ", index=" + index + ", type=" + type + ", analyze="
 				+ analyze + ", termposition=" + termposition + ", termoffset="
 				+ termoffset + ", boost=" + boost + ", must=" + must
-				+ ", termvector=" + termvector + "]";
+				+ ", termvector=" + termvector + ", removeHtmlTag="
+				+ removeHtmlTag + "]";
 	}
 	@Override
 	public Object clone() throws CloneNotSupportedException {

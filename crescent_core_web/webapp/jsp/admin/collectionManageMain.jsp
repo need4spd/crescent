@@ -20,6 +20,7 @@
 		clonedRow.find('#fieldName').attr('disabled', false);
 		clonedRow.find('#defaultSearchField').attr('checked', false);
 		clonedRow.find('#sortField').attr('checked', false);
+		clonedRow.find('#removeHtmlTag').attr('checked', false);
 		clonedRow.find('#store').attr('checked', false);
 		clonedRow.find('#index').attr('checked', false);
 		clonedRow.find('#analyze').attr('checked', false);
@@ -54,7 +55,6 @@
 				isValid = false;
 				return;
 			}
-			//console.log("fieldName : " + fieldName);
 			
 			$(this).find('input,select').each(function() {
 				var id = $(this).attr('id');
@@ -185,6 +185,7 @@
               <th>termvector</th>
               <th>DefaultSearchField</th>
               <th>SortField</th>
+              <th>removeHtmlTag</th>
             </tr>
           </thead>
           <tbody>
@@ -224,6 +225,7 @@
 	              	</c:if>
 	              </c:forEach>
 	              <td style="text-align: center;"><input type="checkbox" id="sortField" name="sortField" <c:if test="${isSortField}">checked</c:if>></td>
+	              <td style="text-align: center;"><input type="checkbox" id="removeHtmlTag" name="removeHtmlTag" <c:choose><c:when test='${field.type eq "LONG"}'>disabled</c:when><c:when test='${field.removeHtmlTag == true}'>checked</c:when></c:choose>></td>
 	            </tr>
           	</c:forEach>
           </tbody>
