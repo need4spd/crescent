@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"  %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="collection" value="${RESULT.collectionName }" />
 <c:set var="index_name" value="${RESULT.indexName }" />
 <c:set var="num_field" value="${RESULT.numOfField }" />
@@ -184,13 +184,12 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach begin="1" end="${top_ranking_count }" step="1" var="i">
+								<c:forEach items="${top_ranking }" var="top_item" varStatus="index">
 								<tr>
-									<td>${i }</td>
-									<td>${top_ranking[top_ranking_count-i].count }</td>
-									<td>${top_ranking[top_ranking_count-i].field }</td>
-									<td>${top_ranking[top_ranking_count-i].text }</td>
-									
+									<td>${index.count }</td>
+									<td>${top_item.count }</td>
+									<td>${top_item.field }</td>
+									<td>${top_item.text }</td>
 								</tr>
 								</c:forEach>
 							</tbody>

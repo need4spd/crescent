@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.htmlparser.jericho.Source;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Fieldable;
 import org.slf4j.Logger;
@@ -39,6 +41,11 @@ public class LuceneDocumentBuilder {
 				if(crescentCollectionField == null) {
 					logger.error("해당 collection에 존재하지 않는 필드입니다. [{}]", fieldName);
 					throw new IllegalStateException("해당 collection에 존재하지 않는 필드입니다. ["+fieldName+"]");
+				}
+				
+				if (crescentCollectionField.isRemoveHtmlTag()) {
+					Source source = new Source(value);
+					value = source.getTextExtractor().toString();
 				}
 				
 				Fieldable fieldAble = luceneFieldBuilder.create(fieldsByName.get(fieldName), value);
