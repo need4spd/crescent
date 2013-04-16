@@ -136,6 +136,8 @@ public class MakeJsonFormUpdateByFieldValueFileFromFiles {
 				String fileName = sourceFile.getName();
 				String filePath = sourceFile.getPath();
 				String modidate = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date(sourceFile.lastModified()));
+				String fileExtName = sourceFile.getName().substring(sourceFile.getName().lastIndexOf(".")+1);
+				
 				StringBuffer contents = new StringBuffer();
 				
 				InputStream is = new FileInputStream(sourceFile);
@@ -160,6 +162,7 @@ public class MakeJsonFormUpdateByFieldValueFileFromFiles {
 				oneFile.put("filePath", filePath);
 				oneFile.put("modiDate", modidate);
 				oneFile.put("contents", contents.toString());
+				oneFile.put("fileExtName", fileExtName);
 				
 				targetFileList.add(oneFile);
 				
@@ -211,8 +214,6 @@ public class MakeJsonFormUpdateByFieldValueFileFromFiles {
 		
 		@XmlAnyAttribute
 		private String outputEncoding;
-		
-		
 		
 		public String getInputEncoding() {
 			return inputEncoding;
