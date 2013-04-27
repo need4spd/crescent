@@ -100,12 +100,18 @@ public class MorphAdminMainController {
 	public void morphTestAjax(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		String keyword = request.getParameter("keyword");
-		String collectionName = request.getParameter("collectionName");
+		String selectedCollectionName = request.getParameter("collectionName");
 		
-		logger.debug("keyword : {}, collectionName : {}", keyword, collectionName);
+		logger.debug("keyword : {}, collectionName : {}", keyword, selectedCollectionName);
 		
-		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, collectionName);
-		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, collectionName);
+		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
+		
+		if(selectedCollectionName == null) {
+			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
+		}
+		
+		List<MorphToken> resultTokenListIndexingMode = morphService.getTokens(keyword, true, selectedCollectionName);
+		List<MorphToken> resultTokenListQueryMode = morphService.getTokens(keyword, false, selectedCollectionName);
 		
 		List<MorphResult> morphIndexingTestResult = new ArrayList<MorphResult>();
 		List<MorphResult> morphQueryTestResult = new ArrayList<MorphResult>();
