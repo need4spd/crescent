@@ -4,8 +4,11 @@
 /target
 .settings
 /bin
+.gradle
 crescent_utils/target
+crescent_utils/build
 crescent_core_web/target
+crescent_core_web/build
 crescent_core_web/logs
 crescent_core_web/src/main/resources/rebel.xml
 crescent_core_web/webapp/crescent_index

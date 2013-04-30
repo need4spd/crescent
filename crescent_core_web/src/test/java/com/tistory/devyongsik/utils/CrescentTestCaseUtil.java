@@ -1,5 +1,6 @@
 package com.tistory.devyongsik.utils;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -71,4 +72,7 @@ public class CrescentTestCaseUtil {
 
 		System.out.println("indexing result message : " + message);
 	}
+	
+	@Test
+	public void dummy() {}
 }
