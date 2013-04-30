@@ -44,6 +44,7 @@ public class MorphServiceImpl implements MorphService {
 		}
 		
 		TokenStream stream = analyzer.reusableTokenStream("dummy", reader);
+		stream.reset();
 		
 		CharTermAttribute charTermAtt = stream.getAttribute(CharTermAttribute.class);
 		OffsetAttribute offSetAtt = stream.getAttribute(OffsetAttribute.class);
