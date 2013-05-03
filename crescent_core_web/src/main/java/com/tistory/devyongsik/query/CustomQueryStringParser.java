@@ -153,7 +153,7 @@ public class CustomQueryStringParser {
 				for(int i = 0; i < keywords.length; i++) {
 					ArrayList<String> analyzedTokenList = analyzedTokenList(analyzer, keywords[i]);
 
-					if(analyzedTokenList.size() == 0) {
+					if(!isAnalyzed || analyzedTokenList.size() == 0) {
 						
 						Term t = new Term(fieldName, keywords[i]);
 						Query query = new TermQuery(t);
@@ -246,13 +246,6 @@ public class CustomQueryStringParser {
 	private List<QueryAnalysisResult> getQueryAnalysisResults(String analysisTargetString) throws CrescentInvalidRequestException {
 		List<QueryAnalysisResult> queryAnalysisResultList = new ArrayList<QueryAnalysisResult>();
 		
-		String fieldName = "";
-		Occur occur = Occur.SHOULD;
-		String userRequestQuery = "";
-		float boost = 0F;
-		
-		boolean isRangeQuery = false;
-		
 		Matcher m = pattern.matcher(analysisTargetString);
 		
 		while(m.find()) {
@@ -262,7 +255,12 @@ public class CustomQueryStringParser {
 			
 			QueryAnalysisResult anaysisResult = new QueryAnalysisResult();
 			
-			fieldName = m.group(1).trim();
+			Occur occur = Occur.SHOULD;
+			String userRequestQuery = "";
+			float boost = 0F;
+			boolean isRangeQuery = false;
+			
+			String fieldName = m.group(1).trim();
 			if(fieldName.startsWith("-")) {
 				occur = Occur.MUST_NOT;
 				fieldName = fieldName.substring(1);
