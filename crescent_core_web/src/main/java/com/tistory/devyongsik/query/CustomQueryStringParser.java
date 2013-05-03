@@ -55,6 +55,7 @@ public class CustomQueryStringParser {
 		float boost = 0F;
 		
 		boolean isRangeQuery = false;
+		boolean isSubQuery = false;
 		
 		boolean any = true;
 		boolean isLongField = false;
@@ -67,6 +68,7 @@ public class CustomQueryStringParser {
 			userRequestQuery = queryAnalysisResult.getUserQuery();
 			boost = queryAnalysisResult.getBoost();
 			isRangeQuery = queryAnalysisResult.isRangeQuery();
+			isSubQuery = queryAnalysisResult.isSubQuery();
 			
 			//field가 검색 대상에 있는지 확인..
 			for(CrescentCollectionField crescentField : indexedFields) {
@@ -142,6 +144,20 @@ public class CustomQueryStringParser {
 				
 				resultQuery.add(query, occur);
 				
+			} else if (isSubQuery) {
+			    
+			        BooleanQuery query = new BooleanQuery();
+			        userRequestQuery = userRequestQuery.substring(1, userRequestQuery.length() - 1);
+			        for (String type : userRequestQuery.split( "," )) {
+			            TermQuery tq = new TermQuery(new Term(fieldName, type));
+			            query.add(tq, Occur.SHOULD);
+			        }
+			        
+			        resultQuery.add(query, occur);
+			        
+			        logger.debug("Query : {} ", query);
+			        logger.debug("Result Query : {} ", resultQuery);
+			        
 			} else {
 				//쿼리 생성..
 				String[] keywords = userRequestQuery.split( " " );
@@ -259,6 +275,7 @@ public class CustomQueryStringParser {
 			String userRequestQuery = "";
 			float boost = 0F;
 			boolean isRangeQuery = false;
+			boolean isSubQuery = false;
 			
 			String fieldName = m.group(1).trim();
 			if(fieldName.startsWith("-")) {
@@ -277,6 +294,12 @@ public class CustomQueryStringParser {
 			
 			}
 			
+			if (userRequestQuery.startsWith("(") && userRequestQuery.endsWith(")")) {
+			
+			        isSubQuery = true;
+			
+			}
+			
 			//boost 정보 추출
 			int indexOfBoostSign = userRequestQuery.indexOf("^");
 			if(indexOfBoostSign >= 0) {
@@ -292,6 +315,7 @@ public class CustomQueryStringParser {
 			anaysisResult.setOccur(occur);
 			anaysisResult.setRangeQuery(isRangeQuery);
 			anaysisResult.setUserQuery(userRequestQuery);
+			anaysisResult.setSubQuery(isSubQuery);
 
 			queryAnalysisResultList.add(anaysisResult);
 		}
@@ -306,6 +330,7 @@ public class CustomQueryStringParser {
 		private Occur occur = Occur.SHOULD;
 		private float boost = 0F;
 		private boolean isRangeQuery = false;
+		private boolean isSubQuery = false;
 		
 		public String getFieldName() {
 			return fieldName;
@@ -336,6 +361,12 @@ public class CustomQueryStringParser {
 		}
 		public void setRangeQuery(boolean isRangeQuery) {
 			this.isRangeQuery = isRangeQuery;
+		}
+		public boolean isSubQuery() {
+		        return isSubQuery;
+		}
+		public void setSubQuery(boolean isSubQuery) {
+		        this.isSubQuery = isSubQuery;
 		}
 	}
 }
