@@ -128,11 +128,9 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 				TermDocs termDocs = reader.termDocs(currTerm);
 
 				if (currTerm.field().equals(topRankingField)) {
-					while (termDocs.next()) {
-						RankingTerm e = new RankingTerm(
-				                decoder.decodeTerm(currTerm.text()), currTerm.field(), terms.docFreq());
-						topRankingQueue.add(e);
-					}
+					RankingTerm e = new RankingTerm(
+			                decoder.decodeTerm(currTerm.text()), currTerm.field(), terms.docFreq());
+					topRankingQueue.add(e);
 				}
 				termFreq++;
 			}
