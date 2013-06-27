@@ -1,29 +1,5 @@
-apply plugin: 'eclipse'
-apply plugin: 'eclipse-wtp'
-apply plugin: 'maven'
-apply plugin: 'war'
-
-
-sourceCompatibility = 1.6
-
 group = 'com.tistory.devyongsik'
 version = '0.5-SNAPSHOT'
-
-webAppDirName = 'webapp'
-
-repositories {
-	
-	maven {
-        url "https://github.com/need4spd/need4spd-maven-repo/raw/master/snapshots"
-    }
-    maven {
-    	url "http://repository.springsource.com/maven/bundles/release"
-    }
-    maven {
-    	url "http://repository.springsource.com/maven/bundles/external"
-    }
-    mavenCentral()
-}
 
 dependencies {
 	compile(
@@ -75,80 +51,5 @@ dependencies {
 
 }
 
-//[configuration.runtime, configuration.default]*.exclude(module: 'commons-logging')
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-test {
-	jvmArgs = ['-ea', '-Xmx256m']
-	logging.captureStandardOutput(LogLevel.INFO)
-	//testReport = false
-}
-
-compileJava << {
-    copy {
-		from 'src/main/java'
-		into 'build/classes/main'
-		include '**/*.properties'
-		
-		includeEmptyDirs = false
-	}
-}
-
-compileJava << {
-	servertype = System.properties['servertype']
-
-	if(servertype != '') { 
-		servertype = 'local'
-	}
-
-	copy {
-		from 'src/main/resources-'+servertype
-		into 'build/resources/main'
-		include '**/*.xml'
-
-		includeEmptyDirs = false
-	}
-}
-
-eclipse {
-	classpath {
-		downloadSources=true
-	}
-	
-	jdt {
-		file {
-			withProperties { 
-				properties -> properties.setProperty("encoding//src/main/java", "utf-8")
-					      properties.setProperty("encoding//src/main/resources", "utf-8")
-					      properties.setProperty("encoding//src/test/java", "utf-8")
-					      properties.setProperty("encoding//src/test/resources", "utf-8")
-			}		
-		}
-	}
-
-	wtp {
-		component {
-			contextPath = '/'
-		}
-
-		facet {
-			facets = facets
-
-			//facet name: 'jst.web', version: '2.5'
-			facet name: 'jst.java',	version: '6.0'
-		}
-	}
-	
-	project {
-    	natures 'com.google.gwt.eclipse.core.gwtNature'
-    	natures 'org.springframework.ide.eclipse.core.springnature'
-    	buildCommand 'org.springframework.ide.eclipse.core.springbuilder'
-  	}
-}
-
-eclipseJdt << {
-    File f = file('.settings/org.eclipse.core.resources.prefs')
-    f.write('eclipse.preferences.version=1\n')
-    f.append('encoding/<project>=utf-8')
-}
 

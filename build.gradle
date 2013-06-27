@@ -1,0 +1,130 @@
+
+ext {
+    DEFAULT_PROFILE = 'local'
+    webProjects = ['crescent_core_web']
+
+    javaVersion = '1.6'
+    javaEncoding = 'UTF-8'
+    tmpDir = System.getProperty('java.io.tmpdir')
+}
+
+allprojects {
+    if (!project.hasProperty('profile') || !profile) {
+        ext.profile = DEFAULT_PROFILE
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'eclipse-wtp'
+
+    buildDir = 'target'
+
+    task hello << {
+        println "${project.name} - ${profile}"
+    }
+
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    [compileJava, compileTestJava]*.options*.encoding = javaEncoding
+
+    repositories {
+        maven {
+            url "https://github.com/need4spd/need4spd-maven-repo/raw/master/snapshots"
+        }
+        maven {
+            url "http://repository.springsource.com/maven/bundles/release"
+        }
+        maven {
+            url "http://repository.springsource.com/maven/bundles/external"
+        }
+        mavenCentral()
+    }
+
+    sourceSets {
+        // SQL Mapper의 *.xml때문에 java 디렉토리를 resource에 추가해야한다.
+        main {
+            resources {
+                srcDir "${project.projectDir}/src/main/resources-${profile}"
+                //srcDir "${project.projectDir}/src/main/java"
+            }
+        }
+    }
+
+    task compile(dependsOn: ['compileJava', 'compileTestJava']) {
+        description = 'Compile all main/test sources'
+        group = 'build'
+        doLast {
+            println 'Compiling java/test sources....'
+        }
+    }
+
+    test {
+        jvmArgs = ['-ea', '-Xmx256m']
+        logging.captureStandardOutput(LogLevel.INFO)
+        //testReport = false
+    }
+
+    tasks.eclipse.dependsOn cleanEclipse
+
+    eclipse {
+        classpath {
+            downloadSources = true
+            defaultOutputDir = file("${buildDir}/classes/main")
+        }
+
+        jdt {
+            file {
+                withProperties {
+                    properties -> properties.setProperty("encoding//src/main/java", "utf-8")
+                        properties.setProperty("encoding//src/main/resources", "utf-8")
+                        properties.setProperty("encoding//src/test/java", "utf-8")
+                        properties.setProperty("encoding//src/test/resources", "utf-8")
+                }
+            }
+        }
+    }
+}
+
+//configure Web Projects
+configure(subprojects.findAll { webProjects.contains(it.name) }) {
+    apply plugin: 'war'
+
+    webAppDirName = 'webapp'
+
+    eclipse {
+        classpath {
+            downloadSources=true
+        }
+
+        wtp {
+            component {
+                contextPath = '/'
+            }
+
+            facet {
+                facets = facets
+
+                //facet name: 'jst.web', version: '2.5'
+                facet name: 'jst.java',	version: '6.0'
+            }
+        }
+
+        project {
+            natures 'com.google.gwt.eclipse.core.gwtNature'
+            natures 'org.springframework.ide.eclipse.core.springnature'
+            buildCommand 'org.springframework.ide.eclipse.core.springbuilder'
+        }
+    }
+
+    eclipseJdt << {
+        File f = file('.settings/org.eclipse.core.resources.prefs')
+        f.write('eclipse.preferences.version=1\n')
+        f.append('encoding/<project>=utf-8')
+    }
+
+    // Clean시에 /src/main/webapp/WEB-INF/classes|lib 삭제
+    clean {
+        delete project.file('/src/main/webapp/WEB-INF/classes'), project.file('/src/main/webapp/WEB-INF/lib')
+    }
+}

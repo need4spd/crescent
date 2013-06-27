@@ -1,17 +1,6 @@
-apply plugin: 'eclipse'
-apply plugin: 'eclipse-wtp'
-apply plugin: 'maven'
-apply plugin: 'java'
-
-sourceCompatibility = 1.6
 
 group = 'com.tistory.devyongsik'
 version = '0.5-SNAPSHOT'
-
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
 	compile(
@@ -27,42 +16,5 @@ dependencies {
        [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
 	   [group: 'commons-pool', name: 'commons-pool', version: '1.6']
     )
-
-}
-
-//[configuration.runtime, configuration.default]*.exclude(module: 'commons-logging')
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
-test {
-	jvmArgs = ['-ea', '-Xmx256m']
-	logging.captureStandardOutput(LogLevel.INFO)
-	//testReport = false
-}
-
-compileJava << {
-    copy {
-		from 'src/main/java'
-		into 'build/classes/main'
-		include '**/*.properties'
-		
-		includeEmptyDirs = false
-	}
-}
-
-eclipse {
-	classpath {
-		downloadSources=true
-	}
-	
-	jdt {
-		file {
-			withProperties { 
-				properties -> properties.setProperty("encoding//src/main/java", "utf-8")
-					      properties.setProperty("encoding//src/main/resources", "utf-8")
-					      properties.setProperty("encoding//src/test/java", "utf-8")
-					      properties.setProperty("encoding//src/test/resources", "utf-8")
-			}		
-		}
-	}
 
 }
