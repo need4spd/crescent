@@ -1,3 +1,7 @@
+/*
+=== 프로젝트 프라퍼티 ===
+  - -Pprofile=값 : 프로젝트 프로필. 없으면 기본 dev
+*/
 
 ext {
     DEFAULT_PROFILE = 'local'
