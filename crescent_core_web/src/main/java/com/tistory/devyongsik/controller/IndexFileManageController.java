@@ -24,18 +24,23 @@ public class IndexFileManageController {
 	@RequestMapping("/indexFileManageMain")
 	public ModelAndView adminMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/admin/indexFileManageMain");
+		Map<String, Object> result = new HashMap<String, Object>();
+		boolean isReload= false;
 		
-		String collection = request.getParameter("collection");
+		modelAndView.setViewName("/admin/indexFileManageMain");
+		String collection = request.getParameter("selectCollection");
 		String topRankingField = request.getParameter("topRankingField");
 		
-		if (indexFileManageService.reload(collection, topRankingField) == false)
+		isReload = indexFileManageService.reload(collection, topRankingField);
+		Map<String, Object>temp = indexFileManageService.getResult();
+		result.put("collectionNames", temp.get("collectionNames"));
+		if (isReload == false) {
+			modelAndView.addObject("RESULT", result);
 			return modelAndView;
-		
-		Map<String, Object> result = new HashMap<String, Object>();
-		Map<String, Object> temp = indexFileManageService.getResult();
-		
-		result.put("collectionName", temp.get("collectionName"));
+		}
+				
+		result.put("selectCollection", temp.get("selectCollection"));
+		result.put("collectionNames", temp.get("collectionNames"));
 		result.put("indexName", temp.get("indexName"));
 		result.put("numOfField", temp.get("numOfField"));
 		result.put("numOfTerm", temp.get("numOfTerm"));
@@ -48,6 +53,7 @@ public class IndexFileManageController {
 		result.put("topRanking", temp.get("topRanking"));
 		result.put("topRankingCount", temp.get("topRankingCount"));
 		result.put("topRankingFields", temp.get("fieldName"));
+		result.put("topRankingField", temp.get("topRankingField"));
 		
 		modelAndView.addObject("RESULT", result);
 		return modelAndView;
@@ -58,10 +64,10 @@ public class IndexFileManageController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/admin/indexFileManageDoc");
 		
-		String collectionName = request.getParameter("collection");
+		String collectionName = request.getParameter("selectCollection");
 		String docNum = request.getParameter("docNum");
 		if (docNum == null)
-			return modelAndView;
+			docNum = "0";
 		
 		if (indexFileManageService.reload(collectionName, Integer.parseInt(docNum)) == false)
 			return modelAndView;
@@ -69,7 +75,8 @@ public class IndexFileManageController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, Object> temp = indexFileManageService.getResult();
 		
-		result.put("collectionName", collectionName);
+		result.put("collectionNames", temp.get("collectionNames"));
+		result.put("selectCollection", temp.get("selectCollection"));
 		result.put("docNum", docNum);
 		
 		result.put("fieldName", temp.get("fieldName"));

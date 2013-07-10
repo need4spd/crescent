@@ -2,7 +2,8 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"  %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="collection" value="${RESULT.collectionName }" />
+<c:set var="selectCollection" value="${RESULT.selectCollection }" />
+<c:set var="collectionNames" value="${RESULT.collectionNames }" />
 <c:set var="index_name" value="${RESULT.indexName }" />
 <c:set var="num_field" value="${RESULT.numOfField }" />
 <c:set var="num_doc" value="${RESULT.numOfDoc }" />
@@ -14,6 +15,7 @@
 <c:set var="term_count" value="${RESULT.termCount }" />
 <c:set var="top_ranking" value="${RESULT.topRanking }" />
 <c:set var="top_ranking_count" value="${RESULT.topRankingCount }" />
+<c:set var="select_top_ranking_field" value="${RESULT.topRankingField }" />
 <c:set var="top_ranking_fields" value="${RESULT.topRankingFields }" />
 
 
@@ -24,24 +26,7 @@
 <html lang="en">
 <%@ include file="../common/header.jsp"%>
 <script>
-	function enterKey(e) {
-		if (e.keyCode == 13) {
-			indexFileManage();
-		}
-		return true;
-	}
-	
-	function indexFileManage() {
-		if ($('#collection').val() == '') {
-			newAlert('collection 명을 입력해주세요', 'alert-area');
-			return;
-		}
-		$('#indexFileManageForm').attr('action', 'indexFileManageMain.devys').submit();
-	}
-	
 	$(document).ready(function() {
-		$('#collection').val('${collection}');
-		
 		$('#indexName').val('${index_name}');
 		$('#numOfField').val('${num_field}');
 		$('#numOfDocument').val('${num_doc}');
@@ -58,12 +43,20 @@
 		$('#lastModified').attr('disabled','disabled');
 		$('#hasDelIsOpt').attr('disabled','disabled');
 		
-		$("#fieldList").click(function(event){
-			var targetText = event.target.text;
+		
+		$("#collection").change(function(event) {
+			var selectCollection = $("#collection").find("option:selected").text();
+			$("input[name='selectCollection']").val(selectCollection);
+			$("input[name='topRankingField']").val('');
+			$('#indexFileManageForm').attr("action", "indexFileManageMain.devys").submit();
+		});
+		
+		
+		$("#fieldList").change(function(event){
+			var topRankingField = $("#fieldList").find("option:selected").text();
+			$("input[name=topRankingField]").val(topRankingField);
 			
-			$("input[name=topRankingField]").val(targetText);
-			indexFileManage();
-			
+			$('#indexFileManageForm').attr("action", "indexFileManageMain.devys").submit();
 		});
 	});
 </script>
@@ -80,8 +73,13 @@
 			<div class="control-group">
 				<label class="control-label">Collection Name</label>
 				<div class="controls">
-					<input type="text" class="input-large" id="collection" name="collection" onkeypress="enterKey(event);" placeholder="input collection name..."/>
+					<select id="collection">
+						<c:forEach items="${collectionNames }" var="collectionName">
+							<option value="${collectionName }" ${collectionName == selectCollection ? 'selected' : '' }>${collectionName }</option>
+						</c:forEach>
+					</select>
 				</div>
+				<input type="hidden" name="selectCollection" value="${selectCollection }"/>
 			</div>
 			<div id="alert-area"></div>
 			<div class="control-group">
@@ -162,16 +160,12 @@
 				<div class="span6">
 					<div>
 						<div class="btn-group">
-							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-								Field 선택 <span class="caret"></span>
-							</a>
-							<ul class="dropdown-menu" id="fieldList" >
-								<!-- dropdown menu links -->
+							<select id="fieldList" >
 								<c:forEach items="${top_ranking_fields }" var="top_ranking_field">
-									<li><a href="#">${top_ranking_field }</a></li>
+									<option value="${top_ranking_field }" ${top_ranking_field == select_top_ranking_field ? 'selected' : ''}>${top_ranking_field }</option>
 								</c:forEach>	
-							</ul>
-							<input type="hidden" name="topRankingField" value="" />
+							</select>
+							<input type="hidden" name="topRankingField" value="${select_top_ranking_field }" />
 						</div>
 						<table class="table table-striped">
 							<caption>Top ranking terms</caption>
@@ -184,6 +178,8 @@
 								</tr>
 							</thead>
 							<tbody>
+							<c:choose>
+								<c:when test="${top_ranking != null}">
 								<c:forEach items="${top_ranking }" var="top_item" varStatus="index">
 								<tr>
 									<td>${index.count }</td>
@@ -192,6 +188,10 @@
 									<td>${top_item.text }</td>
 								</tr>
 								</c:forEach>
+								</c:when>
+								<c:otherwise>
+								</c:otherwise>
+							</c:choose>
 							</tbody>
 						</table>
 					</div>
