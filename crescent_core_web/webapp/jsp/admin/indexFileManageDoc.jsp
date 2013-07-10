@@ -19,7 +19,7 @@
 		if (e.keyCode == 13) {
 			var docNum = parseInt($('#docNum').val());
 			if (docNum < 0) {
-				$('#docNum').val('0');
+				$('#docNum').val("0");
 			} else
 				$('#indexFileManageDocForm').attr('action', 'indexFileManageDoc.devys').submit();
 		}
