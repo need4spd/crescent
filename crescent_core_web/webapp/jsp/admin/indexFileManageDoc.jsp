@@ -2,7 +2,8 @@
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<c:set var="collection" value="${RESULT.collectionName }" />
+<c:set var="collectionNames" value="${RESULT.collectionNames }" />
+<c:set var="selectCollection" value="${RESULT.selectCollection }" />
 <c:set var="docNum" value="${RESULT.docNum }" />
 <c:set var="field_name" value="${RESULT.fieldName }" />
 <c:set var="flag" value="${RESULT.flag }" />
@@ -15,40 +16,41 @@
 <%@ include file="../common/header.jsp"%>
 <script>
 	function enterKey(e) {
-		if(e.keyCode == 13) {
-			indexFileManageDoc();
+		if (e.keyCode == 13) {
+			var docNum = parseInt($('#docNum').val());
+			if (docNum < 0) {
+				$('#docNum').val('0');
+			} else
+				$('#indexFileManageDocForm').attr('action', 'indexFileManageDoc.devys').submit();
 		}
 		return true;
 	}
-	function indexFileManageDoc() {
-		var err = 0;
-		if ($('#collection').val() == '') {
-			newAlert('colleciton 명을 입력해주세요', 'alert_collection');
-			err = 1;
-		}
-		if ($('#docNum').val() == '') {
-			newAlert('Document Number를 입력해주세요', 'alert_docNum'	);
-			err = 1;
-		}
-		if (err == 1)
-			return ;
-		$('#indexFileManageDocForm').attr('action', 'indexFileManageDoc.devys').submit();
-	}
-	
 	function upAndDown(docNum) {
-		$('#docNum').val(docNum);
-		indexFileManageDoc();
+		if (parseInt(docNum) < 0) {
+			newAlert('0이상의 문서번호를 입력해주세요.', "alert_docNum");
+		} else {
+			$('#docNum').val(docNum);
+			$('#indexFileManageDocForm').attr('action', 'indexFileManageDoc.devys').submit();
+		}
+		return false;
 	}
 	
 	$(document).ready(function() {
-		$('#collection').val('${collection}');
 		$('#docNum').val('${docNum}');
+		
+		$('#collection').change(function() {
+			var selectCollection = $('#collection').find("option:selected").text();
+			$("input[name='selectCollection']").val(selectCollection);
+			$('#docNum').val(0);
+			
+			$('#indexFileManageDocForm').attr('action', 'indexFileManageDoc.devys').submit();
+		})
 	});
 </script>
 <body>
 	<%@ include file="../common/menu.jsp"%>
 	<div class="container">
-		<form class="form-horizontal" id="indexFileManageDocForm" name="indexFileManageDocForm" method="post" action="indexFileManageDocForm.devys">
+		<form class="form-horizontal" id="indexFileManageDocForm" method="post" action="indexFileManageDoc.devys">
 			<div>
 				<ul class="nav nav-tabs">
 					<li><a href="indexFileManageMain.devys">Overview</a></li>
@@ -59,9 +61,13 @@
       <div class="control-group">
       <label class="control-label">Collection Name:</label>
         <div class="controls">
-          <input type="text" class="input-large" id="collection" name="collection" onkeypress="enterKey(event)"/> 
+          	<select id="collection">
+          		<c:forEach items="${collectionNames }" var="collectionName">
+          			<option value="${collectionName }" ${collectionName == selectCollection ? 'selected' : '' }>${collectionName }</option>
+          		</c:forEach>
+			</select> 
+			<input type="hidden" name="selectCollection" value="${selectCollection }"/>
         </div>
-        <div id="alert_collection"></div>
         <label class="control-label">Doc. #:0</label>
         <div class="controls">
           <input type="text" class="input-large" id="docNum" name="docNum" onkeypress="enterKey(event)"/> 
