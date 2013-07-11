@@ -48,34 +48,27 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 	public enum View { Overview, Document };
 	private final static int DEFAULT_TOPRANKING_TERM = 20;
 	
-	String[] resultField1 = {"collectionName", "indexName", "numOfField", "numOfDoc", "numOfTerm",
-						"hasDel", "isOptimize", "indexVersion", "lastModify", "termCount", "topRanking"};
-	
-	
 	@Override
-	public boolean reload(String collectionName, String topRankingField) throws Exception {
-		if (collectionName == null) {
-			return false;
-		}
-		
+	public boolean reload(String selectCollection, String topRankingField) throws Exception {
 		CrescentCollectionHandler collectionHandler 
 			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
+		List<String> collectionNames = new ArrayList<String>();
+		
+		for (CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections())
+			collectionNames.add(crescentCollection.getName());
+		result.put("collectionNames", collectionNames);
+		
+		if (selectCollection == null)
+			selectCollection = collectionNames.get(0);
 	
-		CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
-		
+		CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(selectCollection);
 		Decoder decoder = null;
-		
-		if (collection == null) {
-			logger.debug("doesn't Collection Info => {}", collectionName);
-			init(View.Overview);
-			return false;
-		}
 		
 		if (!StringUtils.hasText(topRankingField)) {
 			if (collection.getDefaultSearchFields().get(0) != null) {
 				topRankingField = collection.getDefaultSearchFields().get(0).getName();
 			} else {
-				logger.debug("doesn't defaultSearchField => {}", collectionName);
+				logger.debug("doesn't defaultSearchField => {}", selectCollection);
 				init(View.Overview);
 				return false;
 			}
@@ -83,7 +76,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 		
 		for (CrescentCollectionField field :collection.getFields()) {
 			if (field.getName().equals(topRankingField)) {
-				if (StringUtils.capitalize(field.getType()).equals("Long")) {
+				if ("LONG".equalsIgnoreCase(field.getType())) {
 					decoder = new LongDecoder();
 				} else {
 					decoder = new MockDecoder();
@@ -105,6 +98,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 			int termFreq = 0;
 			int termCount = 0;
 			Term beforeTerm = null;
+			topRankingTerms = null;
 			//init term count
 			fieldTermCount.clear();
 			for (CrescentCollectionField field : collection.getFields())
@@ -125,8 +119,6 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 					beforeTerm = currTerm;
 				}
 				
-				TermDocs termDocs = reader.termDocs(currTerm);
-
 				if (currTerm.field().equals(topRankingField)) {
 					RankingTerm e = new RankingTerm(
 			                decoder.decodeTerm(currTerm.text()), currTerm.field(), terms.docFreq());
@@ -152,11 +144,13 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 			topRankingTerms = topRankingQueue.toArray();
 			Arrays.sort(topRankingTerms, Collections.reverseOrder());
 		}
-		result.put("collectionName", collectionName);
+		
+		result.put("selectCollection", selectCollection);
 		result.put("indexName", collection.getIndexingDirectory());
 		result.put("numOfField", collection.getFields().size());
 		result.put("termCount", fieldTermCount);
 		result.put("topRanking", topRankingTerms);
+		result.put("topRankingField", topRankingField);
 		result.put("topRankingCount", DEFAULT_TOPRANKING_TERM);
 		result.put("fieldName", fieldName);
 		
@@ -164,18 +158,18 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 	}
 
 	@Override
-	public boolean reload(String collectionName, int docNum) {
-		if (collectionName == null)
-			return false;
-		
+	public boolean reload(String selectCollection, int docNum) {
 		CrescentCollectionHandler collectionHandler 
 			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-		CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(collectionName);
+		List<String> collectionNames = new ArrayList<String>();
 		
-		if (collection == null) {
-			logger.debug("doesn't Collection Info => {}", collectionName);
-			return false;
-		}
+		for (CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections())
+			collectionNames.add(crescentCollection.getName());
+		
+		if (selectCollection == null)
+			selectCollection = collectionNames.get(0);
+		
+		CrescentCollection collection = collectionHandler.getCrescentCollections().getCrescentCollection(selectCollection);
 		
 		List<String> fieldName = new ArrayList<String>();
 		List<String> flag = new ArrayList<String>();
@@ -213,7 +207,8 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 		}
 		
 		
-		result.put("collection", collectionName);
+		result.put("selectCollection", selectCollection);
+		result.put("collectionNames", collectionNames);
 		result.put("docNum", docNum);
 		result.put("fieldName", fieldName);
 		result.put("flag", flag);
@@ -229,6 +224,9 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
+	private static String[] resultField1 = {"selectCollection", "indexName", "numOfField", "numOfDoc", "numOfTerm",
+			"hasDel", "isOptimize", "indexVersion", "lastModify", "termCount", "topRanking"};
 	
 	private void init(View view) {
 		if (view == View.Overview) {
