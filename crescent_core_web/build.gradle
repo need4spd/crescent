@@ -1,3 +1,7 @@
+apply plugin: 'eclipse'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'war'
+
 group = 'com.tistory.devyongsik'
 version = '0.5-SNAPSHOT'
 
@@ -49,6 +53,50 @@ dependencies {
 		[group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.0']
     )
 
+}
+
+tasks.eclipse.dependsOn cleanEclipse
+
+eclipse {
+	classpath {
+		downloadSources=true
+	}
+
+	jdt {
+		file {
+			withProperties { 
+				properties -> properties.setProperty("encoding//src/main/java", "utf-8")
+					      properties.setProperty("encoding//src/main/resources", "utf-8")
+					      properties.setProperty("encoding//src/test/java", "utf-8")
+					      properties.setProperty("encoding//src/test/resources", "utf-8")
+			}		
+		}
+	}
+
+	wtp {
+		component {
+			contextPath = '/'
+		}
+
+		facet {
+			facets = facets
+
+			//facet name: 'jst.web', version: '2.5'
+			facet name: 'jst.java',	version: '6.0'
+		}
+	}
+
+	project {
+    	natures 'com.google.gwt.eclipse.core.gwtNature'
+    	natures 'org.springframework.ide.eclipse.core.springnature'
+    	buildCommand 'org.springframework.ide.eclipse.core.springbuilder'
+  	}
+}
+
+eclipseJdt << {
+        File f = file('.settings/org.eclipse.core.resources.prefs')
+        f.write('eclipse.preferences.version=1\n')
+        f.append('encoding/<project>=utf-8')
 }
 
 

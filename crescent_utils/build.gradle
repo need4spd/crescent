@@ -1,3 +1,4 @@
+apply plugin: 'eclipse'
 
 group = 'com.tistory.devyongsik'
 version = '0.5-SNAPSHOT'
@@ -18,3 +19,34 @@ dependencies {
     )
 
 }
+
+tasks.eclipse.dependsOn cleanEclipse
+
+eclipse {
+	classpath {
+		downloadSources=true
+	}
+
+	jdt {
+		file {
+			withProperties { 
+				properties -> properties.setProperty("encoding//src/main/java", "utf-8")
+					      properties.setProperty("encoding//src/main/resources", "utf-8")
+					      properties.setProperty("encoding//src/test/java", "utf-8")
+					      properties.setProperty("encoding//src/test/resources", "utf-8")
+			}		
+		}
+	}
+
+	project {
+    	natures 'com.google.gwt.eclipse.core.gwtNature'
+    	natures 'org.springframework.ide.eclipse.core.springnature'
+    	buildCommand 'org.springframework.ide.eclipse.core.springbuilder'
+  	}
+}
+
+eclipseJdt << {
+        File f = file('.settings/org.eclipse.core.resources.prefs')
+        f.write('eclipse.preferences.version=1\n')
+        f.append('encoding/<project>=utf-8')
+    }
