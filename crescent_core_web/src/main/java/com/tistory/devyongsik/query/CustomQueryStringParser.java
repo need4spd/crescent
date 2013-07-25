@@ -169,7 +169,7 @@ public class CustomQueryStringParser {
 				for(int i = 0; i < keywords.length; i++) {
 					ArrayList<String> analyzedTokenList = analyzedTokenList(analyzer, keywords[i]);
 
-					if(!isAnalyzed || analyzedTokenList.size() == 0) {
+					if(!isAnalyzed || occur.equals(Occur.MUST_NOT) || occur.equals(Occur.MUST) || analyzedTokenList.size() == 0) {
 						
 						Term t = new Term(fieldName, keywords[i]);
 						Query query = new TermQuery(t);
