@@ -7,16 +7,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.tistory.devyongsik.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.domain.CrescentCollection;
-import com.tistory.devyongsik.domain.CrescentCollections;
-import com.tistory.devyongsik.handler.Handler;
-import com.tistory.devyongsik.handler.IndexingRequestForm;
-import com.tistory.devyongsik.handler.JsonDataHandler;
-import com.tistory.devyongsik.index.CrescentIndexerExecutor;
-import com.tistory.devyongsik.search.CrescentDocSearcher;
-import com.tistory.devyongsik.search.CrescentSearcherManager;
-import com.tistory.devyongsik.service.SearchService;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollections;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.crescent.data.handler.Handler;
+import com.tistory.devyongsik.crescent.data.handler.JsonDataHandler;
+import com.tistory.devyongsik.crescent.index.entity.IndexingRequestForm;
+import com.tistory.devyongsik.crescent.index.indexer.CrescentIndexerExecutor;
+import com.tistory.devyongsik.crescent.search.searcher.CrescentDocSearcher;
+import com.tistory.devyongsik.crescent.search.searcher.CrescentSearcherManager;
+import com.tistory.devyongsik.crescent.search.service.SearchService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { 
