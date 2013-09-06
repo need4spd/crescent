@@ -1,11 +1,14 @@
 package com.tistory.devyongsik.crescent.admin.service;
 
-import java.util.Map;
+import com.tistory.devyongsik.crescent.admin.entity.HighFreqTermResult;
+import com.tistory.devyongsik.crescent.admin.entity.IndexInfo;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+
+import java.io.IOException;
 
 public interface IndexFileManageService {
-	public Map<String, Object> getResult();
-	public boolean reload(String collectionName, String topRankingField) throws Exception;
-	public boolean reload(String collectionName, int docNum);
-	public boolean reload(String collectionName, String field, String query);
+	public HighFreqTermResult reload(CrescentCollection selectCollection) throws Exception;
+	public HighFreqTermResult reload(CrescentCollection selectCollection, int docNum);
+	public IndexInfo getIndexInfo(CrescentCollection selectCollection) throws IOException;
 	
 }
