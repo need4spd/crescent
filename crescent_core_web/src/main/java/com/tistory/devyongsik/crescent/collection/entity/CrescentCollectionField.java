@@ -119,12 +119,13 @@ public class CrescentCollectionField implements Cloneable {
 		return false;
 	}
 	
-	public int getSortFieldType() {
-		if("string".equals(type.toLowerCase())) return SortField.STRING;
-		if("integer".equals(type.toLowerCase())) return SortField.INT;
-		if("long".equals(type.toLowerCase())) return SortField.LONG;
-		else return SortField.STRING;
+	public SortField.Type getSortFieldType() {
+		if("string".equals(type.toLowerCase())) return SortField.Type.STRING;
+		if("integer".equals(type.toLowerCase())) return SortField.Type.INT;
+		if("long".equals(type.toLowerCase())) return SortField.Type.LONG;
+		else return SortField.Type.STRING;
 	}
+	
 	@Override
 	public String toString() {
 		return "CrescentCollectionField [name=" + name + ", store=" + store

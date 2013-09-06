@@ -38,7 +38,7 @@ public class CrescentHighlighter {
 			highlighter.setTextFragmenter(new SimpleFragmenter(50));
 
 
-			TokenStream stream = analyzer.reusableTokenStream(field.getName(), new StringReader(value));
+			TokenStream stream = analyzer.tokenStream(field.getName(), new StringReader(value));
 			fragment = highlighter.getBestFragments(stream, value, 1, "...");
 
 			if(fragment == null || "".equals(fragment)) {

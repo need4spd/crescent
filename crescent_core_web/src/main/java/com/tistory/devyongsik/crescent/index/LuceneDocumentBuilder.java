@@ -8,7 +8,7 @@ import java.util.Set;
 import net.htmlparser.jericho.Source;
 
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Fieldable;
+import org.apache.lucene.index.IndexableField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,12 +48,12 @@ public class LuceneDocumentBuilder {
 					value = source.getTextExtractor().toString();
 				}
 				
-				Fieldable fieldAble = luceneFieldBuilder.create(fieldsByName.get(fieldName), value);
-				document.add(fieldAble);
+				IndexableField indexableField = luceneFieldBuilder.create(fieldsByName.get(fieldName), value);
+				document.add(indexableField);
 				
 				CrescentCollectionField crescentSortField = fieldsByName.get(fieldName+"_sort");
 				if(crescentSortField != null) {
-					Fieldable sortFieldAble = luceneFieldBuilder.create(fieldsByName.get(fieldName+"_sort"), value);
+					IndexableField sortFieldAble = luceneFieldBuilder.create(fieldsByName.get(fieldName+"_sort"), value);
 					document.add(sortFieldAble);
 				}
 			}

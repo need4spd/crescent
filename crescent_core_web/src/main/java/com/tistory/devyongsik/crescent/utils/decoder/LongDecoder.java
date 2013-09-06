@@ -1,5 +1,6 @@
 package com.tistory.devyongsik.crescent.utils.decoder;
 
+import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.NumericUtils;
 
 
@@ -7,7 +8,7 @@ public class LongDecoder implements Decoder {
 
 	  @Override
 	  public String decodeTerm(Object value) {
-	    return Long.toString(NumericUtils.prefixCodedToLong(value.toString()));
+	    return Long.toString(NumericUtils.prefixCodedToLong(new BytesRef((String)value)));
 	  }
 	  
 	  @Override
@@ -18,6 +19,4 @@ public class LongDecoder implements Decoder {
 	  public String toString() {
 	    return "numeric-long";
 	  }
-
-
 }

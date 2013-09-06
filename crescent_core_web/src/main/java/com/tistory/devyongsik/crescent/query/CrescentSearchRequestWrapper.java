@@ -127,7 +127,7 @@ public class CrescentSearchRequestWrapper {
 					}
 					lst[i] = SortField.FIELD_SCORE;
 				} else {
-					lst[i] = new SortField(null,SortField.SCORE, true);
+					lst[i] = new SortField(null,SortField.Type.SCORE, true);
 				}
 			} else {
 

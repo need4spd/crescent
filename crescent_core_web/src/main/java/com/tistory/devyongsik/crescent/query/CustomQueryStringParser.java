@@ -13,13 +13,14 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.sandbox.queries.regex.RegexQuery;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.TermRangeQuery;
-import org.apache.lucene.search.regex.RegexQuery;
+import org.apache.lucene.util.BytesRef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,10 +132,18 @@ public class CustomQueryStringParser {
 					logger.error("범위검색 대상 field는 analyzed값이 false이어야 합니다. {} " , userRequestQuery);
 					throw new CrescentInvalidRequestException("범위검색 대상 field는 analyzed값이 false이어야 합니다. [" + userRequestQuery + "]");
 				}
+				
 				if(isLongField && isNumeric) {
+				
 					query = NumericRangeQuery.newLongRange(fieldName, Long.parseLong(minValue), Long.parseLong(maxValue), isIncludeMin, isIncludeMax);
+				
 				} else if (!(isLongField && isNumeric)){
-					query = new TermRangeQuery(fieldName, minValue, maxValue, isIncludeMin, isIncludeMax);
+					
+					BytesRef minValBytes = new BytesRef(minValue);
+					BytesRef maxValBytes = new BytesRef(maxValue);
+					
+					query = new TermRangeQuery(fieldName, minValBytes, maxValBytes, isIncludeMin, isIncludeMax);
+					
 				} else {
 					logger.error("범위검색은 필드의 타입과 쿼리의 타입이 맞아야 합니다. {} " , userRequestQuery);
 					throw new CrescentInvalidRequestException("범위검색은 필드의 타입과 쿼리의 타입이 맞아야 합니다. [" + userRequestQuery + "]");
@@ -221,11 +230,11 @@ public class CustomQueryStringParser {
 		
 		ArrayList<String> rst = new ArrayList<String>();
 		//split된 검색어를 Analyze..
-		TokenStream stream = analyzer.tokenStream("", new StringReader(splitedKeyword));
-		CharTermAttribute charTerm = stream.getAttribute(CharTermAttribute.class);
-		
-
+		TokenStream stream = null;
 		try {
+			stream = analyzer.tokenStream("", new StringReader(splitedKeyword));
+			CharTermAttribute charTerm = stream.getAttribute(CharTermAttribute.class);
+		
 			stream.reset();
 			
 			while(stream.incrementToken()) {

@@ -9,7 +9,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Query;
@@ -76,7 +76,15 @@ public class DefaultKeywordParser {
 		
 		ArrayList<String> rst = new ArrayList<String>();
 		//split된 검색어를 Analyze..
-		TokenStream stream = analyzer.tokenStream("", new StringReader(splitedKeyword));
+		TokenStream stream = null;
+		
+		try {
+			stream = analyzer.tokenStream("", new StringReader(splitedKeyword));
+		} catch (IOException e1) {
+			logger.error("Error in analyzed Token List", e1);
+			throw new IllegalStateException("키워드 분석 중 에러가 발생하였습니다. [" + splitedKeyword + "]");	
+		}
+		
 		CharTermAttribute charTerm = stream.getAttribute(CharTermAttribute.class);
 		
 

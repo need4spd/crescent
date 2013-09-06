@@ -43,7 +43,7 @@ public class MorphServiceImpl implements MorphService {
 			analyzer = crescentCollection.getSearchModeAnalyzer();
 		}
 		
-		TokenStream stream = analyzer.reusableTokenStream("dummy", reader);
+		TokenStream stream = analyzer.tokenStream("dummy", reader);
 		stream.reset();
 		
 		CharTermAttribute charTermAtt = stream.getAttribute(CharTermAttribute.class);
