@@ -5,7 +5,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.lucene.document.Fieldable;
+import org.apache.lucene.index.IndexableField;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class LuceneFieldBuilderTest extends CrescentTestCaseUtil {
 		
 		for(String fieldName : fieldNames) {
 			CrescentCollectionField field = fieldsByName.get(fieldName);
-			Fieldable luceneField = luceneFieldBuilder.create(field, "30");
+			IndexableField luceneField = luceneFieldBuilder.create(field, "30");
 			
 			System.out.println(luceneField);
 			

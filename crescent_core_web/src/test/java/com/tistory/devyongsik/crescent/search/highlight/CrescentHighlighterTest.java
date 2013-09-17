@@ -12,9 +12,9 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.document.Field.Index;
-import org.apache.lucene.document.Field.Store;
-import org.apache.lucene.document.Field.TermVector;
+import org.apache.lucene.document.FieldType;
+import org.apache.lucene.index.FieldInfo.IndexOptions;
+import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -125,18 +125,28 @@ public class CrescentHighlighterTest extends CrescentTestCaseUtil {
 	@Test public void testVectorHighlighter() throws Exception {
         Directory dir = new RAMDirectory();
         IndexWriter indexWriter 
-        	= new IndexWriter(dir, new IndexWriterConfig(Version.LUCENE_36, new KoreanAnalyzer(true)));
+        	= new IndexWriter(dir, new IndexWriterConfig(Version.LUCENE_44, new KoreanAnalyzer(true)));
  
         Document doc = new Document();
-        Field f1 = new Field("_id", "1", Store.YES, Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS);
-        Field f2 = new Field("content", "the big 입니다. dog", Store.YES, Index.ANALYZED, TermVector.WITH_POSITIONS_OFFSETS);
+        FieldType fieldType = new FieldType();
+		fieldType.setIndexed(true);
+		fieldType.setStored(true);
+		fieldType.setTokenized(true);
+		fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+		fieldType.setStoreTermVectors(true);
+			
+        Field f1 = new Field("_id", "1", fieldType);
+        Field f2 = new Field("content", "the big 입니다. dog", fieldType);
    
         doc.add(f1);
         doc.add(f2);
         
         indexWriter.addDocument(doc);
- 
-        IndexReader reader = IndexReader.open(indexWriter, true);
+        
+        indexWriter.commit();
+        indexWriter.close();
+        
+        DirectoryReader reader = DirectoryReader.open(dir);
         IndexSearcher searcher = new IndexSearcher(reader);
         TopDocs topDocs = searcher.search(new TermQuery(new Term("_id", "1")), 1);
  
@@ -147,7 +157,5 @@ public class CrescentHighlighterTest extends CrescentTestCaseUtil {
         		reader, topDocs.scoreDocs[0].doc, "content", 30);
        
         System.out.println(fragment);
-        
-        searcher.close();
     }
 }

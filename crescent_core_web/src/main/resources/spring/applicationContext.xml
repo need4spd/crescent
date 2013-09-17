@@ -31,6 +31,6 @@
 	
 	<bean
         id="springApplicationContext"
-        class="com.tistory.devyongsik.config.SpringApplicationContext" >
+        class="com.tistory.devyongsik.crescent.config.SpringApplicationContext" >
     </bean>
 </beans>

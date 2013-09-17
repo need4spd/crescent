@@ -1,5 +1,7 @@
 package com.tistory.devyongsik.crescent.search.searcher;
 
+import java.io.IOException;
+
 import javax.annotation.PostConstruct;
 
 import junit.framework.Assert;
@@ -24,7 +26,7 @@ public class SearcherManagerTest extends CrescentTestCaseUtil {
 	}
 	
 	@Test
-	public void getSearcher() {
+	public void getSearcher() throws IOException {
 		IndexSearcher indexSearcher = null;
 		SearcherManager searcherManager = crescentSearcherManager.getSearcherManager("sample");
 		
