@@ -1,23 +1,24 @@
 package com.tistory.devyongsik.crescent.admin.controller;
 
-import com.tistory.devyongsik.crescent.admin.entity.HighFreqTermResult;
-import com.tistory.devyongsik.crescent.admin.entity.IndexInfo;
-import com.tistory.devyongsik.crescent.admin.service.IndexFileManageService;
-import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
-import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
-import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.tistory.devyongsik.crescent.admin.entity.IndexInfo;
+import com.tistory.devyongsik.crescent.admin.service.IndexFileManageService;
+import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.crescent.config.SpringApplicationContext;
 
 @Controller
 public class IndexFileManageController {
@@ -51,7 +52,7 @@ public class IndexFileManageController {
 
 		result.put("collectionNames", collectionNames);
 
-        HighFreqTermResult highFreqTermResult = indexFileManageService.reload(selectCollection);
+//        HighFreqTermResult highFreqTermResult = indexFileManageService.reload(selectCollection);
 
 		result.put("selectCollection", selectCollectionName);
 		result.put("collectionNames", collectionNames);
@@ -61,54 +62,10 @@ public class IndexFileManageController {
 		result.put("hasDel", indexInfo.isHasDel());
 		result.put("indexVersion", indexInfo.getIndexVersion());
 		result.put("termCount", indexInfo.getTermCount());
+		result.put("numOfTerm", indexInfo.getTotalTermCount());
 
 
 		modelAndView.addObject("RESULT", result);
-		return modelAndView;
-	}
-	
-	@RequestMapping("/indexFileManageDoc")
-	public ModelAndView indexFileManageDoc(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("/admin/indexFileManageDoc");
-		
-		String selectCollectionName = request.getParameter("selectCollection");
-
-        CrescentCollectionHandler collectionHandler
-                = SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-        List<String> collectionNames = new ArrayList<String>();
-
-        for (CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
-            collectionNames.add(crescentCollection.getName());
-        }
-
-        CrescentCollection selectCollection = collectionHandler
-                .getCrescentCollections()
-                .getCrescentCollection(selectCollectionName);
-
-		int docId = 0;
-		if (request.getParameter("docNum") != null) {
-            docId = Integer.parseInt(request.getParameter("docNum"));
-        }
-
-		
-		Map<String, Object> result = new HashMap<String, Object>();
-        HighFreqTermResult highFreqTermResult = indexFileManageService.reload(selectCollection, docId);
-
-        IndexInfo indexInfo = indexFileManageService.getIndexInfo(selectCollection);
-
-        result.put("collectionNames", collectionNames);
-        result.put("selectCollection", selectCollectionName);
-        result.put("collectionNames", collectionNames);
-        result.put("indexName", indexInfo.getIndexName());
-        result.put("numOfField", indexInfo.getNumOfField());
-        result.put("numOfDoc", indexInfo.getNumOfDoc());
-        result.put("hasDel", indexInfo.isHasDel());
-        result.put("indexVersion", indexInfo.getIndexVersion());
-        result.put("termCount", indexInfo.getTermCount());
-
-		modelAndView.addObject("RESULT", result);
-		
 		return modelAndView;
 	}
 }

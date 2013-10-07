@@ -41,7 +41,7 @@ public class LuceneFieldBuilder {
 		} else if("LONG".equalsIgnoreCase(collectionField.getType())) {
 			fieldType.setNumericType(NumericType.LONG);
 			
-			LongField f = new LongField(collectionField.getName(),
+			Field f = new LongField(collectionField.getName(),
 					Long.parseLong(value),
 					fieldType);
 			

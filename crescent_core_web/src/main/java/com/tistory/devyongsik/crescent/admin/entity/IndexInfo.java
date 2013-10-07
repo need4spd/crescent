@@ -2,6 +2,7 @@ package com.tistory.devyongsik.crescent.admin.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class IndexInfo {
     private int numOfDoc;
@@ -10,9 +11,19 @@ public class IndexInfo {
     private String selectCollectionName;
     private String indexName;
     private int numOfField;
-    private long termCount;
-    private List<String> fieldNames = new ArrayList<String>();
+    private Map<String, Long> termCount;
+    private long totalTermCount;
 
+	private List<String> fieldNames = new ArrayList<String>();
+
+    public long getTotalTermCount() {
+		return totalTermCount;
+	}
+
+	public void setTotalTermCount(long totalTermCount) {
+		this.totalTermCount = totalTermCount;
+	}
+	
     public int getNumOfDoc() {
         return numOfDoc;
     }
@@ -61,11 +72,11 @@ public class IndexInfo {
         this.numOfField = numOfField;
     }
 
-    public long getTermCount() {
+    public Map<String, Long> getTermCount() {
         return termCount;
     }
 
-    public void setTermCount(long termCount) {
+    public void setTermCount(Map<String, Long> termCount) {
         this.termCount = termCount;
     }
 

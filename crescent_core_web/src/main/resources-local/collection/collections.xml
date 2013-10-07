@@ -10,7 +10,7 @@
 		<analyzer type="indexing" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="true" />
 	    <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
 	</analyzers>
-    <indexingDirectory>crescent_index/sample</indexingDirectory>
+    <indexingDirectory>d:/Programming/Java/crescent_index/sample</indexingDirectory>
     <searcherReloadScheduleMin>50</searcherReloadScheduleMin>
     <!-- indexingDirectory>/data1/lucene_index/sample</indexingDirectory -->
     <fields>
@@ -37,7 +37,7 @@
 		<analyzer type="indexing" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="true" />
 	    <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
 	</analyzers>
-    <indexingDirectory>crescent_index/sample_wiki</indexingDirectory>
+    <indexingDirectory>d:/Programming/Java/crescent_index/sample_wiki</indexingDirectory>
     <searcherReloadScheduleMin>50</searcherReloadScheduleMin>
     <!-- indexingDirectory>/data1/lucene_index/sample_wiki</indexingDirectory -->
     <fields>

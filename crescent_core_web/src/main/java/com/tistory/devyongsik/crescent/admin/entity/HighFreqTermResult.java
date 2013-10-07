@@ -1,6 +1,5 @@
 package com.tistory.devyongsik.crescent.admin.entity;
 
-import org.apache.lucene.codecs.TermStats;
 import org.apache.lucene.util.PriorityQueue;
 
 public class HighFreqTermResult {
@@ -17,14 +16,14 @@ public class HighFreqTermResult {
         return tiq;
     }
 
-    public final class TermStatsQueue extends PriorityQueue<TermStats> {
+    public final class TermStatsQueue extends PriorityQueue<CrescentTermStats> {
         TermStatsQueue(int size) {
             super(size);
         }
 
         @Override
-        protected boolean lessThan(TermStats termInfoA, TermStats termInfoB) {
-            return termInfoA.docFreq < termInfoB.docFreq;
+        protected boolean lessThan(CrescentTermStats termInfoA, CrescentTermStats termInfoB) {
+            return termInfoA.getTotalTermFreq() < termInfoB.getTotalTermFreq();
         }
     }
 }
