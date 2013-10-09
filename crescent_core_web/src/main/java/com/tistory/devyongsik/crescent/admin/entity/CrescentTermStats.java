@@ -1,32 +1,31 @@
 package com.tistory.devyongsik.crescent.admin.entity;
 
-import org.apache.lucene.util.BytesRef;
 
 public class CrescentTermStats {
-	private BytesRef termtext;
+	private String termtext;
 	private String field;
 	private int docFreq;
 	private long totalTermFreq;
 
-	public CrescentTermStats(String field, BytesRef termtext, int df) {
-		this.termtext = (BytesRef)termtext.clone();
+	public CrescentTermStats(String field, String termtext, int df) {
+		this.termtext = termtext;
 		this.field = field;
 		this.docFreq = df;
 	}
 
-	public CrescentTermStats(String field, BytesRef termtext, int df, long tf) {
-		this.termtext = (BytesRef)termtext.clone();
+	public CrescentTermStats(String field, String termtext, int df, long tf) {
+		this.termtext = termtext;
 		this.field = field;
 		this.docFreq = df;
 		this.totalTermFreq = tf;
 	}
 
 	
-	public BytesRef getTermtext() {
+	public String getTermtext() {
 		return termtext;
 	}
 
-	public void setTermtext(BytesRef termtext) {
+	public void setTermtext(String termtext) {
 		this.termtext = termtext;
 	}
 
@@ -54,11 +53,7 @@ public class CrescentTermStats {
 		this.totalTermFreq = totalTermFreq;
 	}
 
-	public String getTermText() {
-		return termtext.utf8ToString();
-	}
-
 	public String toString() {
-		return field + ":" + termtext.utf8ToString() + ":" + docFreq + ":" + totalTermFreq;
+		return field + ":" + termtext + ":" + docFreq + ":" + totalTermFreq;
 	}
 }

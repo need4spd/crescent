@@ -4,7 +4,7 @@ import org.apache.lucene.util.PriorityQueue;
 
 public class HighFreqTermResult {
 
-    public static int numTerms = 100;
+    public static int numTerms = 5;
 
     private TermStatsQueue tiq;
 

@@ -51,9 +51,6 @@ public class IndexFileManageController {
 		IndexInfo indexInfo = indexFileManageService.getIndexInfo(selectCollection);
 
 		result.put("collectionNames", collectionNames);
-
-//        HighFreqTermResult highFreqTermResult = indexFileManageService.reload(selectCollection);
-
 		result.put("selectCollection", selectCollectionName);
 		result.put("collectionNames", collectionNames);
 		result.put("indexName", indexInfo.getIndexName());
@@ -61,8 +58,9 @@ public class IndexFileManageController {
 		result.put("numOfDoc", indexInfo.getNumOfDoc());
 		result.put("hasDel", indexInfo.isHasDel());
 		result.put("indexVersion", indexInfo.getIndexVersion());
-		result.put("termCount", indexInfo.getTermCount());
+		result.put("termCountByFieldName", indexInfo.getTermCountByFieldNameMap());
 		result.put("numOfTerm", indexInfo.getTotalTermCount());
+		result.put("termStatsList", indexInfo.getCrescentTermStatsList());
 
 
 		modelAndView.addObject("RESULT", result);
