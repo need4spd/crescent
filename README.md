@@ -3,7 +3,7 @@ Crescent (Search Engine)
 1. Http기반으로 작동하는 검색엔진입니다.
 
 2. 웹 어플리케이션으로 개발되어있으며, Lucene을 기반으로 하고 있습니다.
-현재 3.6.1버전으로 개발되어있습니다.
+현재 4.4.0버전으로 개발되어있습니다.
 
 3. 한글 분석기 (Korean Analyzer)는 저의 또다른 프로젝트인 (https://github.com/need4spd/lucene-Korean-Analyzer)
 를 사용합니다. maven 빌드를하면 위 repository에서 필요한 lucene Korean Analyzer를 자동으로 다운받아 사용합니다.
@@ -16,8 +16,6 @@ Crescent (Search Engine)
 
 7. 라이센스는 Apache License 2.0을 따릅니다.
 
-8. 테스트 페이지는 아래의 url로 접속하여주세요.
-
-http://ec2-54-248-115-161.ap-northeast-1.compute.amazonaws.com:8080/crescent
+8. 테스트 페이지는 잠시 close되어있는 상태입니다.
 
 

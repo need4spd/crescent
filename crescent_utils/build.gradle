@@ -8,14 +8,16 @@ dependencies {
 		[group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'],
 		[group: 'com.google.code.gson', name: 'gson', version: '2.2.2'],
 		[group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
-		[group: 'commons-pool', name: 'commons-pool', version: '1.6']
+		[group: 'commons-pool', name: 'commons-pool', version: '1.6'],
+		[group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.0.6.v20130930']
 	)
 
 	testRuntime(
        [group: 'commons-dbcp', name: 'commons-dbcp', version: '1.4'],
        [group: 'com.google.code.gson', name: 'gson', version: '2.2.2'],
        [group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.3'],
-	   [group: 'commons-pool', name: 'commons-pool', version: '1.6']
+	   [group: 'commons-pool', name: 'commons-pool', version: '1.6'],
+		[group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.0.6.v20130930']
     )
 
 }
