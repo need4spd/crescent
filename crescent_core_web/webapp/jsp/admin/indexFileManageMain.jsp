@@ -12,11 +12,12 @@
 <c:set var="is_optimize" value="${RESULT.isOptimize }" />
 <c:set var="index_version" value="${RESULT.indexVersion }" />
 <c:set var="last_modify" value="${RESULT.lastModify }" />
-<c:set var="term_count" value="${RESULT.termCount }" />
+<c:set var="term_count_by_field_name" value="${RESULT.termCountByFieldName }" />
 <c:set var="top_ranking" value="${RESULT.topRanking }" />
 <c:set var="top_ranking_count" value="${RESULT.topRankingCount }" />
 <c:set var="select_top_ranking_field" value="${RESULT.topRankingField }" />
 <c:set var="top_ranking_fields" value="${RESULT.topRankingFields }" />
+<c:set var="term_stats_list" value="${RESULT.termStatsList}" />
 
 
 <!DOCTYPE html>
@@ -138,7 +139,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${term_count }" var="product">
+								<c:forEach items="${term_count_by_field_name }" var="product">
 								<tr>
 									<td>${product.key }</td>
 									<td>${product.value }</td>
@@ -179,13 +180,13 @@
 							</thead>
 							<tbody>
 							<c:choose>
-								<c:when test="${top_ranking != null}">
-								<c:forEach items="${top_ranking }" var="top_item" varStatus="index">
+								<c:when test="${term_stats_list != null}">
+								<c:forEach items="${term_stats_list }" var="top_item" varStatus="index">
 								<tr>
 									<td>${index.count }</td>
-									<td>${top_item.count }</td>
+									<td>${top_item.totalTermFreq }</td>
 									<td>${top_item.field }</td>
-									<td>${top_item.text }</td>
+									<td>${top_item.termtext }</td>
 								</tr>
 								</c:forEach>
 								</c:when>

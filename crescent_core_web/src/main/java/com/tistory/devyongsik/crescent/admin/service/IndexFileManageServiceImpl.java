@@ -3,6 +3,8 @@ package com.tistory.devyongsik.crescent.admin.service;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +17,7 @@ import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
+import org.apache.lucene.util.NumericUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -44,30 +47,54 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
         indexInfo.setSelectCollectionName(selectCollection.getName());
         indexInfo.setIndexName(selectCollection.getIndexingDirectory());
 
-        Map<String, Long> termCount = new HashMap<String, Long>();
+        Map<String, Long> termCountByFieldNameMap = new HashMap<String, Long>();
+        
         long totalTermCount = 0L;
+        long totalTermCountByField = 0L;
         
         List<String> fieldNames = new ArrayList<String>();
         for (CrescentCollectionField field : selectCollection.getFields()) {
             fieldNames.add(field.getName());
-            totalTermCount += directoryReader.getSumTotalTermFreq(field.getName());
+            
+            totalTermCountByField = directoryReader.getSumTotalTermFreq(field.getName());
+            totalTermCount += totalTermCountByField;
+            
+            termCountByFieldNameMap.put(field.getName(), totalTermCountByField);
         }
 
         indexInfo.setFieldNames(fieldNames);
         indexInfo.setNumOfField(fieldNames.size());
-        indexInfo.setTermCount(termCount);
+        indexInfo.setTermCountByFieldNameMap(termCountByFieldNameMap);
         indexInfo.setTotalTermCount(totalTermCount);
         
         try {
-			HighFreqTermResult highFreqTermResult = getHighFreqTerms(selectCollection);
+			
+        	HighFreqTermResult highFreqTermResult = getHighFreqTerms(selectCollection);
 			TermStatsQueue q = highFreqTermResult.getTermStatsQueue();
+			
+			List<CrescentTermStats> crescentTermStatsList = new ArrayList<CrescentTermStats>();
 			
 			while(q.size() > 0) {
 				CrescentTermStats stats = q.pop();
-				termCount.put(stats.getTermText(), stats.getTotalTermFreq());
+				
+				crescentTermStatsList.add(stats);
 			}
 			
-			indexInfo.setTermCount(termCount);
+			Collections.sort(crescentTermStatsList, new Comparator<CrescentTermStats>() {
+
+				@Override
+				public int compare(CrescentTermStats o1, CrescentTermStats o2) {
+					if (o2.getTotalTermFreq() > o1.getTotalTermFreq()) {
+						return 1;
+					} else if (o2.getTotalTermFreq() < o1.getTotalTermFreq()) {
+						return -1;
+					} else {
+						return 0;
+					}
+				}
+			});
+			
+			indexInfo.setCrescentTermStatsList(crescentTermStatsList);
 			
 		} catch (Exception e) {
 			logger.error("Exception in getIndexInfo : " , e);
@@ -81,6 +108,7 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
         HighFreqTermResult highFreqTermResult = new HighFreqTermResult();
 
 		List<String> fieldNames = new ArrayList<String>();
+		
 		for (CrescentCollectionField field : selectCollection.getFields()) {
 			fieldNames.add(field.getName());
 		}
@@ -105,7 +133,8 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
                     Terms terms = fields.terms(field);
                     if (terms != null) {
                         te = terms.iterator(te);
-                        fillQueue(field, te, termStatsQueue);
+                        CrescentCollectionField crescentField = selectCollection.getCrescentFieldByName().get(field);
+                        fillQueue(field, te, termStatsQueue, crescentField.getType());
                     }
                 }
             }
@@ -118,16 +147,27 @@ public class IndexFileManageServiceImpl implements IndexFileManageService {
         return highFreqTermResult;
 	}
 
-    private void fillQueue(String fieldName, TermsEnum termsEnum, HighFreqTermResult.TermStatsQueue tiq) throws Exception {
+    private void fillQueue(String fieldName, TermsEnum termsEnum, HighFreqTermResult.TermStatsQueue tiq, String fieldType) throws Exception {
 
-        while (true) {
+    	while (true) {
             
         	BytesRef term = termsEnum.next();
             
             if (term != null) {
             	BytesRef r = new BytesRef();
                 r.copyBytes(term);
-                tiq.insertWithOverflow(new CrescentTermStats(fieldName, r, termsEnum.docFreq(), termsEnum.totalTermFreq()));
+                
+                String termText = "";
+                
+                if("LONG".equalsIgnoreCase(fieldType)) {
+                	termText = String.valueOf(NumericUtils.prefixCodedToLong(r));
+                } else if ("INTEGER".equalsIgnoreCase(fieldType)) {
+                	termText = String.valueOf(NumericUtils.prefixCodedToInt(r));
+                } else {
+                	termText = r.utf8ToString();
+                }
+				
+               tiq.insertWithOverflow(new CrescentTermStats(fieldName, termText, termsEnum.docFreq(), termsEnum.totalTermFreq()));
             
             } else {
                 break;

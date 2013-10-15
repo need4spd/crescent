@@ -11,12 +11,22 @@ public class IndexInfo {
     private String selectCollectionName;
     private String indexName;
     private int numOfField;
-    private Map<String, Long> termCount;
+    private Map<String, Long> termCountByFieldNameMap;
     private long totalTermCount;
+    private List<CrescentTermStats> crescentTermStatsList;
 
 	private List<String> fieldNames = new ArrayList<String>();
 
-    public long getTotalTermCount() {
+    public List<CrescentTermStats> getCrescentTermStatsList() {
+		return crescentTermStatsList;
+	}
+
+	public void setCrescentTermStatsList(
+			List<CrescentTermStats> crescentTermStatsList) {
+		this.crescentTermStatsList = crescentTermStatsList;
+	}
+
+	public long getTotalTermCount() {
 		return totalTermCount;
 	}
 
@@ -72,12 +82,12 @@ public class IndexInfo {
         this.numOfField = numOfField;
     }
 
-    public Map<String, Long> getTermCount() {
-        return termCount;
+    public Map<String, Long> getTermCountByFieldNameMap() {
+        return termCountByFieldNameMap;
     }
 
-    public void setTermCount(Map<String, Long> termCount) {
-        this.termCount = termCount;
+    public void setTermCountByFieldNameMap(Map<String, Long> termCountByFieldNameMap) {
+        this.termCountByFieldNameMap = termCountByFieldNameMap;
     }
 
     public List<String> getFieldNames() {
