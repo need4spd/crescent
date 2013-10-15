@@ -7,7 +7,7 @@ ext {
     DEFAULT_PROFILE = 'local'
     webProjects = ['crescent_core_web']
 
-    javaVersion = '1.6'
+    javaVersion = '1.7'
     javaEncoding = 'UTF-8'
     tmpDir = System.getProperty('java.io.tmpdir')
 }
