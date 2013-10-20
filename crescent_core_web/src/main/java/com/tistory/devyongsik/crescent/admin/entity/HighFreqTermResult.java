@@ -9,11 +9,11 @@ public class HighFreqTermResult {
     private TermStatsQueue tiq;
 
     public HighFreqTermResult() {
-        tiq = new TermStatsQueue(numTerms);
+        this.tiq = new TermStatsQueue(numTerms);
     }
 
     public TermStatsQueue getTermStatsQueue() {
-        return tiq;
+        return this.tiq;
     }
 
     public final class TermStatsQueue extends PriorityQueue<CrescentTermStats> {

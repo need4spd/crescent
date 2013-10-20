@@ -1,7 +1,12 @@
 package com.tistory.devyongsik.crescent.index.indexer;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
@@ -129,6 +134,10 @@ public class CrescentIndexer {
 		try {
 			
 			logger.info("Commit {}", collectionName);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+			Map<String, String> indexUserData = new HashMap<String, String>();
+			indexUserData.put("lastModified", dateFormat.format(new Date()));
+			indexWriter.setCommitData(indexUserData);
 			
 			indexWriter.commit();
 		

@@ -2,6 +2,7 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"  %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <c:set var="selectCollection" value="${RESULT.selectCollection }" />
 <c:set var="collectionNames" value="${RESULT.collectionNames }" />
 <c:set var="index_name" value="${RESULT.indexName }" />
@@ -86,43 +87,43 @@
 			<div class="control-group">
 				<label class="control-label">Index name</label>
 				<div class="controls">
-					<input type="text" id="indexName" placeholder="Index Name" disables>
+					<input type="text" id="indexName" placeholder="Index Name" disabled>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Number of Fields</label>
 				<div class="controls">
-					<input type="text" id="numOfField" placeholder="Number of Fields" disables>
+					<input type="text" id="numOfField" placeholder="Number of Fields" disabled>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Number of Terms</label>
 				<div class="controls">
-					<input type="text" id="numOfTerm" placeholder="Number of Terms" disables>
+					<input type="text" id="numOfTerm" placeholder="Number of Terms" disabled>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Number of Documents</label>
 				<div class="controls">
-					<input type="text" id="numOfDocument" placeholder="Number of Documents" disables>
+					<input type="text" id="numOfDocument" placeholder="Number of Documents" disabled>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Has Deletions / Optimized</label>
 				<div class="controls">
-					<input type="text" id="hasDelIsOpt" placeholder="hasDelete / isOptimized" disables>
+					<input type="text" id="hasDelIsOpt" placeholder="hasDelete / isOptimized" disabled>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Index Version</label>
 				<div class="controls">
-					<input type="text" id="indexVersion" placeholder="IndexVersion" disables>
+					<input type="text" id="indexVersion" placeholder="IndexVersion" disabled>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Last modified</label>
 				<div class="controls">
-					<input type="text" id="lastModified" placeholder="Last modified" disables>
+					<input type="text" id="lastModified" placeholder="Last modified" disabled>
 				</div>
 				<div class="span6 offset1" id="lastModified"></div>
 			</div>

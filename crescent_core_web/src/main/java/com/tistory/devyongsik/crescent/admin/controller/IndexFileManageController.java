@@ -66,4 +66,11 @@ public class IndexFileManageController {
 		modelAndView.addObject("RESULT", result);
 		return modelAndView;
 	}
+	
+	@RequestMapping("/indexFileManageDoc")
+	public ModelAndView indexFileManageDoc(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		return modelAndView;
+	}
 }
