@@ -137,7 +137,7 @@ public class CrescentHighlighterTest extends CrescentTestCaseUtil {
 		fieldType.setStoreTermVectors(true);
 			
         Field f1 = new Field("_id", "1", fieldType);
-        Field f2 = new Field("content", "the big 입니다. dog", fieldType);
+        Field f2 = new Field("content", "the big 삼성전자연구원. dog", fieldType);
    
         doc.add(f1);
         doc.add(f2);
