@@ -52,7 +52,7 @@ public class IndexWriterManager {
 					dir = FSDirectory.open(new File(indexDir));
 				}
 				
-				IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_35, crescentCollection.getIndexingModeAnalyzer());
+				IndexWriterConfig conf = new IndexWriterConfig(Version.LUCENE_44, crescentCollection.getIndexingModeAnalyzer());
 				conf.setOpenMode(OpenMode.CREATE_OR_APPEND);
 				//conf.setIndexDeletionPolicy(new LastCommitDeletePolicy());
 				

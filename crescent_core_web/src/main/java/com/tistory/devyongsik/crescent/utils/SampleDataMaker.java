@@ -1,14 +1,17 @@
 package com.tistory.devyongsik.crescent.utils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 public class SampleDataMaker {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws JsonGenerationException, JsonMappingException, IOException {
 		
 		List<Map<String, String>> sampleList = new ArrayList<Map<String, String>>();
 		String field_name_1 = "wiki_idx";
@@ -30,8 +33,8 @@ public class SampleDataMaker {
 			sampleList.add(doc);
 		}
 		
-		Gson gson = new Gson();
-		String sampleData = gson.toJson(sampleList);
+		ObjectMapper mapper = new ObjectMapper();
+		String sampleData = mapper.writeValueAsString(sampleList);
 		
 		System.out.println(sampleData);
 	}

@@ -1,10 +1,12 @@
 package com.tistory.devyongsik.crescent.data.handler;
 
+import java.io.IOException;
+
 import junit.framework.Assert;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
-import com.google.gson.Gson;
 import com.tistory.devyongsik.crescent.index.entity.IndexingRequestForm;
 import com.tistory.devyongsik.utils.FormattedTextBuilder;
 
@@ -14,9 +16,13 @@ public class JsonDataHandlerTest {
 	public void indexingAddDocumentBulk() {
 		String inputText = FormattedTextBuilder.getAddDocBulkJsonForm();
 		
-		Gson gson = new Gson();
-		
-		IndexingRequestForm indexingRequest = gson.fromJson(inputText, IndexingRequestForm.class);
+		ObjectMapper mapper = new ObjectMapper();
+		IndexingRequestForm indexingRequest = null;
+		try {
+			indexingRequest = mapper.readValue(inputText, IndexingRequestForm.class);
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
 		
 		Assert.assertEquals("add", indexingRequest.getCommand());
 		Assert.assertEquals(null, indexingRequest.getQuery());
@@ -29,9 +35,13 @@ public class JsonDataHandlerTest {
 	public void indexingAddDocumentIncrement() {
 		String inputText = FormattedTextBuilder.getAddDocIncJsonForm();
 		
-		Gson gson = new Gson();
-		
-		IndexingRequestForm indexingRequest = gson.fromJson(inputText, IndexingRequestForm.class);
+		ObjectMapper mapper = new ObjectMapper();
+		IndexingRequestForm indexingRequest = null;
+		try {
+			indexingRequest = mapper.readValue(inputText, IndexingRequestForm.class);
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
 		
 		Assert.assertEquals("add", indexingRequest.getCommand());
 		Assert.assertEquals(null, indexingRequest.getQuery());
@@ -44,9 +54,13 @@ public class JsonDataHandlerTest {
 	public void indexingUpdateDocumentBulk() {
 		String inputText = FormattedTextBuilder.getUpdateDocBulkJsonForm();
 		
-		Gson gson = new Gson();
-		
-		IndexingRequestForm indexingRequest = gson.fromJson(inputText, IndexingRequestForm.class);
+		ObjectMapper mapper = new ObjectMapper();
+		IndexingRequestForm indexingRequest = null;
+		try {
+			indexingRequest = mapper.readValue(inputText, IndexingRequestForm.class);
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
 		
 		Assert.assertEquals("update", indexingRequest.getCommand());
 		Assert.assertEquals("creuser:test", indexingRequest.getQuery());
@@ -59,9 +73,14 @@ public class JsonDataHandlerTest {
 	public void indexingUpdateDocumentInc() {
 		String inputText = FormattedTextBuilder.getUpdateDocIncJsonForm();
 		
-		Gson gson = new Gson();
+		ObjectMapper mapper = new ObjectMapper();
+		IndexingRequestForm indexingRequest = null;
+		try {
+			indexingRequest = mapper.readValue(inputText, IndexingRequestForm.class);
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
 		
-		IndexingRequestForm indexingRequest = gson.fromJson(inputText, IndexingRequestForm.class);
 		
 		Assert.assertEquals("update", indexingRequest.getCommand());
 		Assert.assertEquals("creuser:test", indexingRequest.getQuery());
@@ -74,9 +93,13 @@ public class JsonDataHandlerTest {
 	public void indexingDeleteDocumentBulk() {
 		String inputText = FormattedTextBuilder.getDeleteDocBulkJsonForm();
 		
-		Gson gson = new Gson();
-		
-		IndexingRequestForm indexingRequest = gson.fromJson(inputText, IndexingRequestForm.class);
+		ObjectMapper mapper = new ObjectMapper();
+		IndexingRequestForm indexingRequest = null;
+		try {
+			indexingRequest = mapper.readValue(inputText, IndexingRequestForm.class);
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
 		
 		Assert.assertEquals("delete", indexingRequest.getCommand());
 		Assert.assertEquals("creuser:test", indexingRequest.getQuery());
@@ -88,9 +111,13 @@ public class JsonDataHandlerTest {
 	public void indexingDeleteDocumentInc() {
 		String inputText = FormattedTextBuilder.getDeleteDocIncJsonForm();
 		
-		Gson gson = new Gson();
-		
-		IndexingRequestForm indexingRequest = gson.fromJson(inputText, IndexingRequestForm.class);
+		ObjectMapper mapper = new ObjectMapper();
+		IndexingRequestForm indexingRequest = null;
+		try {
+			indexingRequest = mapper.readValue(inputText, IndexingRequestForm.class);
+		} catch (IOException e) {
+			Assert.fail(e.getMessage());
+		}
 		
 		Assert.assertEquals("delete", indexingRequest.getCommand());
 		Assert.assertEquals("creuser:test", indexingRequest.getQuery());

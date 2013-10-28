@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.codehaus.jackson.map.ObjectMapper;
 
-import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamAsAttribute;
@@ -72,7 +72,7 @@ public class MakeJsonFormFileFromDB {
 		
 		int rowCount = 0;
 
-		Gson gson = new Gson();
+		ObjectMapper mapper = new ObjectMapper();
 		
 		while(rs.next()) {
 			rowCount++;
@@ -109,7 +109,7 @@ public class MakeJsonFormFileFromDB {
 				indexingForm.put("indexingType", "bulk");
 				indexingForm.put("documentList", resultSetMapList);
 				
-				String jsonForm = gson.toJson(resultSetMapList);
+				String jsonForm = mapper.writeValueAsString(resultSetMapList);
 				
 				bw.write(jsonForm);
 				
@@ -142,7 +142,7 @@ public class MakeJsonFormFileFromDB {
 			
 			System.out.println("file write start ... [" + targetFile.getName() + "]");
 			
-			String jsonForm = gson.toJson(resultSetMapList);
+			String jsonForm = mapper.writeValueAsString(resultSetMapList);
 			
 			bw.write(jsonForm);
 			
