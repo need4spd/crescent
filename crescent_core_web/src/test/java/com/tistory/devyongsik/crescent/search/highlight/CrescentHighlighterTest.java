@@ -10,11 +10,12 @@ import junit.framework.Assert;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
-import org.apache.lucene.index.FieldInfo.IndexOptions;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.FieldInfo.IndexOptions;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -32,7 +33,6 @@ import org.apache.lucene.search.vectorhighlight.FastVectorHighlighter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
@@ -123,10 +123,10 @@ public class CrescentHighlighterTest extends CrescentTestCaseUtil {
 		
 	}
 	
-	@Test @Ignore public void testVectorHighlighter() throws Exception {
+	@Test public void testVectorHighlighter() throws Exception {
         Directory dir = new RAMDirectory();
         IndexWriter indexWriter 
-        	= new IndexWriter(dir, new IndexWriterConfig(Version.LUCENE_44, new KoreanAnalyzer(true)));
+        	= new IndexWriter(dir, new IndexWriterConfig(Version.LUCENE_44, new WhitespaceAnalyzer(Version.LUCENE_44)));
  
         Document doc = new Document();
         FieldType fieldType = new FieldType();
@@ -154,8 +154,8 @@ public class CrescentHighlighterTest extends CrescentTestCaseUtil {
         System.out.println(topDocs.totalHits);
          
         FastVectorHighlighter highlighter = new FastVectorHighlighter();
-        String fragment = highlighter.getBestFragment(highlighter.getFieldQuery(new TermQuery(new Term("content", "입니다"))),
-        		reader, topDocs.scoreDocs[0].doc, "content", 30);
+        String fragment = highlighter.getBestFragment(highlighter.getFieldQuery(new TermQuery(new Term("content", "big"))),
+        		reader, topDocs.scoreDocs[0].doc, "content", 200);
        
         System.out.println(fragment);
     }
