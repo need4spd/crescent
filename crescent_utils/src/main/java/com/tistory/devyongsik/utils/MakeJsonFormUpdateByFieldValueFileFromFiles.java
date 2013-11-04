@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlAnyAttribute;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -53,7 +53,7 @@ public class MakeJsonFormUpdateByFieldValueFileFromFiles {
 		writeFile(sourceFile);
 		
 		//50000개가 안되거나... 남아있는것들 
-		Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+		ObjectMapper mapper = new ObjectMapper();
 		
 		Map<String, Object> indexingForm = new HashMap<String, Object>();
 		indexingForm.put("command", "update_by_field_value");
@@ -62,7 +62,7 @@ public class MakeJsonFormUpdateByFieldValueFileFromFiles {
 		indexingForm.put("query", "filePath:*");
 		
 		//write file
-		String jsonForm = gson.toJson(indexingForm);
+		String jsonForm = mapper.writeValueAsString(indexingForm);
 		
 		bw.write(jsonForm);
 		
@@ -109,7 +109,7 @@ public class MakeJsonFormUpdateByFieldValueFileFromFiles {
 					
 					madeFileCount = 0;
 					
-					Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+					ObjectMapper mapper = new ObjectMapper();
 					
 					Map<String, Object> indexingForm = new HashMap<String, Object>();
 					indexingForm.put("command", "update_by_field_value");
@@ -118,7 +118,7 @@ public class MakeJsonFormUpdateByFieldValueFileFromFiles {
 					indexingForm.put("query", "filePath:*");
 					
 					//write file
-					String jsonForm = gson.toJson(indexingForm);
+					String jsonForm = mapper.writeValueAsString(indexingForm);
 					bw.write(jsonForm);
 					
 					targetFileList.clear();

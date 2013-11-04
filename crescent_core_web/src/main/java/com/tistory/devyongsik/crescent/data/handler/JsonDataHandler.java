@@ -1,9 +1,11 @@
 package com.tistory.devyongsik.crescent.data.handler;
 
+import java.io.IOException;
+
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
 import com.tistory.devyongsik.crescent.index.entity.IndexingRequestForm;
 
 /**
@@ -15,21 +17,18 @@ public class JsonDataHandler implements Handler {
 	private Logger logger = LoggerFactory.getLogger(JsonDataHandler.class);
 	
 	@Override
-	public IndexingRequestForm handledData(String jonsFormStr) {
-		
-		Gson gson = new Gson();
-		
-		//logger.debug("jonsFormStr : {}", jonsFormStr);
+	public IndexingRequestForm handledData(String jsonFormStr) {
 		
 		try {
+			ObjectMapper mapper = new ObjectMapper();
 			
-			IndexingRequestForm indexingRequestForm = gson.fromJson(jonsFormStr, IndexingRequestForm.class);
+			IndexingRequestForm indexingRequestForm = mapper.readValue(jsonFormStr, IndexingRequestForm.class);
 			
 			return indexingRequestForm;
 			
-		} catch (Exception e) {
+		} catch (IOException e) {
 			logger.error("error : ", e);
-			throw new IllegalStateException("색인 대상 문서를 변환 중 에러가 발생하였습니다. [" + jonsFormStr +"]");
+			throw new IllegalStateException("색인 대상 문서를 변환 중 에러가 발생하였습니다. [" + jsonFormStr +"]");
 		}
 	}
 }
