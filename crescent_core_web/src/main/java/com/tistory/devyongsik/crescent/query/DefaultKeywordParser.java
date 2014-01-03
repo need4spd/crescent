@@ -95,6 +95,8 @@ public class DefaultKeywordParser {
 				rst.add(charTerm.toString());
 			}
 			
+			stream.close();
+			
 		} catch (IOException e) {
 			logger.error("error in DefaultKeywordParser : ", e);
 			throw new RuntimeException(e);

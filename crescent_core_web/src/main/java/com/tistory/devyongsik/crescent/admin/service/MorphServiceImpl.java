@@ -67,6 +67,7 @@ public class MorphServiceImpl implements MorphService {
 			resultTokenList.add(mt);
 		}
 	
+		stream.close();
 		//analyzer.close();
 		
 		return resultTokenList;
