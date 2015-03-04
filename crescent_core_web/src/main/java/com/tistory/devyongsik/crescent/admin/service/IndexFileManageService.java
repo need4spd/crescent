@@ -6,5 +6,5 @@ import com.tistory.devyongsik.crescent.admin.entity.IndexInfo;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 
 public interface IndexFileManageService {
-	public IndexInfo getIndexInfo(CrescentCollection selectCollection) throws IOException;
+	public IndexInfo getIndexInfo(CrescentCollection selectCollection, String selectTopField) throws IOException;
 }

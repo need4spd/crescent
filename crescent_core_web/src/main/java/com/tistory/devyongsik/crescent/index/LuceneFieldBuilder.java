@@ -3,10 +3,11 @@ package com.tistory.devyongsik.crescent.index;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
-import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.FieldType.NumericType;
-import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.document.IntField;
+import org.apache.lucene.document.LongField;
 import org.apache.lucene.index.FieldInfo.IndexOptions;
+import org.apache.lucene.index.IndexableField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,17 @@ public class LuceneFieldBuilder {
 			
 			return f;
 		
-		} else {
+		} else if ("INTEGER".equalsIgnoreCase(collectionField.getType())){
+			fieldType.setNumericType(NumericType.INT);
+			
+			Field f = new IntField(collectionField.getName(),
+					Integer.parseInt(value),
+					fieldType);
+			
+			logger.debug("Field : {}", f);
+			
+			return f;
+		}else {
 			return null;
 		}
 	}

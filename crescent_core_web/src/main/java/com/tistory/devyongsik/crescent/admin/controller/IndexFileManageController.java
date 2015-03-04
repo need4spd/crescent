@@ -42,26 +42,41 @@ public class IndexFileManageController {
         for (CrescentCollection crescentCollection : collectionHandler.getCrescentCollections().getCrescentCollections()) {
             collectionNames.add(crescentCollection.getName());
         }
-
-        String selectCollectionName = collectionNames.get(0);
+        
+        String selectCollectionName;
+        if (request.getParameter("selectCollectionName") != null) {
+        	selectCollectionName = (String)request.getParameter("selectCollectionName");
+        } else {
+        	selectCollectionName = collectionNames.get(0);
+        }
         CrescentCollection selectCollection = collectionHandler
                                                     .getCrescentCollections()
                                                     .getCrescentCollection(selectCollectionName);
-
-		IndexInfo indexInfo = indexFileManageService.getIndexInfo(selectCollection);
+        
+        String selectTopField = null;
+        if (request.getParameter("selectTopField") != null) {
+        	selectTopField = (String)request.getParameter("selectTopField");
+        } else {
+        	selectTopField = selectCollection.getFields().get(0).getName();
+        }
+		IndexInfo indexInfo = indexFileManageService.getIndexInfo(selectCollection, selectTopField);
 
 		result.put("collectionNames", collectionNames);
-		result.put("selectCollection", selectCollectionName);
-		result.put("collectionNames", collectionNames);
-		result.put("indexName", indexInfo.getIndexName());
-		result.put("numOfField", indexInfo.getNumOfField());
-		result.put("numOfDoc", indexInfo.getNumOfDoc());
-		result.put("hasDel", indexInfo.isHasDel());
-		result.put("indexVersion", indexInfo.getIndexVersion());
-		result.put("termCountByFieldName", indexInfo.getTermCountByFieldNameMap());
-		result.put("numOfTerm", indexInfo.getTotalTermCount());
-		result.put("termStatsList", indexInfo.getCrescentTermStatsList());
+		result.put("selectCollectionName", selectCollectionName);
 
+		if (indexInfo != null) {
+			result.put("hasIndexInfo", true);
+			result.put("indexName", indexInfo.getIndexName());
+			result.put("topRankingFields", indexInfo.getFieldNames());
+			result.put("selectTopField", selectTopField);
+			result.put("numOfField", indexInfo.getNumOfField());
+			result.put("numOfDoc", indexInfo.getNumOfDoc());
+			result.put("hasDel", indexInfo.isHasDel());
+			result.put("indexVersion", indexInfo.getIndexVersion());
+			result.put("termCountByFieldName", indexInfo.getTermCountByFieldNameMap());
+			result.put("numOfTerm", indexInfo.getTotalTermCount());
+			result.put("termStatsList", indexInfo.getCrescentTermStatsList());
+		}
 
 		modelAndView.addObject("RESULT", result);
 		return modelAndView;
