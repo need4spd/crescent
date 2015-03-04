@@ -2,20 +2,19 @@
 	pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"  %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<c:set var="selectCollection" value="${RESULT.selectCollection }" />
+
+<c:set var="selectCollectionName" value="${RESULT.selectCollectionName }" />
 <c:set var="collectionNames" value="${RESULT.collectionNames }" />
 <c:set var="index_name" value="${RESULT.indexName }" />
 <c:set var="num_field" value="${RESULT.numOfField }" />
 <c:set var="num_doc" value="${RESULT.numOfDoc }" />
 <c:set var="num_term" value="${RESULT.numOfTerm }" />
 <c:set var="has_del" value="${RESULT.hasDel }" />
-<c:set var="is_optimize" value="${RESULT.isOptimize }" />
 <c:set var="index_version" value="${RESULT.indexVersion }" />
-<c:set var="last_modify" value="${RESULT.lastModify }" />
 <c:set var="term_count_by_field_name" value="${RESULT.termCountByFieldName }" />
 <c:set var="top_ranking" value="${RESULT.topRanking }" />
 <c:set var="top_ranking_count" value="${RESULT.topRankingCount }" />
-<c:set var="select_top_ranking_field" value="${RESULT.topRankingField }" />
+<c:set var="select_top_ranking_field" value="${RESULT.selectTopField }" />
 <c:set var="top_ranking_fields" value="${RESULT.topRankingFields }" />
 <c:set var="term_stats_list" value="${RESULT.termStatsList}" />
 
@@ -33,30 +32,20 @@
 		$('#numOfDocument').val('${num_doc}');
 		$('#numOfTerm').val('${num_term}');
 		$('#indexVersion').val('${index_version}');
-		$('#lastModified').val('${last_modify}');
-		$('#hasDelIsOpt').val('${has_del}' + " / " + '${is_optimize}');
+		$('#hasDel').val('${has_del}');
 
-		$('#indexName').attr('disabled','disabled');
-		$('#numOfField').attr('disabled','disabled');
-		$('#numOfDocument').attr('disabled','disabled');
-		$('#numOfTerm').attr('disabled','disabled');
-		$('#indexVersion').attr('disabled','disabled');
-		$('#lastModified').attr('disabled','disabled');
-		$('#hasDelIsOpt').attr('disabled','disabled');
-		
 		
 		$("#collection").change(function(event) {
-			var selectCollection = $("#collection").find("option:selected").text();
-			$("input[name='selectCollection']").val(selectCollection);
-			$("input[name='topRankingField']").val('');
+			var selectCollectionName = $("#collection").find("option:selected").text();
+			$("input[name='selectCollectionName']").val(selectCollectionName);
+			$("input[name='selectTopField']").val('');
 			$('#indexFileManageForm').attr("action", "indexFileManageMain.devys").submit();
 		});
 		
 		
-		$("#fieldList").change(function(event){
-			var topRankingField = $("#fieldList").find("option:selected").text();
-			$("input[name=topRankingField]").val(topRankingField);
-			
+		$("#topFieldList").change(function(event){
+			var selectTopField = $("#topFieldList").find("option:selected").text();
+			$("input[name=selectTopField]").val(selectTopField);
 			$('#indexFileManageForm').attr("action", "indexFileManageMain.devys").submit();
 		});
 	});
@@ -76,55 +65,50 @@
 				<div class="controls">
 					<select id="collection">
 						<c:forEach items="${collectionNames }" var="collectionName">
-							<option value="${collectionName }" ${collectionName == selectCollection ? 'selected' : '' }>${collectionName }</option>
+							<option value="${collectionName }" ${collectionName == selectCollectionName ? 'selected' : '' }>${collectionName }</option>
 						</c:forEach>
 					</select>
 				</div>
-				<input type="hidden" name="selectCollection" value="${selectCollection }"/>
+				<input type="hidden" name="selectCollectionName" value="${selectCollectionName }"/>
 			</div>
 			<div id="alert-area"></div>
+			<c:choose>
+			<c:when test="${RESULT.hasIndexInfo }">
 			<div class="control-group">
 				<label class="control-label">Index name</label>
 				<div class="controls">
-					<input type="text" id="indexName" placeholder="Index Name" disables>
+					<input type="text" id="indexName" placeholder="Index Name" disabled>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Number of Fields</label>
 				<div class="controls">
-					<input type="text" id="numOfField" placeholder="Number of Fields" disables>
+					<input type="text" id="numOfField" placeholder="Number of Fields" disabled>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Number of Terms</label>
 				<div class="controls">
-					<input type="text" id="numOfTerm" placeholder="Number of Terms" disables>
+					<input type="text" id="numOfTerm" placeholder="Number of Terms" disabled>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Number of Documents</label>
 				<div class="controls">
-					<input type="text" id="numOfDocument" placeholder="Number of Documents" disables>
+					<input type="text" id="numOfDocument" placeholder="Number of Documents" disabled>
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label">Has Deletions / Optimized</label>
+				<label class="control-label">Has Delete</label>
 				<div class="controls">
-					<input type="text" id="hasDelIsOpt" placeholder="hasDelete / isOptimized" disables>
+					<input type="text" id="hasDel" placeholder="hasDelete" disabled>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Index Version</label>
 				<div class="controls">
-					<input type="text" id="indexVersion" placeholder="IndexVersion" disables>
+					<input type="text" id="indexVersion" placeholder="IndexVersion" disabled>
 				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label">Last modified</label>
-				<div class="controls">
-					<input type="text" id="lastModified" placeholder="Last modified" disables>
-				</div>
-				<div class="span6 offset1" id="lastModified"></div>
 			</div>
 			<div class="row">
 				<div class="span6">
@@ -161,12 +145,12 @@
 				<div class="span6">
 					<div>
 						<div class="btn-group">
-							<select id="fieldList" >
+							<select id="topFieldList" >
 								<c:forEach items="${top_ranking_fields }" var="top_ranking_field">
 									<option value="${top_ranking_field }" ${top_ranking_field == select_top_ranking_field ? 'selected' : ''}>${top_ranking_field }</option>
 								</c:forEach>	
 							</select>
-							<input type="hidden" name="topRankingField" value="${select_top_ranking_field }" />
+							<input type="hidden" name="selectTopField" value="${select_top_ranking_field }" />
 						</div>
 						<table class="table table-striped">
 							<caption>Top ranking terms</caption>
@@ -198,6 +182,11 @@
 					</div>
 				</div>
 			</div>
+			</c:when>
+			<c:otherwise>
+				Has no Index file
+			</c:otherwise>
+			</c:choose>
 		</form>
 	</div>
 </body>
