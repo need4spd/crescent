@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tistory.devyongsik.crescent.admin.service.CollectionManageService;
@@ -28,11 +29,10 @@ public class CollectionManageMainCotroller {
 	private CrescentCollectionHandler collectionHandler;
 	
 	@RequestMapping("/collectionManageMain")
-	public ModelAndView collectionManageMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView collectionManageMain(@RequestParam(value="collectionName", required=false) String selectedCollectionName) throws Exception {
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
-		String selectedCollectionName = request.getParameter("collectionName");
 		if(selectedCollectionName == null) {
 			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
 		}
@@ -72,7 +72,7 @@ public class CollectionManageMainCotroller {
 	}
 	
 	@RequestMapping("/addNewCollection")
-	public ModelAndView addNewCollection(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView addNewCollection() throws Exception {
 		
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -86,12 +86,7 @@ public class CollectionManageMainCotroller {
 	public ModelAndView collectionAdd(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		CrescentCollection selectedCollection = collectionManageService.addCollectionInfo(request);
-		
-//		CrescentCollectionHandler collectionHandler 
-//		= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
-		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
-	
 	
 		ModelAndView modelAndView = new ModelAndView();
 		//modelAndView.addObject("crescentCollections", crescentCollections);
@@ -107,14 +102,11 @@ public class CollectionManageMainCotroller {
 	}
 	
 	@RequestMapping("/deleteCollection")
-	public ModelAndView deleteCollection(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView deleteCollection(@RequestParam(value="collectionName") String collectionName ) throws Exception {
 		
-		collectionManageService.deleteCollectionInfo(request.getParameter("collectionName"));
+		collectionManageService.deleteCollectionInfo(collectionName);
 		
 		ModelAndView modelAndView = new ModelAndView();
-		
-//		CrescentCollectionHandler collectionHandler 
-//			= SpringApplicationContext.getBean("crescentCollectionHandler", CrescentCollectionHandler.class);
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		String selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();

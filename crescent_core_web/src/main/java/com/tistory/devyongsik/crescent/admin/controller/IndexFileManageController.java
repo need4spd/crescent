@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tistory.devyongsik.crescent.admin.entity.IndexInfo;
@@ -28,7 +29,8 @@ public class IndexFileManageController {
 	private IndexFileManageService indexFileManageService;
 	
 	@RequestMapping("/indexFileManageMain")
-	public ModelAndView indexFileManageMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView indexFileManageMain(@RequestParam(value="selectCollectionName",required=false) String selectCollectionName
+											, @RequestParam(value="selectTopField", required=false) String selectTopField) throws Exception {
 
         ModelAndView modelAndView = new ModelAndView();
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -43,20 +45,14 @@ public class IndexFileManageController {
             collectionNames.add(crescentCollection.getName());
         }
         
-        String selectCollectionName;
-        if (request.getParameter("selectCollectionName") != null) {
-        	selectCollectionName = (String)request.getParameter("selectCollectionName");
-        } else {
+        if (selectCollectionName == null) {
         	selectCollectionName = collectionNames.get(0);
         }
         CrescentCollection selectCollection = collectionHandler
                                                     .getCrescentCollections()
                                                     .getCrescentCollection(selectCollectionName);
         
-        String selectTopField = null;
-        if (request.getParameter("selectTopField") != null) {
-        	selectTopField = (String)request.getParameter("selectTopField");
-        } else {
+        if (selectTopField == null) {
         	selectTopField = selectCollection.getFields().get(0).getName();
         }
 		IndexInfo indexInfo = indexFileManageService.getIndexInfo(selectCollection, selectTopField);
@@ -83,7 +79,7 @@ public class IndexFileManageController {
 	}
 	
 	@RequestMapping("/indexFileManageDoc")
-	public ModelAndView indexFileManageDoc(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView indexFileManageDoc() throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		
 		return modelAndView;

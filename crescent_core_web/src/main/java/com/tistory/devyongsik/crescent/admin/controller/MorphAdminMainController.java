@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tistory.devyongsik.crescent.admin.entity.MorphResult;
@@ -38,17 +39,15 @@ public class MorphAdminMainController {
 	private CrescentCollectionHandler collectionHandler;
 
 	@RequestMapping("/morphMain")
-	public ModelAndView morphMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView morphMain(@RequestParam(value="col_name", required=false) String selectedCollectionName) throws Exception {
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
-		String selectedCollectionName = request.getParameter("col_name");
 		if(selectedCollectionName == null) {
 			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
 		}
 		
 		ModelAndView modelAndView = new ModelAndView();
-		//modelAndView.addObject("crescentCollections", crescentCollections);
 		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
 		
 		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
@@ -62,19 +61,15 @@ public class MorphAdminMainController {
 	}
 	
 	@RequestMapping("/doMorphTest")
-	public ModelAndView morphTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
-		String keyword = request.getParameter("keyword");
-		
+	public ModelAndView morphTest(@RequestParam(value="keyword") String keyword
+								, @RequestParam(value="col_name", required=false) String selectedCollectionName) throws Exception {
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
 		
-		String selectedCollectionName = request.getParameter("col_name");
 		if(selectedCollectionName == null) {
 			selectedCollectionName = crescentCollections.getCrescentCollections().get(0).getName();
 		}
 		
 		ModelAndView modelAndView = new ModelAndView();
-		//modelAndView.addObject("crescentCollections", crescentCollections);
 		modelAndView.addObject("selectedCollectionName", selectedCollectionName);
 		
 		List<CrescentCollection> crescentCollectionList = crescentCollections.getCrescentCollections();
