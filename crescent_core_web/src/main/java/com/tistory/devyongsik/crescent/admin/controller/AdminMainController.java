@@ -2,16 +2,13 @@ package com.tistory.devyongsik.crescent.admin.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.tistory.devyongsik.analyzer.dictionary.DictionaryType;
@@ -28,7 +25,7 @@ public class AdminMainController {
 	private DictionaryService dictionaryService = null;
 	
 	@RequestMapping("/adminMain")
-	public ModelAndView adminMain(HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public ModelAndView adminMain() throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/admin/main");
 		
@@ -36,10 +33,9 @@ public class AdminMainController {
 	}
 	
 	@RequestMapping("/dictionaryManage")
-	public ModelAndView dictionaryManage(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String dicType = request.getParameter("dicType");
-		String pagingAction = request.getParameter("pagingAction");
-		
+	public ModelAndView dictionaryManage(@RequestParam(value="dicType") String dicType
+										, @RequestParam(value="pagingAction", required=false) String pagingAction
+										, @RequestParam(value="startOffset", defaultValue="0") int startOffset) throws Exception {
 		List<String> dictionary = loadDictionary(dicType);
 		
 		ModelAndView modelAndView = new ModelAndView();
@@ -54,7 +50,6 @@ public class AdminMainController {
 			return modelAndView;
 		} 
 		
-		int startOffset = Integer.parseInt(StringUtils.defaultString(request.getParameter("startOffset"), "0"));
 		int endOffset = 0;
 		
 		if("prev".equals(pagingAction)) {
@@ -87,8 +82,8 @@ public class AdminMainController {
 	}
 	
 	@RequestMapping("/dictionaryManageAdd")
-	public ModelAndView dictionaryManageAdd(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String dicType = request.getParameter("dicType");
+	public ModelAndView dictionaryManageAdd(@RequestParam(value="dicType") String dicType
+											, @RequestParam(value="wordToAdd") String wordToAdd) throws Exception {
 		
 		int startOffset = 0;
 		int endOffset = 20;
@@ -102,8 +97,6 @@ public class AdminMainController {
 		modelAndView.addObject("dicType", dicType);
 		
 		//Add Word to Dictionary
-		String wordToAdd = request.getParameter("wordToAdd");
-		
 		logger.debug("word to add : {}", wordToAdd);
 		
 		dictionaryService.addWordToDictionary(getDictionaryType(dicType), wordToAdd);
@@ -126,10 +119,8 @@ public class AdminMainController {
 	}
 	
 	@RequestMapping("/dictionaryManageRemove")
-	public ModelAndView dictionaryManageRemove(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String dicType = request.getParameter("dicType");
-		String wordsToRemove = StringUtils.defaultIfEmpty(request.getParameter("wordsToRemove"), "");
-		
+	public ModelAndView dictionaryManageRemove(@RequestParam(value="dicType") String dicType
+											, @RequestParam(value="wordsToRemove",defaultValue="") String wordsToRemove) throws Exception {
 		int startOffset = 0;
 		int endOffset = 20;
 		
@@ -161,10 +152,8 @@ public class AdminMainController {
 	}
 	
 	@RequestMapping("/dictionaryManageFind")
-	public ModelAndView dictionaryManageFind(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		String dicType = request.getParameter("dicType");
-		String wordToFind = request.getParameter("wordToFind");
-		
+	public ModelAndView dictionaryManageFind(@RequestParam(value="dicType") String dicType
+										, @RequestParam(value="wordToFind", defaultValue="") String wordToFind) throws Exception {
 		int startOffset = 0;
 		int endOffset = 20;
 		
