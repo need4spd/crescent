@@ -75,6 +75,10 @@ public class CrescentCollectionHandler {
 		
 		
 		XStream stream = new XStream();
+		stream.allowTypesByWildcard(new String[] {
+			"com.tistory.devyongsik.crescent.collection.entity.**",
+			"java.util.**"
+		});
 		stream.processAnnotations(CrescentCollections.class);
 		stream.alias( "collections", CrescentCollections.class );
 		stream.addImplicitCollection( CrescentCollections.class, "crescentCollections" );
@@ -128,7 +132,7 @@ public class CrescentCollectionHandler {
 					
 					if(constructorArgs == null || constructorArgs.trim().length() == 0) {
 						
-						analyzer = analyzerClass.newInstance();
+						analyzer = analyzerClass.getDeclaredConstructor().newInstance();
 						
 					} else if ("true".equals(constructorArgs.toLowerCase()) || "false".equals(constructorArgs.toLowerCase())) {
 					
@@ -144,7 +148,7 @@ public class CrescentCollectionHandler {
 						Class<?> initArgClass = Class.forName(constructorArgs);
 						
 						Class<?>[] intArgsClass = new Class<?>[] {initArgClass.getClass()};
-						Object[] intArgs = new Object[] {initArgClass.newInstance()};
+						Object[] intArgs = new Object[] {initArgClass.getDeclaredConstructor().newInstance()};
 						
 						Constructor<Analyzer> intArgsConstructor = analyzerClass.getConstructor(intArgsClass);
 						analyzer = (Analyzer) intArgsConstructor.newInstance(intArgs);
@@ -195,8 +199,12 @@ public class CrescentCollectionHandler {
 		URL collectionXmlUrl = resourceLoader.getURL();
 		
 		XStream stream = new XStream();
+		stream.allowTypesByWildcard(new String[] {
+			"com.tistory.devyongsik.crescent.collection.entity.**",
+			"java.util.**"
+		});
 		stream.processAnnotations(CrescentCollections.class);
-		
+
 		logger.debug("collectionXmlUrl : {}", collectionXmlUrl);
 		
 		try {

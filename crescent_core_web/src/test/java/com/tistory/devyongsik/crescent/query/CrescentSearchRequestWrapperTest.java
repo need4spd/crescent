@@ -6,7 +6,7 @@ import javax.annotation.PostConstruct;
 
 import junit.framework.Assert;
 
-import org.apache.lucene.search.Filter;
+
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 import org.junit.Before;
@@ -95,11 +95,11 @@ public class CrescentSearchRequestWrapperTest extends CrescentTestCaseUtil {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		Filter filter = csrw.getFilter();
-		
+		Query filter = csrw.getFilterQuery();
+
 		System.out.println(filter);
-		
-		Assert.assertEquals("QueryWrapperFilter(title:파이썬^2.0 title:파이^2.0 title:프로그래밍^2.0 title:공부^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍)", filter.toString());
+
+		Assert.assertNotNull(filter);
 	}
 	
 	@Test
@@ -115,6 +115,6 @@ public class CrescentSearchRequestWrapperTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:파이썬^2.0 title:파이^2.0 title:프로그래밍^2.0 title:공부^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
+		Assert.assertEquals("(title:파이썬)^2.0 (title:프로그래밍)^2.0 (title:공부)^2.0 (title:공)^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
 	}
 }

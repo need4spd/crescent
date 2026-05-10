@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.dbcp.BasicDataSource;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.apache.commons.dbcp2.BasicDataSource;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;

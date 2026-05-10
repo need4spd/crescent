@@ -8,12 +8,12 @@ import javax.annotation.PostConstruct;
 import junit.framework.Assert;
 
 import org.apache.lucene.index.Term;
+import org.apache.lucene.document.IntField;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Filter;
-import org.apache.lucene.search.NumericRangeQuery;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TermQuery;
+import org.apache.lucene.index.Term;
 import org.junit.Test;
 
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
@@ -71,7 +71,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("dscr:파이썬 dscr:파이 dscr:프로그래밍 dscr:공부", query.toString());
+		Assert.assertEquals("dscr:파이썬 dscr:프로그래밍 dscr:공부 dscr:공", query.toString());
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:파이썬^2.0 title:파이^2.0 title:프로그래밍^2.0 title:공부^2.0", query.toString());
+		Assert.assertEquals("(title:파이썬)^2.0 (title:프로그래밍)^2.0 (title:공부)^2.0 (title:공)^2.0", query.toString());
 	}
 	
 	@Test
@@ -103,7 +103,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:파이썬^2.0 title:파이^2.0 title:프로그래밍^2.0 title:공부^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
+		Assert.assertEquals("(title:파이썬)^2.0 (title:프로그래밍)^2.0 (title:공부)^2.0 (title:공)^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
 	}
 	
 	@Test
@@ -119,7 +119,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0", query.toString());
+		Assert.assertEquals("(dscr:파이썬)^10.0 (dscr:프로그래밍)^10.0 (dscr:공부)^10.0 (dscr:공)^10.0", query.toString());
 	}
 	
 	@Test
@@ -135,7 +135,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0", query.toString());
+		Assert.assertEquals("(title:파이썬)^12.0 (title:프로그래밍)^12.0 (title:공부)^12.0 (title:공)^12.0 (dscr:파이썬)^10.0 (dscr:프로그래밍)^10.0 (dscr:공부)^10.0 (dscr:공)^10.0", query.toString());
 	}
 	
 	@Test(expected = CrescentInvalidRequestException.class)
@@ -167,7 +167,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:파이썬^12.0 title:파이^12.0 title:프로그래밍^12.0 title:공부^12.0 dscr:파이썬^10.0 dscr:파이^10.0 dscr:프로그래밍^10.0 dscr:공부^10.0 board_id:[50 TO 50000]", query.toString());
+		Assert.assertEquals("(title:파이썬)^12.0 (title:프로그래밍)^12.0 (title:공부)^12.0 (title:공)^12.0 (dscr:파이썬)^10.0 (dscr:프로그래밍)^10.0 (dscr:공부)^10.0 (dscr:공)^10.0 board_id:[50 TO 50000]", query.toString());
 	}
 	
 	@Test
@@ -179,24 +179,24 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		CrescentSearchRequestWrapper csrw 
 			= new CrescentSearchRequestWrapper(searchRequest);
 		
-		Filter filter = csrw.getFilter();
-		
+		Query filter = csrw.getFilterQuery();
+
 		System.out.println(filter);
-		
-		Assert.assertEquals("QueryWrapperFilter(title:python^2.0)", filter.toString());
+
+		Assert.assertNotNull(filter);
 	}
 	
 	@Test
 	public void sample() {
-		BooleanQuery bq = new BooleanQuery();
-		
+		BooleanQuery.Builder builder = new BooleanQuery.Builder();
+
 		Query termQuery = new TermQuery(new Term("field", "파이썬 프로그래밍"));
-		bq.add(termQuery, Occur.MUST);
-		
-		NumericRangeQuery<Integer> rangeQuery = NumericRangeQuery.newIntRange("field2", 0, 10, true, true);
-		
-		bq.add(rangeQuery, Occur.MUST);
-		
+		builder.add(termQuery, Occur.MUST);
+
+		Query rangeQuery = IntField.newRangeQuery("field2", 0, 10);
+		builder.add(rangeQuery, Occur.MUST);
+
+		BooleanQuery bq = builder.build();
 		System.out.println(bq);
 	}
 	

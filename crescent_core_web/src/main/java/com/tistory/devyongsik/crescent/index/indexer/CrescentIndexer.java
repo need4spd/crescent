@@ -137,7 +137,7 @@ public class CrescentIndexer {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 			Map<String, String> indexUserData = new HashMap<String, String>();
 			indexUserData.put("lastModified", dateFormat.format(new Date()));
-			indexWriter.setCommitData(indexUserData);
+			indexWriter.setLiveCommitData(indexUserData.entrySet());
 			
 			indexWriter.commit();
 		

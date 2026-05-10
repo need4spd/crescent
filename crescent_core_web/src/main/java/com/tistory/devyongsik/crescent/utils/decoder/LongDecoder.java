@@ -8,14 +8,15 @@ public class LongDecoder implements Decoder {
 
 	  @Override
 	  public String decodeTerm(Object value) {
-	    return Long.toString(NumericUtils.prefixCodedToLong(new BytesRef((String)value)));
+	    BytesRef ref = new BytesRef((String)value);
+	    return Long.toString(NumericUtils.sortableBytesToLong(ref.bytes, ref.offset));
 	  }
-	  
+
 	  @Override
 	  public String decodeStored(Object value) {
 	    return value.toString();
 	  }
-	  
+
 	  public String toString() {
 	    return "numeric-long";
 	  }

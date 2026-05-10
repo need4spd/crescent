@@ -3,10 +3,9 @@ package com.tistory.devyongsik.crescent.index;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.FieldType;
-import org.apache.lucene.document.FieldType.NumericType;
 import org.apache.lucene.document.IntField;
 import org.apache.lucene.document.LongField;
-import org.apache.lucene.index.FieldInfo.IndexOptions;
+import org.apache.lucene.index.IndexOptions;
 import org.apache.lucene.index.IndexableField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,47 +19,48 @@ public class LuceneFieldBuilder {
 	private Logger logger = LoggerFactory.getLogger(LuceneFieldBuilder.class);
 
 	public IndexableField create(CrescentCollectionField collectionField, String value) {
-		
-		FieldType fieldType = new FieldType();
-		fieldType.setIndexed(collectionField.isIndex());
-		fieldType.setStored(collectionField.isStore());
-		fieldType.setTokenized(collectionField.isAnalyze());
-		fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
-		fieldType.setStoreTermVectors(collectionField.isTermvector());
-		
+
 		if("STRING".equalsIgnoreCase(collectionField.getType())) {
+			FieldType fieldType = new FieldType();
+			if (collectionField.isIndex()) {
+				fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+			} else {
+				fieldType.setIndexOptions(IndexOptions.NONE);
+			}
+			fieldType.setStored(collectionField.isStore());
+			fieldType.setTokenized(collectionField.isAnalyze());
+			fieldType.setStoreTermVectors(collectionField.isTermvector());
+			fieldType.freeze();
+
 			Field f = new Field(collectionField.getName(),
 					StringUtils.defaultString(value, ""),
 					fieldType);
 
-			f.setBoost(collectionField.getBoost());
-			
 			logger.debug("Field : {}", f);
 
 			return f;
 
 		} else if("LONG".equalsIgnoreCase(collectionField.getType())) {
-			fieldType.setNumericType(NumericType.LONG);
-			
+			Field.Store store = collectionField.isStore() ? Field.Store.YES : Field.Store.NO;
 			Field f = new LongField(collectionField.getName(),
 					Long.parseLong(value),
-					fieldType);
-			
+					store);
+
 			logger.debug("Field : {}", f);
-			
+
 			return f;
-		
-		} else if ("INTEGER".equalsIgnoreCase(collectionField.getType())){
-			fieldType.setNumericType(NumericType.INT);
-			
+
+		} else if ("INTEGER".equalsIgnoreCase(collectionField.getType())) {
+			Field.Store store = collectionField.isStore() ? Field.Store.YES : Field.Store.NO;
 			Field f = new IntField(collectionField.getName(),
 					Integer.parseInt(value),
-					fieldType);
-			
+					store);
+
 			logger.debug("Field : {}", f);
-			
+
 			return f;
-		}else {
+
+		} else {
 			return null;
 		}
 	}

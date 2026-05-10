@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlAnyAttribute;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;

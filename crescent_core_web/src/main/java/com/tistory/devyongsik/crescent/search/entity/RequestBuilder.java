@@ -15,7 +15,7 @@ public class RequestBuilder<T> {
 
 	public T mappingRequestParam(HttpServletRequest request, Class<T> clazz) throws Exception {
 		
-		T returnObject = clazz.newInstance();
+		T returnObject = clazz.getDeclaredConstructor().newInstance();
 		
 		Field[] fields = clazz.getDeclaredFields();
 		

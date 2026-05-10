@@ -1,6 +1,5 @@
 package com.tistory.devyongsik.crescent.logger;
 
-import org.apache.lucene.search.Filter;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.Sort;
 
@@ -15,13 +14,13 @@ public class LogInfo {
 	private String pcid;
 	private int pageNum;
 	private Sort sort;
-	private Filter filter;
-	
-	
-	public Filter getFilter() {
+	private Query filter;
+
+
+	public Query getFilter() {
 		return filter;
 	}
-	public void setFilter(Filter filter) {
+	public void setFilter(Query filter) {
 		this.filter = filter;
 	}
 	public Query getQuery() {
@@ -60,8 +59,8 @@ public class LogInfo {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
-	
+
+
 	public String getUserIp() {
 		return userIp;
 	}

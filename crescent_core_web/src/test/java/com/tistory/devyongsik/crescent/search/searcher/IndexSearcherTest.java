@@ -33,7 +33,7 @@ public class IndexSearcherTest extends CrescentTestCaseUtil {
 		
 		TopDocs topDocs = indexSearcher.search(q, 5);
 		
-		int totalCount = topDocs.totalHits;
+		int totalCount = (int) topDocs.totalHits.value;
 		
 		System.out.print("total count : " + totalCount);
 		

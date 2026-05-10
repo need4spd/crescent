@@ -32,7 +32,7 @@ public class DefaultKeywordParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("title:나이키청바지^2.0 title:청바지^2.0 title:나이키^2.0 title:나이키청바^2.0 +dscr:나이키청바지 +dscr:청바지 +dscr:나이키 +dscr:나이키청바",
+		Assert.assertEquals("(title:나이키청바지)^2.0 (title:나이키)^2.0 (title:청바지)^2.0 +dscr:나이키청바지 +dscr:나이키 +dscr:청바지",
 				query.toString());
 	}
 }
