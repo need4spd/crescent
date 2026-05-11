@@ -2,6 +2,7 @@
 .classpath
 .DS_Store
 /target
+/build
 .settings
 /bin
 .gradle
@@ -15,3 +16,4 @@ crescent_core_web/webapp/crescent_index
 **/*.iml
 .idea
 atlassian-ide-plugin.xml
+post-follow-up-codex.md
