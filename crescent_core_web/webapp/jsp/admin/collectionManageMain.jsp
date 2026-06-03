@@ -17,13 +17,13 @@
 		
 		//init
 		clonedRow.find('#fieldName').val('');
-		clonedRow.find('#fieldName').attr('disabled', false);
-		clonedRow.find('#defaultSearchField').attr('checked', false);
-		clonedRow.find('#sortField').attr('checked', false);
-		clonedRow.find('#removeHtmlTag').attr('checked', false);
-		clonedRow.find('#store').attr('checked', false);
-		clonedRow.find('#index').attr('checked', false);
-		clonedRow.find('#analyze').attr('checked', false);
+		clonedRow.find('#fieldName').prop('disabled', false);
+		clonedRow.find('#defaultSearchField').prop('checked', false);
+		clonedRow.find('#sortField').prop('checked', false);
+		clonedRow.find('#removeHtmlTag').prop('checked', false);
+		clonedRow.find('#store').prop('checked', false);
+		clonedRow.find('#index').prop('checked', false);
+		clonedRow.find('#analyze').prop('checked', false);
 		
 		$('#fieldTable > tbody').append(clonedRow);
 	}
@@ -70,7 +70,7 @@
 		
 		if(isValid) {
 			$('[disabled]').each(function(i) {
-				$(this).attr("disabled", false);
+				$(this).prop("disabled", false);
 			});
 			
 			$('#collectionManageForm').attr('action', 'collectionUpdate.devys').submit();
@@ -85,8 +85,8 @@
 		$('#collectionManageForm').attr('action', 'deleteCollection.devys').submit();
 	}
 	
-	$(window).load(function () {
-		$("#collectionName > option[value = '${selectedCollectionName}']").attr("selected", "ture");
+	$(window).on('load', function () {
+		$("#collectionName > option[value = '${selectedCollectionName}']").prop("selected", true);
 	});
 	
 </script>

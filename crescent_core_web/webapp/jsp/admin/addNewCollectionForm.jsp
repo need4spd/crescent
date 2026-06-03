@@ -14,12 +14,12 @@
 		
 		//init
 		clonedRow.find('#fieldName').val('');
-		clonedRow.find('#fieldName').attr('disabled', false);
-		clonedRow.find('#defaultSearchField').attr('checked', false);
-		clonedRow.find('#sortField').attr('checked', false);
-		clonedRow.find('#store').attr('checked', false);
-		clonedRow.find('#index').attr('checked', false);
-		clonedRow.find('#analyze').attr('checked', false);
+		clonedRow.find('#fieldName').prop('disabled', false);
+		clonedRow.find('#defaultSearchField').prop('checked', false);
+		clonedRow.find('#sortField').prop('checked', false);
+		clonedRow.find('#store').prop('checked', false);
+		clonedRow.find('#index').prop('checked', false);
+		clonedRow.find('#analyze').prop('checked', false);
 		
 		$('#fieldTable > tbody').append(clonedRow);
 	}
@@ -67,7 +67,7 @@
 		
 		if(isValid) {
 			$('[disabled]').each(function(i) {
-				$(this).attr("disabled", false);
+				$(this).prop("disabled", false);
 			});
 			
 			$('#collectionManageForm').attr('action', 'collectionAdd.devys').submit();

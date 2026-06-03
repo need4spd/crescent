@@ -31,8 +31,8 @@
 			$('#searchForm').attr('action', 'searchTest.devys').submit();
 		}
 		
-		$(window).load(function () {
-			$("#col_name > option[value = '${USER_REQUEST.collectionName}']").attr("selected", "ture");
+		$(window).on('load', function () {
+			$("#col_name > option[value = '${USER_REQUEST.collectionName}']").prop("selected", true);
 		});
 	</script>
 	<div class="container">
