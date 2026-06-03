@@ -28,7 +28,7 @@ public class IndexFileManageController {
 	@Qualifier("indexFileManageService")
 	private IndexFileManageService indexFileManageService;
 	
-	@RequestMapping("/indexFileManageMain")
+	@RequestMapping("/indexFileManageMain.devys")
 	public ModelAndView indexFileManageMain(@RequestParam(value="selectCollectionName",required=false) String selectCollectionName
 											, @RequestParam(value="selectTopField", required=false) String selectTopField) throws Exception {
 
@@ -78,7 +78,7 @@ public class IndexFileManageController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/indexFileManageDoc")
+	@RequestMapping("/indexFileManageDoc.devys")
 	public ModelAndView indexFileManageDoc() throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		

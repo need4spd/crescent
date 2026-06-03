@@ -38,7 +38,7 @@ public class UpdateController {
 	@Qualifier("crescentIndexerExecutor")
 	private CrescentIndexerExecutor crescentIndexerExecutor;
 
-	@RequestMapping("/update")
+	@RequestMapping("/update.devys")
 	public void updateDocument(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 		String contentType = request.getHeader("Content-Type");

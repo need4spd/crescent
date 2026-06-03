@@ -38,7 +38,7 @@ public class MorphAdminMainController {
 	@Qualifier("crescentCollectionHandler")
 	private CrescentCollectionHandler collectionHandler;
 
-	@RequestMapping("/morphMain")
+	@RequestMapping("/morphMain.devys")
 	public ModelAndView morphMain(@RequestParam(value="col_name", required=false) String selectedCollectionName) throws Exception {
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
@@ -60,7 +60,7 @@ public class MorphAdminMainController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/doMorphTest")
+	@RequestMapping("/doMorphTest.devys")
 	public ModelAndView morphTest(@RequestParam(value="keyword") String keyword
 								, @RequestParam(value="col_name", required=false) String selectedCollectionName) throws Exception {
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
@@ -91,7 +91,7 @@ public class MorphAdminMainController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/doMorphTestAjax")
+	@RequestMapping("/doMorphTestAjax.devys")
 	public void morphTestAjax(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		String keyword = request.getParameter("keyword");

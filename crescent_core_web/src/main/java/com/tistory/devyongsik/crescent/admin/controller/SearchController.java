@@ -27,7 +27,7 @@ public class SearchController {
 	@Qualifier("searchService")
 	private SearchService searchService;
 	
-	@RequestMapping("/search")
+	@RequestMapping("/search.devys")
 	public void searchDocument(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		RequestBuilder<SearchRequest> requestBuilder = new RequestBuilder<SearchRequest>();

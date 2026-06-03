@@ -36,7 +36,7 @@ public class SearchTestMainController {
 	@Qualifier("crescentCollectionHandler")
 	private CrescentCollectionHandler collectionHandler;
 
-	@RequestMapping("/searchTestMain")
+	@RequestMapping("/searchTestMain.devys")
 	public ModelAndView searchTestMain(@RequestParam(value="col_name", required=false) String selectedCollectionName) throws Exception {
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
@@ -59,7 +59,7 @@ public class SearchTestMainController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/searchTest")
+	@RequestMapping("/searchTest.devys")
 	public ModelAndView searchTest(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		RequestBuilder<SearchRequest> requestBuilder = new RequestBuilder<SearchRequest>();

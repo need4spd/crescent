@@ -28,7 +28,7 @@ public class CollectionManageMainCotroller {
 	@Qualifier("crescentCollectionHandler")
 	private CrescentCollectionHandler collectionHandler;
 	
-	@RequestMapping("/collectionManageMain")
+	@RequestMapping("/collectionManageMain.devys")
 	public ModelAndView collectionManageMain(@RequestParam(value="collectionName", required=false) String selectedCollectionName) throws Exception {
 		
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
@@ -51,7 +51,7 @@ public class CollectionManageMainCotroller {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/collectionUpdate")
+	@RequestMapping("/collectionUpdate.devys")
 	public ModelAndView collectionUpdate(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		CrescentCollections crescentCollections = collectionHandler.getCrescentCollections();
@@ -71,7 +71,7 @@ public class CollectionManageMainCotroller {
 		
 	}
 	
-	@RequestMapping("/addNewCollection")
+	@RequestMapping("/addNewCollection.devys")
 	public ModelAndView addNewCollection() throws Exception {
 		
 		
@@ -82,7 +82,7 @@ public class CollectionManageMainCotroller {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/collectionAdd")
+	@RequestMapping("/collectionAdd.devys")
 	public ModelAndView collectionAdd(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		CrescentCollection selectedCollection = collectionManageService.addCollectionInfo(request);
@@ -101,7 +101,7 @@ public class CollectionManageMainCotroller {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/deleteCollection")
+	@RequestMapping("/deleteCollection.devys")
 	public ModelAndView deleteCollection(@RequestParam(value="collectionName") String collectionName ) throws Exception {
 		
 		collectionManageService.deleteCollectionInfo(collectionName);

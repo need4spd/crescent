@@ -24,7 +24,7 @@ public class AdminMainController {
 	@Qualifier("dictionaryService")
 	private DictionaryService dictionaryService = null;
 	
-	@RequestMapping("/adminMain")
+	@RequestMapping("/adminMain.devys")
 	public ModelAndView adminMain() throws Exception {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("/admin/main");
@@ -32,7 +32,7 @@ public class AdminMainController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/dictionaryManage")
+	@RequestMapping("/dictionaryManage.devys")
 	public ModelAndView dictionaryManage(@RequestParam(value="dicType") String dicType
 										, @RequestParam(value="pagingAction", required=false) String pagingAction
 										, @RequestParam(value="startOffset", defaultValue="0") int startOffset) throws Exception {
@@ -81,7 +81,7 @@ public class AdminMainController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/dictionaryManageAdd")
+	@RequestMapping("/dictionaryManageAdd.devys")
 	public ModelAndView dictionaryManageAdd(@RequestParam(value="dicType") String dicType
 											, @RequestParam(value="wordToAdd") String wordToAdd) throws Exception {
 		
@@ -118,7 +118,7 @@ public class AdminMainController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/dictionaryManageRemove")
+	@RequestMapping("/dictionaryManageRemove.devys")
 	public ModelAndView dictionaryManageRemove(@RequestParam(value="dicType") String dicType
 											, @RequestParam(value="wordsToRemove",defaultValue="") String wordsToRemove) throws Exception {
 		int startOffset = 0;
@@ -151,7 +151,7 @@ public class AdminMainController {
 		return modelAndView;
 	}
 	
-	@RequestMapping("/dictionaryManageFind")
+	@RequestMapping("/dictionaryManageFind.devys")
 	public ModelAndView dictionaryManageFind(@RequestParam(value="dicType") String dicType
 										, @RequestParam(value="wordToFind", defaultValue="") String wordToFind) throws Exception {
 		int startOffset = 0;
