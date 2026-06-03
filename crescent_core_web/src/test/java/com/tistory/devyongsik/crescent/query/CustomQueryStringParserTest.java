@@ -200,6 +200,17 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		System.out.println(bq);
 	}
 	
+	@Test(expected = CrescentInvalidRequestException.class)
+	public void invalidSecondFieldThrowsException() throws CrescentInvalidRequestException {
+		SearchRequest searchRequest = new SearchRequest();
+		searchRequest.setCollectionName("sample");
+		// 첫 번째 필드는 유효, 두 번째 필드는 존재하지 않는 필드
+		searchRequest.setCustomQuery("title:\"파이썬\" nonExistentField:\"test\"");
+
+		CrescentSearchRequestWrapper csrw = new CrescentSearchRequestWrapper(searchRequest);
+		csrw.getQuery();
+	}
+
 	@Test
 	public void patternMatch() {
 		String query = "title:\"ab cd\" body:\"addd cd\" +price:\"[1000 to 10000]\" description:\"addd cd\"";

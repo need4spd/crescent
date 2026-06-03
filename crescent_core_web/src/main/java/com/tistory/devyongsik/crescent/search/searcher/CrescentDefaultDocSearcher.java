@@ -50,9 +50,13 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 
 		int numOfHits = csrw.getDefaultHitsPage() * csrw.getHitsForPage();
 		IndexSearcher indexSearcher = null;
-		SearcherManager searcherManager = crescentSearcherManager.getSearcherManager(csrw.getCollectionName());
+		SearcherManager searcherManager = null;
 
 		try {
+			searcherManager = crescentSearcherManager.getSearcherManager(csrw.getCollectionName());
+			if (searcherManager == null) {
+				throw new IllegalStateException("컬렉션을 찾을 수 없습니다: " + csrw.getCollectionName());
+			}
 			indexSearcher = searcherManager.acquire();
 
 			Query query = csrw.getQuery();
@@ -192,29 +196,28 @@ public class CrescentDefaultDocSearcher implements CrescentDocSearcher {
 
 		} catch (Exception e) {
 
-			logger.error("error in CrescentDefaultDocSearcher : ", e);
+			logger.error("검색 중 오류 발생: ", e);
 
 			Map<String, Object> result = new HashMap<String, Object>();
 			List<Map<String, String>> resultList = new ArrayList<Map<String, String>>();
 
-			result.put("total_count", totalHitsCount);
+			result.put("total_count", 0);
 			result.put("result_list", resultList);
-			result.put("error_code", errorCode);
-			result.put("error_msg", errorMessage);
+			result.put("error_code", 1);
+			result.put("error_msg", "검색 중 오류가 발생하였습니다.");
 
-			logger.error("검색 중 에러 발생함. {}", e);
-
-			searchResult.setErrorCode(errorCode);
-			searchResult.setErrorMsg(errorMessage);
+			searchResult.setErrorCode(1);
+			searchResult.setErrorMsg("검색 중 오류가 발생하였습니다.");
 			searchResult.setSearchResult(result);
 			searchResult.setResultList(resultList);
 
 			return searchResult;
 
-
 		} finally {
-			searcherManager.release(indexSearcher);
-			indexSearcher = null;
+			if (searcherManager != null && indexSearcher != null) {
+				searcherManager.release(indexSearcher);
+				indexSearcher = null;
+			}
 		}
 
 		return searchResult;

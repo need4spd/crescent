@@ -60,11 +60,11 @@ public class CustomQueryStringParser {
 
 		boolean isRangeQuery = false;
 
-		boolean any = true;
-		boolean isLongField = false;
-		boolean isAnalyzed = false;
-
 		for(QueryAnalysisResult queryAnalysisResult : queryAnalysisResultList) {
+
+			boolean any = true;
+			boolean isLongField = false;
+			boolean isAnalyzed = false;
 
 			fieldName = queryAnalysisResult.getFieldName();
 			occur = queryAnalysisResult.getOccur();
@@ -225,29 +225,19 @@ public class CustomQueryStringParser {
 	}
 
 	private ArrayList<String> analyzedTokenList(Analyzer analyzer, String splitedKeyword) {
-		Logger logger = LoggerFactory.getLogger(DefaultKeywordParser.class);
-
 		ArrayList<String> rst = new ArrayList<String>();
-		TokenStream stream = null;
-		try {
-			stream = analyzer.tokenStream("", new StringReader(splitedKeyword));
+		try (TokenStream stream = analyzer.tokenStream("", new StringReader(splitedKeyword))) {
 			CharTermAttribute charTerm = stream.getAttribute(CharTermAttribute.class);
-
 			stream.reset();
-
-			while(stream.incrementToken()) {
+			while (stream.incrementToken()) {
 				rst.add(charTerm.toString());
 			}
-
-			stream.close();
-
+			stream.end();
 		} catch (IOException e) {
-			logger.error("error in DefaultKeywordParser : ", e);
+			logger.error("error in analyzedTokenList : ", e);
 			throw new RuntimeException(e);
 		}
-
-		logger.debug("[{}] 에서 추출된 명사 : [{}]", new Object[]{splitedKeyword, rst.toString()});
-
+		logger.debug("[{}] 에서 추출된 명사 : [{}]", splitedKeyword, rst.toString());
 		return rst;
 	}
 
