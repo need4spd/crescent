@@ -97,15 +97,12 @@ public class CrescentCollectionHandler {
 			throw new IllegalStateException(errorMsg);
 		}
 		
-		// indexingDirectory가 절대경로가 아닌경우 임의로 경로 수정,  maven local profile에서 사용
+		// 상대 경로인 경우 crescentHome 또는 webapp.root 기준으로 절대 경로로 변환
 		List<CrescentCollection> list = crescentCollections.getCrescentCollections();
 		for (CrescentCollection collection : list) {
 			String path = collection.getIndexingDirectory();
-			File file = new File(path);
-			if (!file.isAbsolute()) {
-				String webRoot = System.getProperty("webapp.root");
-				if (webRoot != null)
-					collection.setIndexingDirectory(webRoot + path);
+			if (!"memory".equals(path) && !new File(path).isAbsolute()) {
+				collection.setIndexingDirectory(resolveIndexingDirectory(path));
 			}
 		}
 		
@@ -189,6 +186,21 @@ public class CrescentCollectionHandler {
 		}
 	}
 	
+	/**
+	 * 상대 경로를 절대 경로로 변환한다.
+	 * 우선순위: crescentHome 시스템 프로퍼티 > webapp.root 시스템 프로퍼티 > 상대 경로 그대로 사용
+	 */
+	String resolveIndexingDirectory(String relativePath) {
+		if (!"default".equals(crescentHomeLocation)) {
+			return crescentHomeLocation + "/" + relativePath;
+		}
+		String webRoot = System.getProperty("webapp.root");
+		if (webRoot != null) {
+			return webRoot + relativePath;
+		}
+		return relativePath;
+	}
+
 	public CrescentCollections getCrescentCollections() {
 		return this.crescentCollections;
 	}

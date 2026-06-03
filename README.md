@@ -97,6 +97,37 @@ Gretty를 사용해 로컬 서버를 실행할 수 있습니다.
 - Servlet mapping: `*.devys`
 - Gretty 실행 모드: `-DrunningMode=test`
 
+## 인덱스 경로 설정
+
+인덱스 디렉터리 경로는 `collections.xml`의 `<indexingDirectory>`로 지정합니다.
+
+| 값 | 동작 |
+| --- | --- |
+| `memory` | 메모리 인덱스 사용 (테스트 전용) |
+| 절대 경로 (`/data/index/sample`) | 해당 경로 그대로 사용 |
+| 상대 경로 (`crescent_index/sample`) | `crescentHome` 또는 `webapp.root` 기준으로 변환 |
+
+상대 경로 해석 우선순위:
+
+1. `-DcrescentHome=<경로>` 시스템 프로퍼티가 설정된 경우 → `${crescentHome}/crescent_index/sample`
+2. `webapp.root` 시스템 프로퍼티가 설정된 경우 → `${webapp.root}crescent_index/sample`
+3. 둘 다 없으면 → 현재 작업 디렉터리 기준 상대 경로
+
+**crescentHome 지정 예시:**
+
+```bash
+# Gretty로 로컬 실행 시
+./gradlew :crescent_core_web:appRun -DcrescentHome=/opt/crescent
+
+# WAR 배포 후 Tomcat/Jetty JVM 옵션으로 설정
+java -DcrescentHome=/opt/crescent -jar ...
+
+# 또는 CATALINA_OPTS / JAVA_OPTS 환경변수로 설정
+export CATALINA_OPTS="-DcrescentHome=/opt/crescent"
+```
+
+`crescentHome`을 지정하면 `collections.xml`의 위치도 `${crescentHome}/collections.xml`로 변경됩니다.
+
 ## 프로필과 리소스
 
 기본 프로필은 `local`입니다.
