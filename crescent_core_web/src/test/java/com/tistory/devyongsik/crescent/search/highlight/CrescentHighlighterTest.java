@@ -34,7 +34,6 @@ import org.apache.lucene.store.ByteBuffersDirectory;
 import org.apache.lucene.store.Directory;
 import org.junit.Test;
 
-import com.tistory.devyongsik.analyzer.KoreanAnalyzer;
 import com.tistory.devyongsik.crescent.search.entity.SearchRequest;
 import com.tistory.devyongsik.utils.CrescentTestCaseUtil;
 
@@ -59,7 +58,7 @@ public class CrescentHighlighterTest extends CrescentTestCaseUtil {
 		Fragmenter fragmenter = new SimpleFragmenter(5);
 		highlighter.setTextFragmenter(fragmenter);
 
-		Analyzer a = new KoreanAnalyzer(false);
+		Analyzer a = new WhitespaceAnalyzer();
 		TokenStream tokenStream = a.tokenStream("f", new StringReader(text));
 
 		String result =
@@ -84,7 +83,7 @@ public class CrescentHighlighterTest extends CrescentTestCaseUtil {
 
 		IndexReader indexReader = indexSearcher.getIndexReader();
 
-		TopDocs topDocs = indexSearcher.search(new TermQuery(new Term("dscr", "입니다")), 3);
+		TopDocs topDocs = indexSearcher.search(new TermQuery(new Term("dscr", "텍스트")), 3);
 
 		System.out.println("ddd : " + indexReader.leaves());
 		System.out.println(topDocs.totalHits);

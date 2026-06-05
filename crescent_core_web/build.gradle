@@ -24,6 +24,7 @@ dependencies {
 	implementation(
 		[group: 'org.apache.lucene', name: 'lucene-core', version: "${versions.lucene}"],
         [group: 'org.apache.lucene', name: 'lucene-analysis-common', version: "${versions.lucene}"],
+        [group: 'org.apache.lucene', name: 'lucene-analysis-nori', version: "${versions.lucene}"],
         [group: 'org.apache.lucene', name: 'lucene-queries', version: "${versions.lucene}"],
         [group: 'org.apache.lucene', name: 'lucene-queryparser', version: "${versions.lucene}"],
         [group: 'org.apache.lucene', name: 'lucene-highlighter', version: "${versions.lucene}"],
