@@ -164,6 +164,44 @@ new KoreanAnalyzer(userDict, decompoundMode, stopTags, outputUnknownUnigrams)
 
 ---
 
+## 남은 권장 후속 작업
+
+Phase 1·2 완료(PR: [#112](https://github.com/need4spd/crescent/pull/112)) 이후 남은 작업.
+
+### 1. 브랜치 병합 (진행 중)
+
+- `feature/nori-analyzer` → master PR [#112](https://github.com/need4spd/crescent/pull/112) 생성 완료.
+- 리뷰 후 병합.
+
+### 2. 운영 환경 전체 재색인 (필수)
+
+- Nori 전환으로 토큰 체계가 바뀌므로 기존 인덱스를 그대로 사용할 수 없다.
+- local/production/aws 각 환경의 인덱스를 **전체 재색인**해야 한다.
+- 테스트는 memory 인덱스라 매 실행 시 새로 색인되어 영향 없음.
+
+### 3. 사전 데이터 품질 점검
+
+- custom.txt에 단일자 명사(예: "공")가 있어 일반어가 과분절된다. 예) `공부` → `[공][부]`.
+- 단일자/저품질 명사 정제, 복합명사 분해 규칙 정비 필요.
+- Nori `userdict_ko.txt` 권장 포맷 기준으로 사전 정합성 재검토.
+
+### 4. 관리자 화면 smoke test (수동/브라우저)
+
+- jQuery 3.7.1 업그레이드 + 사전 관리 UI 동작을 브라우저에서 직접 확인 (자동 테스트로 검증 어려운 영역).
+- 점검 항목:
+  - 사전 관리: 명사/불용어/동의어/복합명사 단어 추가·삭제·찾기
+  - 형태소 분석 테스트 (Ajax) — Nori 토큰 표시 확인
+  - 추가/삭제 후 검색 테스트에 반영되는지 (rebuild 전파)
+  - 컬렉션 관리 폼, 인덱스 파일 관리, 메뉴 이동
+
+### 5. (선택) DecompoundMode 튜닝
+
+- 현재 `KoreanTokenizer.DEFAULT_DECOMPOUND`(DISCARD) 사용.
+- 복합어 원형 보존이 필요하면 `MIXED` 검토 (색인량 증가 trade-off).
+- 변경 시 분석기 의존 테스트 기대값 재확정 필요.
+
+---
+
 ## 토큰 분석 차이 예시 (참고)
 
 **"파이썬은 쉽고 강력한 프로그래밍 언어입니다"**
