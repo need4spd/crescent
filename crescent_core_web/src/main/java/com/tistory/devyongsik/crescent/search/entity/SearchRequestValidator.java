@@ -2,7 +2,7 @@ package com.tistory.devyongsik.crescent.search.entity;
 
 import java.util.Map;
 
-import org.apache.lucene.analysis.kr.utils.StringUtil;
+import org.apache.commons.lang.StringUtils;
 
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollection;
 import com.tistory.devyongsik.crescent.collection.entity.CrescentCollectionField;
@@ -41,7 +41,7 @@ public class SearchRequestValidator {
 		
 		//page num
 		if(searchRequest.getPageNum() != null) {
-			if(!StringUtil.isNumeric(searchRequest.getPageNum())) {
+			if(!StringUtils.isNumeric(searchRequest.getPageNum())) {
 				throw new CrescentInvalidRequestException("Page_Num parameter value is must positive number: " + searchRequest.getPageNum());
 			}
 		}

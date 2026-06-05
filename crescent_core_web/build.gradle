@@ -34,7 +34,6 @@ dependencies {
 		[group: 'org.springframework', name: 'spring-core', version: "${versions.spring}"],
 		[group: 'jaxen', name: 'jaxen', version: '1.1.4'],
 		[group: 'org.dom4j', name: 'dom4j', version: '2.1.4'],
-		[group: 'com.tistory.devyongsik', name: 'korean-analyzer-4.x', version: '0.7-SNAPSHOT'],
 		[group: 'commons-lang', name: 'commons-lang', version: '2.6'],
 		[group: 'com.thoughtworks.xstream', name: 'xstream', version: '1.4.20'],
 		[group: 'net.htmlparser.jericho', name: 'jericho-html', version: '3.0'],

@@ -71,7 +71,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("dscr:파이썬 dscr:프로그래밍 dscr:공부", query.toString());
+		Assert.assertEquals("dscr:파이썬 dscr:프로그래밍 dscr:공 dscr:부", query.toString());
 	}
 	
 	@Test
@@ -87,7 +87,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("(title:파이썬)^2.0 (title:프로그래밍)^2.0 (title:공부)^2.0", query.toString());
+		Assert.assertEquals("(title:파이썬)^2.0 (title:프로그래밍)^2.0 (title:공)^2.0 (title:부)^2.0", query.toString());
 	}
 	
 	@Test
@@ -103,7 +103,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("(title:파이썬)^2.0 (title:프로그래밍)^2.0 (title:공부)^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
+		Assert.assertEquals("(title:파이썬)^2.0 (title:프로그래밍)^2.0 (title:공)^2.0 (title:부)^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
 	}
 	
 	@Test
@@ -119,7 +119,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("(dscr:파이썬)^10.0 (dscr:프로그래밍)^10.0 (dscr:공부)^10.0", query.toString());
+		Assert.assertEquals("(dscr:파이썬)^10.0 (dscr:프로그래밍)^10.0 (dscr:공)^10.0 (dscr:부)^10.0", query.toString());
 	}
 	
 	@Test
@@ -135,7 +135,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("(title:파이썬)^12.0 (title:프로그래밍)^12.0 (title:공부)^12.0 (dscr:파이썬)^10.0 (dscr:프로그래밍)^10.0 (dscr:공부)^10.0", query.toString());
+		Assert.assertEquals("(title:파이썬)^12.0 (title:프로그래밍)^12.0 (title:공)^12.0 (title:부)^12.0 (dscr:파이썬)^10.0 (dscr:프로그래밍)^10.0 (dscr:공)^10.0 (dscr:부)^10.0", query.toString());
 	}
 	
 	@Test(expected = CrescentInvalidRequestException.class)
@@ -167,7 +167,7 @@ public class CustomQueryStringParserTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("(title:파이썬)^12.0 (title:프로그래밍)^12.0 (title:공부)^12.0 (dscr:파이썬)^10.0 (dscr:프로그래밍)^10.0 (dscr:공부)^10.0 board_id:[50 TO 50000]", query.toString());
+		Assert.assertEquals("(title:파이썬)^12.0 (title:프로그래밍)^12.0 (title:공)^12.0 (title:부)^12.0 (dscr:파이썬)^10.0 (dscr:프로그래밍)^10.0 (dscr:공)^10.0 (dscr:부)^10.0 board_id:[50 TO 50000]", query.toString());
 	}
 	
 	@Test

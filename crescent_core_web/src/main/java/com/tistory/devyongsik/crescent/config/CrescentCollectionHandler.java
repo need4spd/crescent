@@ -113,56 +113,66 @@ public class CrescentCollectionHandler {
 		}
 		
 		//Analyzer 생성
+		instantiateAnalyzers(list);
+	}
+
+	/**
+	 * 각 컬렉션의 collections.xml 분석기 설정(className, constructor-args)을 읽어
+	 * 리플렉션으로 분석기를 생성하고 컬렉션에 주입한다.
+	 *
+	 * 사전 변경 후 {@link #rebuildAnalyzers()}에서 재호출되어 분석기를 새 인스턴스로 교체한다.
+	 */
+	private void instantiateAnalyzers(List<CrescentCollection> list) {
 		for (CrescentCollection collection : list) {
 			List<CrescentAnalyzerHolder> analyzerHolders = collection.getAnalyzers();
-			
+
 			for(CrescentAnalyzerHolder analyzerHolder : analyzerHolders) {
 				String type = analyzerHolder.getType();
 				String className = analyzerHolder.getClassName();
 				String constructorArgs = analyzerHolder.getConstructorArgs();
-				
+
 				Analyzer analyzer = null;
-				
+
 				try {
 					@SuppressWarnings("unchecked")
-					Class<Analyzer> analyzerClass = (Class<Analyzer>) Class.forName(className);	
-					
+					Class<Analyzer> analyzerClass = (Class<Analyzer>) Class.forName(className);
+
 					if(constructorArgs == null || constructorArgs.trim().length() == 0) {
-						
+
 						analyzer = analyzerClass.getDeclaredConstructor().newInstance();
-						
+
 					} else if ("true".equals(constructorArgs.toLowerCase()) || "false".equals(constructorArgs.toLowerCase())) {
-					
+
 						boolean booleanStr = Boolean.valueOf(constructorArgs);
 						Class<?>[] intArgsClass = new Class<?>[] {boolean.class};
 						Object[] intArgs = new Object[] {booleanStr};
-						
+
 						Constructor<Analyzer> intArgsConstructor = analyzerClass.getConstructor(intArgsClass);
 						analyzer = (Analyzer) intArgsConstructor.newInstance(intArgs);
-					
+
 					} else {
-						
+
 						Class<?> initArgClass = Class.forName(constructorArgs);
-						
+
 						Class<?>[] intArgsClass = new Class<?>[] {initArgClass.getClass()};
 						Object[] intArgs = new Object[] {initArgClass.getDeclaredConstructor().newInstance()};
-						
+
 						Constructor<Analyzer> intArgsConstructor = analyzerClass.getConstructor(intArgsClass);
 						analyzer = (Analyzer) intArgsConstructor.newInstance(intArgs);
 					}
-					
+
 					if("indexing".equals(type)) {
 
 						collection.setIndexingModeAnalyzer(analyzer);
-					
+
 					} else if("search".equals(type)) {
-					
+
 						collection.setSearchModeAnalyzer(analyzer);
-						
+
 					} else {
 						throw new IllegalStateException("정의되지 않은 Analyzer type 입니다. ["+type+"]");
 					}
-				
+
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
 				} catch (InstantiationException e) {
@@ -184,6 +194,19 @@ public class CrescentCollectionHandler {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 사전 변경 후 모든 컬렉션의 분석기를 새 인스턴스로 재생성한다.
+	 * 새 분석기는 변경된 {@link com.tistory.devyongsik.crescent.dictionary.CrescentNoriDictionary}
+	 * 상태를 반영한다. (검색/형태소분석에 즉시 반영, 색인은 재색인 필요)
+	 */
+	public void rebuildAnalyzers() {
+		if (crescentCollections == null) {
+			return;
+		}
+		instantiateAnalyzers(crescentCollections.getCrescentCollections());
+		logger.info("모든 컬렉션의 분석기를 재생성했습니다.");
 	}
 	
 	/**

@@ -108,21 +108,48 @@ new KoreanAnalyzer(userDict, decompoundMode, stopTags, outputUnknownUnigrams)
 
 → 목표였던 외래어 조사 분리 확인: `파이썬은` → `[파이썬]`
 
-### Phase 2 — Nori 사전 관리 시스템 구축 (후속 작업)
+### Phase 2 — Nori 사전 관리 시스템 구축 ✅ 완료
 
 목표: Nori가 커스텀 사전을 실제로 사용하도록 하고, 사전 관리 UI를 Nori 사전에 연결한다.
 
-1. `UserDictionary` + `KoreanPartOfSpeechStopFilter` + `StopFilter` + `SynonymGraphFilter`로
-   커스텀 Nori 분석기 작성 (`Analyzer` 상속 또는 `CustomAnalyzer` 활용)
-2. `DictionaryService`를 Nori 사전 파일 관리 + 분석기 재빌드 방식으로 재작성
-   - 명사/복합명사 → `UserDictionary` 파일
-   - 불용어 → 불용어 파일
-   - 동의어 → 동의어 파일
-   - 사전 수정 시 해당 컬렉션 분석기 재생성 후 교체
-3. 사전 관리 UI를 Nori 사전에 연결 (단어 추가/삭제/찾기/형태소 테스트)
-4. `korean-analyzer-4.x` 의존성 **완전 제거**
+1. ✅ 커스텀 Nori 분석기 작성: `analyzer/CrescentNoriAnalyzer.java`
+   체인: `KoreanTokenizer(UserDictionary)` → `KoreanPartOfSpeechStopFilter`
+   → `KoreanReadingFormFilter` → `LowerCaseFilter` → `StopFilter(불용어)`
+   → `SynonymGraphFilter(동의어)` [색인 모드: + `FlattenGraphFilter`]
+   - collections.xml에서 `constructor-args="true"`(색인)/`"false"`(검색)로 모드 지정
+2. ✅ 사전 홀더 + 서비스 재작성
+   - `dictionary/CrescentDictionaryType.java`: 로컬 enum (CUSTOM/COMPOUND/STOP/SYNONYM)
+   - `dictionary/CrescentNoriDictionary.java`: 싱글톤. 4개 파일 로드, 단어 get/add/remove/find/write,
+     Nori 컴포넌트(UserDictionary/CharArraySet/SynonymMap) 빌드·재빌드
+     - 명사(custom.txt) + 복합명사(compounds.txt `N:A,B` → `N A B`) → UserDictionary
+     - 불용어(stop.txt) → CharArraySet
+     - 동의어(synonym.txt `a,b,c`) → SynonymMap
+   - `DictionaryServiceImpl`: CrescentNoriDictionary에 위임, rebuild 시
+     `CrescentCollectionHandler.rebuildAnalyzers()`로 모든 컬렉션 분석기 재생성
+3. ✅ 사전 관리 UI 연결
+   - `DictionaryService` 인터페이스 / `AdminMainController` → `CrescentDictionaryType` 사용
+   - 기존 JSP/매핑(단어 추가/삭제/찾기/형태소 테스트)은 그대로 동작
+4. ✅ `korean-analyzer-4.x` 의존성 **완전 제거**
+   - `SearchRequestValidator`의 `org.apache.lucene.analysis.kr.utils.StringUtil`
+     → `org.apache.commons.lang.StringUtils`로 교체
+   - `CrescentCollectionHandler`: 분석기 생성 로직을 `instantiateAnalyzers()`로 추출,
+     `rebuildAnalyzers()` 추가
 
-**Phase 2 완료 기준**: 관리자 사전 관리 화면에서 단어 추가/삭제 시 Nori 검색 결과에 반영됨.
+**Phase 2 완료 기준**: ✅ 사전 단어 추가 + rebuild 시 재생성된 분석기가 검색/형태소분석에 반영됨
+(`DictionaryRebuildTest`로 검증), ✅ `./gradlew clean test` 84건 통과, ✅ `./gradlew war` 성공.
+
+#### CrescentNoriAnalyzer 사전 적용 실측 (참고)
+
+| 입력 | 결과 | 적용 사전 |
+|------|------|-----------|
+| `맥북에어` | `[맥북] [에어]` | 복합명사 (compounds.txt) |
+| `나이키청바지` | `[나이키] [청바지]` | 사용자 명사 (custom.txt: 청바지) |
+| `오라클` | `[오라클] [oracle]` | 동의어 (synonym.txt) |
+| `를` | (제거) | 불용어 (stop.txt) |
+| `공부` | `[공] [부]` | (사용자 사전 로드로 분절 변화) |
+
+> 주의: 사용자 사전(약 5700개 명사) 로드로 일부 일반어 분절이 Phase 1 기본 Nori와 달라진다.
+> 예) `공부` → `[공][부]`. custom.txt의 단일자 명사 등 사전 데이터 품질 점검은 별도 과제.
 
 ---
 
