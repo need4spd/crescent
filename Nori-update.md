@@ -195,11 +195,16 @@ custom.txt 점검 및 정제 완료 (5694줄 → 5104줄).
   - 추가/삭제 후 검색 테스트에 반영되는지 (rebuild 전파)
   - 컬렉션 관리 폼, 인덱스 파일 관리, 메뉴 이동
 
-### 4. (선택) DecompoundMode 튜닝
+### 4. (선택) DecompoundMode 튜닝 ✅ 완료
 
-- 현재 `KoreanTokenizer.DEFAULT_DECOMPOUND`(DISCARD) 사용.
-- 복합어 원형 보존이 필요하면 `MIXED` 검토 (색인량 증가 trade-off).
-- 변경 시 분석기 의존 테스트 기대값 재확정 필요.
+- `CrescentNoriAnalyzer`에 시스템 프로퍼티 `crescent.nori.decompound`(NONE/DISCARD/MIXED) 추가.
+  미설정·잘못된 값이면 기본값 `DISCARD`(기존 동작) 유지 → 기존 테스트 영향 없음.
+- 색인/검색 분석기가 동일 프로퍼티를 참조하여 모드 일관성 보장.
+- `CrescentNoriAnalyzerTest`에 DISCARD/MIXED/폴백 검증 테스트 추가 (전체 87건 통과).
+- README "한국어 Analyzer" 섹션을 Nori 기준으로 갱신 + 사전/DecompoundMode 사용법 문서화.
+
+> MIXED 적용 시 `맥북에어` → `[맥북에어][맥북][에어]`(원형 보존), DISCARD → `[맥북][에어]`.
+> 운영에서 MIXED로 변경하려면 전체 재색인 필요.
 
 ---
 

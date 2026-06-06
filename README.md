@@ -228,8 +228,8 @@ curl -X POST \
 ```xml
 <collection name="sample">
   <analyzers>
-    <analyzer type="indexing" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="true" />
-    <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+    <analyzer type="indexing" className="com.tistory.devyongsik.crescent.analyzer.CrescentNoriAnalyzer" constructor-args="true" />
+    <analyzer type="search" className="com.tistory.devyongsik.crescent.analyzer.CrescentNoriAnalyzer" constructor-args="false" />
   </analyzers>
   <indexingDirectory>memory</indexingDirectory>
   <fields>
@@ -241,7 +241,37 @@ curl -X POST \
 
 ## 한국어 Analyzer
 
-Crescent는 `com.tistory.devyongsik:korean-analyzer-4.x:0.7-SNAPSHOT`을 사용합니다. 이 의존성은 로컬 Maven 저장소와 `need4spd` Maven snapshot 저장소에서 해석합니다.
+Crescent는 Apache Lucene 공식 한국어 분석기 **Nori**(`lucene-analysis-nori`) 기반의
+`CrescentNoriAnalyzer`를 사용합니다. 사용자 사전(명사/복합명사/불용어/동의어)을 적용하며,
+`constructor-args`로 색인(`true`)/검색(`false`) 모드를 지정합니다.
+
+분석 체인: `KoreanTokenizer(UserDictionary)` → 품사 불용 필터 → 한자 독음 변환 →
+소문자화 → 불용어(StopFilter) → 동의어(SynonymGraphFilter, 색인 시 +FlattenGraph)
+
+### 사용자 사전
+
+`src/main/resources` 아래 파일로 관리하며, 관리자 화면(Dictionary)에서 추가/삭제/찾기 가능합니다.
+
+| 파일 | 종류 | 형식 |
+| --- | --- | --- |
+| `custom.txt` | 명사 | 한 줄당 한 단어 |
+| `compounds.txt` | 복합명사 | `복합어:분해1,분해2` |
+| `stop.txt` | 불용어 | 한 줄당 한 단어 |
+| `synonym.txt` | 동의어 | `단어1,단어2,단어3` (쉼표 구분) |
+
+사전 변경 후에는 분석기가 재생성되어 검색/형태소분석에 즉시 반영됩니다(재색인은 별도 필요).
+
+### 복합어 분해 모드 (DecompoundMode)
+
+`-Dcrescent.nori.decompound=<MODE>` 시스템 프로퍼티로 복합어 분해 방식을 조정합니다.
+
+| 값 | 동작 |
+| --- | --- |
+| `NONE` | 복합어를 분해하지 않음 |
+| `DISCARD` | 복합어를 분해하고 원형은 버림 (**기본값**, 색인량 작음) |
+| `MIXED` | 복합어 원형 + 분해 부분 모두 유지 (recall 향상, 색인량 증가) |
+
+미설정 시 기본값은 `DISCARD`입니다. 예: `./gradlew :crescent_core_web:appRun -Dcrescent.nori.decompound=MIXED`
 
 ## 라이선스
 

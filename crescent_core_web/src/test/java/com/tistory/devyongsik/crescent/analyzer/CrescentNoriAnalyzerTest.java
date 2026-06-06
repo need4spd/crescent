@@ -41,6 +41,40 @@ public class CrescentNoriAnalyzerTest {
 	}
 
 	@Test
+	public void defaultDecompoundModeDiscardsOriginalCompound() throws IOException {
+		// 기본값 DISCARD: 복합어 원형(맥북에어)은 버려지고 분해 부분만 남는다
+		Assert.assertNull("기본은 DISCARD여야 함", System.getProperty(CrescentNoriAnalyzer.DECOMPOUND_MODE_PROPERTY));
+		List<String> tokens = tokenize(true, "맥북에어");
+		Assert.assertFalse("DISCARD 모드에서는 복합어 원형이 없어야 함", tokens.contains("맥북에어"));
+	}
+
+	@Test
+	public void mixedDecompoundModeKeepsOriginalCompound() throws IOException {
+		// MIXED: 복합어 원형 + 분해 부분 모두 유지
+		System.setProperty(CrescentNoriAnalyzer.DECOMPOUND_MODE_PROPERTY, "MIXED");
+		try {
+			List<String> tokens = tokenize(true, "맥북에어");
+			Assert.assertTrue("MIXED 모드에서는 복합어 원형 '맥북에어' 유지", tokens.contains("맥북에어"));
+			Assert.assertTrue("분해 부분 '맥북'도 유지", tokens.contains("맥북"));
+			Assert.assertTrue("분해 부분 '에어'도 유지", tokens.contains("에어"));
+		} finally {
+			System.clearProperty(CrescentNoriAnalyzer.DECOMPOUND_MODE_PROPERTY);
+		}
+	}
+
+	@Test
+	public void invalidDecompoundModeFallsBackToDefault() {
+		System.setProperty(CrescentNoriAnalyzer.DECOMPOUND_MODE_PROPERTY, "WRONG_VALUE");
+		try {
+			Assert.assertEquals("잘못된 값은 기본값으로 폴백",
+					org.apache.lucene.analysis.ko.KoreanTokenizer.DEFAULT_DECOMPOUND,
+					CrescentNoriAnalyzer.resolveDecompoundMode());
+		} finally {
+			System.clearProperty(CrescentNoriAnalyzer.DECOMPOUND_MODE_PROPERTY);
+		}
+	}
+
+	@Test
 	public void customNounIsRecognized() throws IOException {
 		// custom.txt: 청바지 (사용자 명사) → 나이키청바지가 [나이키][청바지]로 분리
 		List<String> tokens = tokenize(false, "나이키청바지");
