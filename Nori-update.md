@@ -173,19 +173,20 @@ Phase 1·2 완료(PR: [#112](https://github.com/need4spd/crescent/pull/112)) 이
 - `feature/nori-analyzer` → master PR [#112](https://github.com/need4spd/crescent/pull/112) 생성 완료.
 - 리뷰 후 병합.
 
-### 2. 운영 환경 전체 재색인 (필수)
+### 2. 사전 데이터 품질 점검 ✅ 완료
 
-- Nori 전환으로 토큰 체계가 바뀌므로 기존 인덱스를 그대로 사용할 수 없다.
-- local/production/aws 각 환경의 인덱스를 **전체 재색인**해야 한다.
-- 테스트는 memory 인덱스라 매 실행 시 새로 색인되어 영향 없음.
+custom.txt 점검 및 정제 완료 (5694줄 → 5104줄).
 
-### 3. 사전 데이터 품질 점검
+- **단일 글자 명사 66종 제거**: 공·물·옷·책·집·차 등 일반 음절 + 톰·폰·컵 등 1음절 외래어.
+  과분절(`공부` → `[공][부]`) 해소. 제거 후 `공부` → `[공부]`로 정상화, Nori 기본 형태소 모델이 처리.
+- **중복 523줄 제거**: 442종 중복(아이나비 10회 등) → 고유 5170종.
+- **빈 줄 2개 제거**, **CRLF → LF 정규화**.
+- compounds.txt(분해규칙 5건 정상)·stop.txt·synonym.txt는 문제 없어 유지.
+- 관련 테스트 assertion을 `공부` 단일 토큰으로 재조정 (84건 통과).
 
-- custom.txt에 단일자 명사(예: "공")가 있어 일반어가 과분절된다. 예) `공부` → `[공][부]`.
-- 단일자/저품질 명사 정제, 복합명사 분해 규칙 정비 필요.
-- Nori `userdict_ko.txt` 권장 포맷 기준으로 사전 정합성 재검토.
+> 남은 사전 품질 개선(저빈도 명사 정리, 동의어/불용어 확충 등)은 운영 데이터 기반으로 지속.
 
-### 4. 관리자 화면 smoke test (수동/브라우저)
+### 3. 관리자 화면 smoke test (수동/브라우저)
 
 - jQuery 3.7.1 업그레이드 + 사전 관리 UI 동작을 브라우저에서 직접 확인 (자동 테스트로 검증 어려운 영역).
 - 점검 항목:
@@ -194,7 +195,7 @@ Phase 1·2 완료(PR: [#112](https://github.com/need4spd/crescent/pull/112)) 이
   - 추가/삭제 후 검색 테스트에 반영되는지 (rebuild 전파)
   - 컬렉션 관리 폼, 인덱스 파일 관리, 메뉴 이동
 
-### 5. (선택) DecompoundMode 튜닝
+### 4. (선택) DecompoundMode 튜닝
 
 - 현재 `KoreanTokenizer.DEFAULT_DECOMPOUND`(DISCARD) 사용.
 - 복합어 원형 보존이 필요하면 `MIXED` 검토 (색인량 증가 trade-off).

@@ -115,6 +115,6 @@ public class CrescentSearchRequestWrapperTest extends CrescentTestCaseUtil {
 		
 		System.out.println(query);
 		
-		Assert.assertEquals("(title:파이썬)^2.0 (title:프로그래밍)^2.0 (title:공)^2.0 (title:부)^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
+		Assert.assertEquals("(title:파이썬)^2.0 (title:프로그래밍)^2.0 (title:공부)^2.0 +dscr:자바 +dscr:병렬 +dscr:프로그래밍", query.toString());
 	}
 }
