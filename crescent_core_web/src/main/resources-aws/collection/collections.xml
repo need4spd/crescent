@@ -5,10 +5,10 @@
     <analyzers>
       <!-- 
       <analyzer type="indexing" className="org.apache.lucene.analysis.WhitespaceAnalyzer" constructor-args="org.apache.lucene.util.Version.LUCENE_36" />
-      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+      <analyzer type="search" className="com.tistory.devyongsik.crescent.analyzer.CrescentNoriAnalyzer" constructor-args="false" />
      -->     
-      <analyzer type="indexing" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="true" />
-      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+      <analyzer type="indexing" className="com.tistory.devyongsik.crescent.analyzer.CrescentNoriAnalyzer" constructor-args="true" />
+      <analyzer type="search" className="com.tistory.devyongsik.crescent.analyzer.CrescentNoriAnalyzer" constructor-args="false" />
     </analyzers>
     <indexingDirectory>/data1/lucene_index/sample</indexingDirectory>
     <searcherReloadScheduleMin>1</searcherReloadScheduleMin>
@@ -31,10 +31,10 @@
     <analyzers>
       <!-- 
       <analyzer type="indexing" className="org.apache.lucene.analysis.WhitespaceAnalyzer" constructor-args="org.apache.lucene.util.Version.LUCENE_36" />
-      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+      <analyzer type="search" className="com.tistory.devyongsik.crescent.analyzer.CrescentNoriAnalyzer" constructor-args="false" />
      -->     
-      <analyzer type="indexing" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="true" />
-      <analyzer type="search" className="com.tistory.devyongsik.analyzer.KoreanAnalyzer" constructor-args="false" />
+      <analyzer type="indexing" className="com.tistory.devyongsik.crescent.analyzer.CrescentNoriAnalyzer" constructor-args="true" />
+      <analyzer type="search" className="com.tistory.devyongsik.crescent.analyzer.CrescentNoriAnalyzer" constructor-args="false" />
     </analyzers>
     <searcherReloadScheduleMin>1</searcherReloadScheduleMin>
     <indexingDirectory>/data1/lucene_index/sample_wiki</indexingDirectory>

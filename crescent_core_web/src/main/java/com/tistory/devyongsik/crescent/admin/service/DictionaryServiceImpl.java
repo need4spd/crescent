@@ -1,117 +1,67 @@
 package com.tistory.devyongsik.crescent.admin.service;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.tistory.devyongsik.analyzer.DictionaryProperties;
-import com.tistory.devyongsik.analyzer.dictionary.DictionaryFactory;
-import com.tistory.devyongsik.analyzer.dictionary.DictionaryType;
+import com.tistory.devyongsik.crescent.config.CrescentCollectionHandler;
+import com.tistory.devyongsik.crescent.dictionary.CrescentDictionaryType;
+import com.tistory.devyongsik.crescent.dictionary.CrescentNoriDictionary;
 
+/**
+ * Nori 사용자 사전 관리 서비스.
+ *
+ * {@link CrescentNoriDictionary} 싱글톤에 단어 추가/삭제/검색/파일 저장을 위임하고,
+ * 사전 재빌드 시 모든 컬렉션의 분석기를 재생성해 변경 내용이 검색/형태소분석에 반영되도록 한다.
+ */
 @Service("dictionaryService")
 public class DictionaryServiceImpl implements DictionaryService {
-	
+
 	private Logger logger = LoggerFactory.getLogger(DictionaryServiceImpl.class);
-	
-	public List<String> getDictionary (DictionaryType dicType) {
-		
-		List<String> dictionary = DictionaryFactory.getFactory().get(dicType);
-		
-		return dictionary;
-	
+
+	@Autowired
+	@Qualifier("crescentCollectionHandler")
+	private CrescentCollectionHandler collectionHandler;
+
+	private CrescentNoriDictionary dictionary() {
+		return CrescentNoriDictionary.getInstance();
 	}
-	
-	public void addWordToDictionary (DictionaryType dicType, String word) {
-		
-		if(dicType == DictionaryType.COMPOUND) {
-		
-			if(word.split(":").length < 2) {
-				logger.warn("복합명사사전의 단어는 [N:A,B] 형식이어야 합니다. [{}]", word);
-				throw new IllegalStateException("복합명사사전의 단어는 [N:A,B] 형식이어야 합니다.");
-			}
-		}
-		
-		List<String> dictionary = DictionaryFactory.getFactory().get(dicType);
-		dictionary.add(word);
+
+	@Override
+	public List<String> getDictionary(CrescentDictionaryType dicType) {
+		return dictionary().getWords(dicType);
 	}
-	
-	public void removeWordFromDictionary (DictionaryType dicType, String word) {
-		List<String> dictionary = DictionaryFactory.getFactory().get(dicType);
-		dictionary.remove(word);
+
+	@Override
+	public void addWordToDictionary(CrescentDictionaryType dicType, String word) {
+		dictionary().addWord(dicType, word);
 	}
-	
-	public List<String> findWordFromDictionary (DictionaryType dicType, String word) {
-		List<String> dictionary = DictionaryFactory.getFactory().get(dicType);
-		
-		List<String> returnResult = new ArrayList<String>();
-		
-		for(String s : dictionary) {
-			if(s.indexOf(word) >= 0) {
-				returnResult.add(s);
-			}
-		}
-	
-		logger.debug("returnResult : {}", returnResult);
-		
-		return returnResult;
+
+	@Override
+	public void removeWordFromDictionary(CrescentDictionaryType dicType, String word) {
+		dictionary().removeWord(dicType, word);
 	}
-	
-	public void writeToDictionaryFile(DictionaryType dicType) {
-		String dicPath = DictionaryProperties.getInstance().getProperty(dicType.getPropertiesKey());
-		
-		logger.debug("dictionary path : {}", dicPath);
-		
-		URL url = DictionaryServiceImpl.class.getClassLoader().getResource(dicPath);
-		
-		logger.debug("URL : {}", url);
-		
-		try {
-		
-			File dictionaryFile = new File(url.toURI());
-			
-			logger.debug("dictionaryFile : {}", dictionaryFile);
-			
-			FileOutputStream fos = new FileOutputStream(dictionaryFile, false);
-			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos, Charset.forName("utf-8")));
-			
-			List<String> dictionary = DictionaryFactory.getFactory().get(dicType);
-			for(String dicWord : dictionary) {
-				bw.write(dicWord);
-				bw.write("\n");
-			}
-			
-			bw.flush();
-			bw.close();
-			fos.close();
-		
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-			logger.error("error : ", e);
-			
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			logger.error("error : ", e);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-			logger.error("error : ", e);
-			
-		}		
+
+	@Override
+	public List<String> findWordFromDictionary(CrescentDictionaryType dicType, String word) {
+		List<String> result = dictionary().findWords(dicType, word);
+		logger.debug("findWordFromDictionary result : {}", result);
+		return result;
 	}
-	
-	public void rebuildDictionary(DictionaryType dictionaryType) {
-		DictionaryFactory.getFactory().rebuildDictionary(dictionaryType);
+
+	@Override
+	public void writeToDictionaryFile(CrescentDictionaryType dicType) {
+		dictionary().writeToFile(dicType);
+	}
+
+	@Override
+	public void rebuildDictionary(CrescentDictionaryType dictionaryType) {
+		dictionary().rebuild(dictionaryType);
+		// 사전이 바뀌면 분석기를 새 인스턴스로 교체해야 검색/형태소분석에 반영된다.
+		collectionHandler.rebuildAnalyzers();
 	}
 }

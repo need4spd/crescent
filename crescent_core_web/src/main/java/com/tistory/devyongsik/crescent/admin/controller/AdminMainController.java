@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.tistory.devyongsik.analyzer.dictionary.DictionaryType;
 import com.tistory.devyongsik.crescent.admin.service.DictionaryService;
+import com.tistory.devyongsik.crescent.dictionary.CrescentDictionaryType;
 
 
 @Controller
@@ -181,42 +181,14 @@ public class AdminMainController {
 	}
 	
 	private List<String> loadDictionary(String dicType) {
-		
-		List<String> dictionary = null;
-		
-		if("noun".equals(dicType)) {
-			dictionary = dictionaryService.getDictionary(DictionaryType.CUSTOM);
-		} else if ("stop".equals(dicType)) {
-			dictionary = dictionaryService.getDictionary(DictionaryType.STOP);
-		} else if ("syn".equals(dicType)) {
-			dictionary = dictionaryService.getDictionary(DictionaryType.SYNONYM);
-		} else if ("compound".equals(dicType)) {
-			dictionary = dictionaryService.getDictionary(DictionaryType.COMPOUND);
-		}
-		
-		return dictionary;
-	}
-	
-	private DictionaryType getDictionaryType(String dicType) {
-		if("noun".equals(dicType)) {
-			
-			return DictionaryType.CUSTOM;
-			
-		} else if ("stop".equals(dicType)) {
-			
-			return DictionaryType.STOP;
-			
-		} else if ("syn".equals(dicType)) {
-			
-			return DictionaryType.SYNONYM;
-			
-		} else if ("compound".equals(dicType)) {
-			
-			return DictionaryType.COMPOUND;
-		} else {
-			
+		CrescentDictionaryType type = getDictionaryType(dicType);
+		if(type == null) {
 			return null;
-		
 		}
+		return dictionaryService.getDictionary(type);
+	}
+
+	private CrescentDictionaryType getDictionaryType(String dicType) {
+		return CrescentDictionaryType.fromDicType(dicType);
 	}
 }
