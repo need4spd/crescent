@@ -23,7 +23,7 @@ appender("FILE", RollingFileAppender) {
   }
 }
 
-logger("com.tistory.devyongsik.analyzer", WARN, ["STDOUT"])
+logger("com.tistory.devyongsik.crescent.dictionary", INFO, ["STDOUT"])
 logger("com.tistory.devyongsik.admin", INFO, ["STDOUT"])
 logger("com.tistory.devyongsik.logger", INFO, ["STDOUT", "FILE"])
 logger("com.tistory.devyongsik.config", INFO, ["STDOUT"])

@@ -44,10 +44,6 @@ subprojects {
     [compileJava, compileTestJava]*.options*.encoding = javaEncoding
 
     repositories {
-        mavenLocal()
-        maven {
-            url "https://github.com/need4spd/need4spd-maven-repo/raw/master/snapshots"
-        }
         mavenCentral()
     }
 
